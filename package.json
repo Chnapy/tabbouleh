@@ -1,8 +1,14 @@
 {
   "name": "tabbouleh",
   "version": "0.0.0",
-  "description": "",
-  "keywords": [],
+  "description": "JSON Schema generator from TypeScript sources",
+  "keywords": [
+    "typescript",
+    "json",
+    "jsonschema",
+    "schema",
+    "forms"
+  ],
   "main": "dist/tabbouleh.umd.js",
   "module": "dist/tabbouleh.es5.js",
   "typings": "dist/types/tabbouleh.d.ts",
@@ -12,11 +18,11 @@
   "author": "Chnapy <richardhaddad@hotmail.fr>",
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://github.com/Chnapy/tabbouleh.git"
   },
   "license": "MIT",
   "engines": {
-    "node": ">=6.0.0"
+    "node": ">=8.0.0"
   },
   "scripts": {
     "lint": "tslint  --project tsconfig.json -t codeFrame 'src/**/*.ts' 'test/**/*.ts'",
@@ -98,6 +104,7 @@
     "lodash.camelcase": "^4.3.0",
     "prettier": "^1.14.3",
     "prompt": "^1.0.0",
+    "reflect-metadata": "^0.1.13",
     "replace-in-file": "^3.4.2",
     "rimraf": "^2.6.2",
     "rollup": "^0.67.0",
