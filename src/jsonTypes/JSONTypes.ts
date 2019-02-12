@@ -1,4 +1,4 @@
-import { Omit } from 'lodash'
+import { Omit } from 'lodash';
 
 export type JSONType = 'string' | 'number' | 'integer' | 'boolean' | 'object' | 'array' | 'null' | 'any';
 
@@ -41,7 +41,7 @@ export type JSONEntity<T extends JSONType | JSONType[], D> = {
 };
 
 type JSONPrimitive = {
-  format: 'date-time' | 'date' | 'time' | 'utc-millisec' | 'regex' | 'color' | 'style' | 'phone'
+  format?: 'date-time' | 'date' | 'time' | 'utc-millisec' | 'regex' | 'color' | 'style' | 'phone'
     | 'uri' | 'email' | 'ip-address' | 'ipv6' | 'host-name';
 };
 
@@ -51,21 +51,25 @@ export type JSONEntityNull = JSONEntity<'null', null>;
 
 export type JSONEntityNumber<T extends 'number' | 'integer' = 'number'> = JSONEntity<T, number> & JSONPrimitive & {
 
-  minimum: number;
-  maximum: number;
-  exclusiveMinimum: number | boolean;
-  exclusiveMaximum: number | boolean;
-  multipleOf: number;
-  divisibleBy: number;
+  minimum?: number;
+  maximum?: number;
+  exclusiveMinimum?: number | boolean;
+  exclusiveMaximum?: number | boolean;
+  multipleOf?: number;
+  divisibleBy?: number;
 };
 
 export type JSONEntityInteger = JSONEntityNumber<'integer'>;
 
 export type JSONEntityString = JSONEntity<'string', string> & JSONPrimitive & {
 
-  pattern: string;
-  minLength: number;
-  maxLength: number;
+  pattern?: string;
+  minLength?: number;
+  maxLength?: number;
+};
+
+export type JSONEntityObjectProperties<K extends object = any> = {
+  [k in keyof K]: JSONEntity<any, any>;
 };
 
 export type JSONEntityObject<K extends object = any> = JSONEntity<'object', object> & {
@@ -73,9 +77,7 @@ export type JSONEntityObject<K extends object = any> = JSONEntity<'object', obje
   minProperties?: number;
   maxProperties?: number;
 
-  properties?: {
-    [k in keyof K]: JSONEntity<any, any>;
-  };
+  properties?: JSONEntityObjectProperties<K>;
 
   patternProperties?: {
     [k: string]: JSONEntity<any, any>;
@@ -97,7 +99,7 @@ export type JSONEntityArray<T extends JSONEntity<any, any> | JSONEntity<any, any
 
   additionalItems: boolean | JSONEntity<any, any>;
 
-}
+};
 
 export type JSONEntityAny = JSONEntityBoolean
   | JSONEntityString

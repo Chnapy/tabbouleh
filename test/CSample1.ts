@@ -1,8 +1,8 @@
-import JSONSchema from '../src/annotation/JSONSchema'
-import JSONAttribute from '../src/annotation/JSONAttribute'
-import { JSONEntityInteger } from '../src/jsonTypes/JSONTypes'
+import JSONClass from '../src/annotation/JSONClass';
+import JSONAttribute from '../src/annotation/JSONAttribute';
+import { JSONEntityInteger, JSONEntityString } from '../src/jsonTypes/JSONTypes';
 
-@JSONSchema()
+@JSONClass()
 export default class CSample1 {
 
   @JSONAttribute<JSONEntityInteger>({
@@ -11,5 +11,15 @@ export default class CSample1 {
   })
   size: number;
 
+  @JSONAttribute<JSONEntityString>({
+    minLength: 6
+  })
+  email: string;
+
 }
 
+export class ShouldNotBeUse {
+
+}
+
+export const ShouldNotBeUseToo = 8;

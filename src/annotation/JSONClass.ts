@@ -1,26 +1,18 @@
-import 'reflect-metadata'
-import { REFLECT_JSON_SCHEMA } from './ReflectKeys'
-import { Optional } from '../jsonTypes/Optional'
-import { JSONRoot } from '../jsonTypes/JSONTypes'
+import 'reflect-metadata';
+import { Optional } from '../jsonTypes/Optional';
+import { JSONEntityObject } from '../jsonTypes/JSONTypes';
+import AnnotationEngine from '../engine/AnnotationEngine';
 
-export default function JSONSchema<T extends { new (): object } & any>(
-  value: Optional<JSONRoot> = {}
-) {
+export default function JSONClass<T extends { new(): object } & any>(value: Optional<JSONEntityObject> = {}) {
+
   return (target: T) => {
-    console.log('class', target)
 
-    // const name = target.name
+    // console.log('class', target);
 
-    const json: JSONRoot = {
-      type: 'object',
-      $schema: 'todo',
-      ...value
-    }
+    AnnotationEngine.defineReflectClassEntity(target, value);
 
-    Reflect.defineMetadata(REFLECT_JSON_SCHEMA, json, target)
+    // console.log('class - metadata', Reflect.getMetadata(REFLECT_JSON_CLASS, target));
 
-    // Reflect.defineMetadata(REFLECT_JSON_OPTIONS, {}, target)
+  };
 
-    console.log('class - metadata', Reflect.getMetadata(REFLECT_JSON_SCHEMA, target))
-  }
 }

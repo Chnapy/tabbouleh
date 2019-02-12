@@ -1,24 +1,17 @@
-import { REFLECT_JSON_SCHEMA } from './ReflectKeys'
-import { Optional } from '../jsonTypes/Optional'
-import { JSONEntity } from '../jsonTypes/JSONTypes'
+import { Optional } from '../jsonTypes/Optional';
+import { JSONEntity } from '../jsonTypes/JSONTypes';
+import AnnotationEngine from '../engine/AnnotationEngine';
 
 export default function JSONAttribute<J extends JSONEntity<any, any>>(value: Optional<J> = {}) {
 
-  console.log('key - attribute', value);
+  // console.log('key - attribute', value);
 
-  return <T extends { new(): object } & any>(target: T, key: keyof T & any, descriptor?: PropertyDescriptor) => {
+  return <T extends { new(): object } & any>(prototype: T, key: keyof T & any, descriptor?: PropertyDescriptor): void => {
 
-    const reflectJson = Reflect.getMetadata(REFLECT_JSON_SCHEMA, target, key) || {};
+    AnnotationEngine.defineReflectAttributeEntity(prototype, key, value);
 
-    const json: J = {
-      type: 'any',
-      ...reflectJson,
-      ...value
-    };
-
-    Reflect.defineMetadata(REFLECT_JSON_SCHEMA, json, target, key);
-
-    console.log('key - attribute - metadata', key, Reflect.getMetadata(REFLECT_JSON_SCHEMA, target, key));
+    // console.log('key - attribute - metadata', key, Reflect.getMetadata(REFLECT_JSON_ATTRIBUTES, prototype), prototype);
   };
 
 }
+
