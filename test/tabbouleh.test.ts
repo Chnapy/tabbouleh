@@ -1,40 +1,78 @@
 import 'reflect-metadata';
-import DummyClass from '../src/tabbouleh';
-import { REFLECT_JSON_ATTRIBUTES, REFLECT_JSON_CLASS } from '../src/annotation/ReflectKeys';
+import CSample1 from './samples/CSample1';
+import Tabbouleh from '../src/tabbouleh';
+import CSample2 from './samples/CSample2';
+import { JSONEntityObject, JSONRoot } from '../src/types/JSONTypes';
+import CSample3 from './samples/CSample3';
+import NotAJsonClassError from '../src/exception/NotAJsonClassError';
 
-/**
- * Dummy test
- */
-describe('Dummy test', () => {
+const schemaCSample1: JSONEntityObject<typeof CSample1.prototype> = {
+  type: 'object',
+  properties: {
+    size: {
+      type: 'integer',
+      minimum: 0
+    },
 
-  const load = require('./CSample1');
-
-  console.log('REQUIRE_LIST', load);
-
-  for (const k of Object.keys(load)) {
-    const value = load[k];
-
-    if (typeof value !== 'function') {
-      continue;
+    email: {
+      type: 'string',
+      minLength: 6
     }
-
-    const metadata = Reflect.getMetadata(REFLECT_JSON_CLASS, value.prototype);
-
-    if (!metadata) {
-      continue;
-    }
-
-    const attributes = Reflect.getMetadata(REFLECT_JSON_ATTRIBUTES, value.prototype);
-
-    console.log('KEEP', k, value, metadata, attributes);
   }
+};
 
+const schemaCSample2: JSONRoot<typeof CSample2.prototype> = {
+  type: 'object',
 
-  it('works if true is truthy', () => {
-    expect(true).toBeTruthy();
+  $id: 'http://json-schema.org/draft-07/schema#',
+  $schema: 'http://json-schema.org/draft-07/schema#',
+  title: 'Toto Africa',
+
+  properties: {
+    name: {
+      type: 'string'
+    },
+
+    phone: {
+      type: 'integer',
+      minimum: 10,
+      maximum: 10,
+      required: true
+    }
+  }
+};
+
+describe('Compare input <-> output', () => {
+  it('generate an valid object with the good keys', () => {
+    const target = {
+      CSample1,
+      toto: CSample2
+    };
+
+    const listJSONEntities = Tabbouleh.generateJSONSchemas(target);
+
+    expect(Object.keys(listJSONEntities).sort()).toEqual(Object.keys(target).sort());
   });
 
-  it('DummyClass is instantiable', () => {
-    expect(new DummyClass()).toBeInstanceOf(DummyClass);
+  it('class samples give the good schema', () => {
+    const target = {
+      CSample1,
+      CSample2
+    };
+
+    const listJSONEntities = Tabbouleh.generateJSONSchemas(target);
+
+    expect(listJSONEntities).toEqual({
+      CSample1: schemaCSample1,
+      CSample2: schemaCSample2
+    });
+  });
+
+  it('class no annotate with JSONClass throws a NotAJsonClassError', () => {
+    const target = {
+      CSample3
+    };
+
+    expect(() => Tabbouleh.generateJSONSchemas(target)).toThrow(NotAJsonClassError);
   });
 });

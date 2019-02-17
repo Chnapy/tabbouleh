@@ -1,3 +1,5 @@
-export const REFLECT_TYPE = 'design:type';
-export const REFLECT_JSON_CLASS = 'json:class';
-export const REFLECT_JSON_ATTRIBUTES = 'json:attribute';
+export enum REFLECT_KEY {
+  TYPE = 'design:type',
+  JSON_CLASS = 'json:class',
+  JSON_ATTRIBUTES = 'json:attribute'
+}

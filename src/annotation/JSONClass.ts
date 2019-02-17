@@ -1,18 +1,19 @@
 import 'reflect-metadata';
-import { Optional } from '../jsonTypes/Optional';
-import { JSONEntityObject } from '../jsonTypes/JSONTypes';
+import { Optional } from '../types/UtilTypes';
+import { JSONEntityObject, JSONRoot } from '../types/JSONTypes';
 import AnnotationEngine from '../engine/AnnotationEngine';
+import { ClassLike } from '../types/ClassTypes';
 
-export default function JSONClass<T extends { new(): object } & any>(value: Optional<JSONEntityObject> = {}) {
-
+/**
+ * TODO allow to annotate without function call
+ *
+ * @param value
+ * @constructor
+ */
+export default function JSONClass<T extends ClassLike>(
+  value: Optional<JSONEntityObject | JSONRoot> = {}
+) {
   return (target: T) => {
-
-    // console.log('class', target);
-
     AnnotationEngine.defineReflectClassEntity(target, value);
-
-    // console.log('class - metadata', Reflect.getMetadata(REFLECT_JSON_CLASS, target));
-
   };
-
 }
