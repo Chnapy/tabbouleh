@@ -4,6 +4,7 @@ import { JSONEntityInteger, JSONEntityString } from '../../src/types/JSONTypes';
 
 @JSONClass()
 export default class CSample1 {
+
   @JSONAttribute<JSONEntityInteger>({
     type: 'integer',
     minimum: 0
@@ -14,4 +15,5 @@ export default class CSample1 {
     minLength: 6
   })
   email: string;
+
 }

@@ -79,7 +79,8 @@
       }
     },
     "collectCoverageFrom": [
-      "src/**/*.{js,ts}"
+      "src/**/*.{js,ts}",
+      "!src/exception/*Error.{js,ts}"
     ]
   },
   "prettier": {

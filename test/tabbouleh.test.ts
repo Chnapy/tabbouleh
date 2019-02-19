@@ -38,20 +38,23 @@ const schemaCSample2: JSONRoot<typeof CSample2.prototype> = {
       minimum: 10,
       maximum: 10,
       required: true
+    },
+
+    anotherProp: {
+      type: 'any'
     }
   }
 };
 
 describe('Compare input <-> output', () => {
+
   it('generate an valid object with the good keys', () => {
     const target = {
       CSample1,
       toto: CSample2
     };
 
-    const listJSONEntities = Tabbouleh.generateJSONSchemas(target);
-
-    expect(Object.keys(listJSONEntities).sort()).toEqual(Object.keys(target).sort());
+    expect(Object.keys(Tabbouleh.generateJSONSchemas(target)).sort()).toEqual(Object.keys(target).sort());
   });
 
   it('class samples give the good schema', () => {
@@ -74,5 +77,13 @@ describe('Compare input <-> output', () => {
     };
 
     expect(() => Tabbouleh.generateJSONSchemas(target)).toThrow(NotAJsonClassError);
+    expect((() => {
+      try {
+        Tabbouleh.generateJSONSchemas(target);
+      } catch (e) {
+        return e.message.includes(target.CSample3.name);
+      }
+    })()).toBe(true);
   });
+
 });
