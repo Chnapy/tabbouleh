@@ -1,6 +1,6 @@
 {
   "name": "tabbouleh",
-  "version": "0.0.0-development",
+  "version": "0.0.1-development",
   "description": "JSON Schema generator from TypeScript sources",
   "keywords": [
     "typescript",
