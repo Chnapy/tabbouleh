@@ -8,6 +8,7 @@ import { JSONEntityInteger } from '../../src/types/JSONTypes';
   title: 'Toto Africa'
 })
 export default class CSample2 {
+
   @JSONAttribute()
   name: string;
 
@@ -18,4 +19,12 @@ export default class CSample2 {
     required: true
   })
   phone: number;
+
+  @JSONAttribute()
+  anotherProp: UnknownClass;
+
+}
+
+class UnknownClass {
+
 }

@@ -1,10 +1,5 @@
 import 'reflect-metadata';
-import {
-  JSONEntity,
-  JSONEntityAny,
-  JSONEntityObject,
-  JSONEntityObjectProperties
-} from '../types/JSONTypes';
+import { JSONEntity, JSONEntityAny, JSONEntityObject, JSONEntityObjectProperties } from '../types/JSONTypes';
 import { Optional } from '../types/UtilTypes';
 import { REFLECT_KEY } from '../annotation/ReflectKeys';
 import { ClassLike } from '../types/ClassTypes';
@@ -37,8 +32,6 @@ export default class AnnotationEngine {
     typeTS: ClassLike,
     name: string
   ): J {
-    reflectEntity = reflectEntity || {};
-    paramEntity = paramEntity || {};
 
     const typeEntity = AnnotationEngine.getJSONType(typeTS) as J;
 
