@@ -26,7 +26,7 @@ export default class AnnotationEngine {
     }
   }
 
-  private static getJSONAttributeEntity<J extends JSONEntity<any, any>>(
+  private static getJSONPropertyEntity<J extends JSONEntity<any, any>>(
     reflectEntity: Optional<J>,
     paramEntity: Optional<J>,
     typeTS: ClassLike,
@@ -42,12 +42,12 @@ export default class AnnotationEngine {
     };
   }
 
-  private static getJSONClassEntity(
+  private static getJSONSchemaEntity(
     reflectEntity: Optional<JSONEntityObject>,
     paramEntity: Optional<JSONEntityObject>,
     name: string
   ): JSONEntityObject {
-    return AnnotationEngine.getJSONAttributeEntity<JSONEntityObject>(
+    return AnnotationEngine.getJSONPropertyEntity<JSONEntityObject>(
       reflectEntity,
       paramEntity,
       Object,
@@ -55,59 +55,59 @@ export default class AnnotationEngine {
     );
   }
 
-  static getReflectClassEntity(target: ClassLike): JSONEntityObject | undefined {
-    return Reflect.getMetadata(REFLECT_KEY.JSON_CLASS, target.prototype);
+  static getReflectSchema(target: ClassLike): JSONEntityObject | undefined {
+    return Reflect.getMetadata(REFLECT_KEY.JSON_SCHEMA, target.prototype);
   }
 
-  private static setReflectClassEntity(target: ClassLike, entity: JSONEntityAny): void {
-    Reflect.defineMetadata(REFLECT_KEY.JSON_CLASS, entity, target.prototype);
+  private static setReflectSchema(target: ClassLike, entity: JSONEntityAny): void {
+    Reflect.defineMetadata(REFLECT_KEY.JSON_SCHEMA, entity, target.prototype);
   }
 
-  static getReflectAttributesObject(prototype: ClassLike['prototype']): JSONEntityObjectProperties {
-    return Reflect.getMetadata(REFLECT_KEY.JSON_ATTRIBUTES, prototype) || {};
+  static getReflectProperties(prototype: ClassLike['prototype']): JSONEntityObjectProperties {
+    return Reflect.getMetadata(REFLECT_KEY.JSON_PROPERTY, prototype) || {};
   }
 
-  private static setReflectAttributesObject(
+  private static setReflectProperties(
     prototype: ClassLike['prototype'],
-    attributes: JSONEntityObject['properties']
+    properties: JSONEntityObject['properties']
   ): void {
-    Reflect.defineMetadata(REFLECT_KEY.JSON_ATTRIBUTES, attributes, prototype);
+    Reflect.defineMetadata(REFLECT_KEY.JSON_PROPERTY, properties, prototype);
   }
 
-  static defineReflectClassEntity(target: ClassLike, value: Optional<JSONEntityObject>): void {
-    const classEntity: JSONEntityObject =
-      AnnotationEngine.getReflectClassEntity(target) ||
-      AnnotationEngine.getJSONClassEntity({}, {}, target.name);
+  static defineReflectSchema(target: ClassLike, value: Optional<JSONEntityObject>): void {
+    const classSchema: JSONEntityObject =
+      AnnotationEngine.getReflectSchema(target) ||
+      AnnotationEngine.getJSONSchemaEntity({}, {}, target.name);
 
-    Object.assign(classEntity, value);
+    Object.assign(classSchema, value);
 
-    AnnotationEngine.setReflectClassEntity(target, classEntity);
+    AnnotationEngine.setReflectSchema(target, classSchema);
   }
 
-  static defineReflectAttributeEntity<C extends ClassLike>(
+  static defineReflectProperties<C extends ClassLike>(
     prototype: C['prototype'],
     key: keyof C['prototype'] & string,
     value: Optional<JSONEntityAny>
   ): void {
-    const properties = AnnotationEngine.getReflectAttributesObject(prototype);
+    const properties = AnnotationEngine.getReflectProperties(prototype);
 
-    const reflectEntity: Optional<JSONEntityAny> =
-      Reflect.getMetadata(REFLECT_KEY.JSON_CLASS, prototype, key) || {};
+    const reflectSchema: Optional<JSONEntityAny> =
+      Reflect.getMetadata(REFLECT_KEY.JSON_SCHEMA, prototype, key) || {};
 
-    const typeEntity: ClassLike = Reflect.getMetadata(REFLECT_KEY.TYPE, prototype, key);
+    const typeSchema: ClassLike = Reflect.getMetadata(REFLECT_KEY.TYPE, prototype, key);
 
-    const fullEntity: JSONEntityAny = AnnotationEngine.getJSONAttributeEntity<JSONEntityAny>(
-      reflectEntity,
+    const fullSchema: JSONEntityAny = AnnotationEngine.getJSONPropertyEntity<JSONEntityAny>(
+      reflectSchema,
       value,
-      typeEntity,
+      typeSchema,
       key
     );
 
     properties[key] = {
       ...(properties[key] || {}),
-      ...fullEntity
+      ...fullSchema
     };
 
-    AnnotationEngine.setReflectAttributesObject(prototype, properties);
+    AnnotationEngine.setReflectProperties(prototype, properties);
   }
 }
