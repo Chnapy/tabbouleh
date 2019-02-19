@@ -4,7 +4,7 @@ import Tabbouleh from '../src/tabbouleh';
 import CSample2 from './samples/CSample2';
 import { JSONEntityObject, JSONRoot } from '../src/types/JSONTypes';
 import CSample3 from './samples/CSample3';
-import NotAJsonClassError from '../src/exception/NotAJsonClassError';
+import NotAJsonSchemaError from '../src/exception/NotAJsonSchemaError';
 
 const schemaCSample1: JSONEntityObject<typeof CSample1.prototype> = {
   type: 'object',
@@ -71,12 +71,12 @@ describe('Compare input <-> output', () => {
     });
   });
 
-  it('class no annotate with JSONClass throws a NotAJsonClassError', () => {
+  it('class no annotate with JSONSchema throws a NotAJsonClassError', () => {
     const target = {
       CSample3
     };
 
-    expect(() => Tabbouleh.generateJSONSchemas(target)).toThrow(NotAJsonClassError);
+    expect(() => Tabbouleh.generateJSONSchemas(target)).toThrow(NotAJsonSchemaError);
     expect((() => {
       try {
         Tabbouleh.generateJSONSchemas(target);

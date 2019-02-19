@@ -1,17 +1,17 @@
-import JSONClass from '../../src/annotation/JSONClass';
-import JSONAttribute from '../../src/annotation/JSONAttribute';
+import JSONSchema from '../../src/annotation/JSONSchema';
+import JSONProperty from '../../src/annotation/JSONProperty';
 import { JSONEntityInteger, JSONEntityString } from '../../src/types/JSONTypes';
 
-@JSONClass()
+@JSONSchema()
 export default class CSample1 {
 
-  @JSONAttribute<JSONEntityInteger>({
+  @JSONProperty<JSONEntityInteger>({
     type: 'integer',
     minimum: 0
   })
   size: number;
 
-  @JSONAttribute<JSONEntityString>({
+  @JSONProperty<JSONEntityString>({
     minLength: 6
   })
   email: string;

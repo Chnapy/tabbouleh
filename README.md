@@ -10,39 +10,45 @@ This project is designed to use Typescript classes for data validation (Java dev
 With tabbouleh you could use your classes for both define the data and validate/constraint them using annotations and Typescript typing. 
 ORM users, you may find it familiar.
 
+Some uses cases:
+- [validate some JSON data](https://github.com/epoberezkin/ajv)
+  - send by the front
+  - loaded from JSON file
+- [building HTML forms from JSON Schemas](https://github.com/mozilla-services/react-jsonschema-form)
+
 ### Installation
 
 ```bash
-npm install tabbouleh --save-dev
+npm install tabbouleh --save
 ```
 
-tabbouleh requires reflect-metadata (for annotations)
+tabbouleh requires [reflect-metadata](https://www.npmjs.com/package/reflect-metadata) (for annotations)
 
 ```bash
 npm install reflect-metadata --save-dev
 ```
 
-Your tsconfig.json needs the following flags:
+Your `tsconfig.json` needs the following flags:
 ```json
 "experimentalDecorators": true,
 "emitDecoratorMetadata": true
 ```
 
-## Model definition
+## Schema definition
 
 ```Typescript
-import { JSONClass, JSONAttribute, JSONEntityInteger, JSONEntityString } from 'tabbouleh';
+import { JSONSchema, JSONProperty, JSONEntityInteger, JSONEntityString } from 'tabbouleh';
 
-@JSONClass()
+@JSONSchema()
 class User {
   
-  @JSONAttribute<JSONEntityInteger>({
+  @JSONProperty<JSONEntityInteger>({
     type: 'integer',
     minimum: 0
   })
   size: number;
 
-  @JSONAttribute<JSONEntityString>({
+  @JSONProperty<JSONEntityString>({
     minLength: 6
   })
   email: string;
@@ -50,13 +56,13 @@ class User {
 }
 ```
 
-The class has to be annotated with the `@JSONClass()` decorator. All the properties who have to be in the JSON Schema need to be annotated with the `@JSONAttribute()` decorator.
+The class has to be annotated with the `@JSONSchema()` decorator. All the properties who have to be in the JSON Schema need to be annotated with the `@JSONProperty()` decorator.
 
-### `@JSONClass`
+### `@JSONSchema`
 
 TODO
 
-### `@JSONAttribute`
+### `@JSONProperty`
 
 TODO
 
@@ -77,7 +83,7 @@ schemas.User  // we have now the User schema !
 
 The keys of the object `schemas` returned are exactly the same as the keys of the object `classes` given.
 
-In this example, given the class User we saw upper, the value of `schemas.User` is the one below:
+In this example, given the class `User` we saw upper, the value of `schemas.User` is the one below:
 
 ```JSON
 {
@@ -94,6 +100,14 @@ In this example, given the class User we saw upper, the value of `schemas.User` 
   }
 }
 ```
+
+### Usage with [ajv](https://github.com/epoberezkin/ajv)
+
+TODO
+
+### Usage with [react-jsonschema-form](https://github.com/mozilla-services/react-jsonschema-form)
+
+TODO
 
 ### Credits
 

@@ -10,10 +10,10 @@ import { ClassLike } from '../types/ClassTypes';
  * @param value
  * @constructor
  */
-export default function JSONClass<T extends ClassLike>(
+export default function JSONSchema<T extends ClassLike>(
   value: Optional<JSONEntityObject | JSONRoot> = {}
 ) {
   return (target: T) => {
-    AnnotationEngine.defineReflectClassEntity(target, value);
+    AnnotationEngine.defineReflectSchema(target, value);
   };
 }

@@ -8,4 +8,4 @@ export type ClassLike<P extends { [k: string]: any } = { [k: string]: any }> = {
 
 export type ListClassEntity<C extends ClassLike> = { [k: string]: C };
 
-export type ListJSONEntity<L> = { [k in keyof L]: JSONEntity<any, any> };
+export type ListJSONSchema<L> = { [k in keyof L]: JSONEntity<any, any> };
