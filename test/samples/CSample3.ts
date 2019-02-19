@@ -1,5 +1,4 @@
-import JSONProperty from '../../src/annotation/JSONProperty';
-import { JSONEntityInteger, JSONEntityString } from '../../src/types/JSONTypes';
+import { JSONEntityInteger, JSONEntityString, JSONProperty } from '../../src/tabbouleh';
 
 export default class CSample3 {
 

@@ -3,7 +3,7 @@ import { JSONEntity } from '../types/JSONTypes';
 import AnnotationEngine from '../engine/AnnotationEngine';
 import { ClassLike } from '../types/ClassTypes';
 
-export default function JSONProperty<J extends JSONEntity<any, any>>(value: Optional<J> = {}) {
+export function JSONProperty<J extends JSONEntity<any, any>>(value: Optional<J> = {}) {
   return <T extends ClassLike>(
     prototype: T['prototype'],
     key: keyof T['prototype'] & string,
