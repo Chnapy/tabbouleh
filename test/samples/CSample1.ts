@@ -1,6 +1,4 @@
-import JSONSchema from '../../src/annotation/JSONSchema';
-import JSONProperty from '../../src/annotation/JSONProperty';
-import { JSONEntityInteger, JSONEntityString } from '../../src/types/JSONTypes';
+import { JSONEntityInteger, JSONEntityString, JSONProperty, JSONSchema } from '../../src/tabbouleh';
 
 @JSONSchema()
 export default class CSample1 {

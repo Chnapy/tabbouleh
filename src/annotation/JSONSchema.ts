@@ -10,7 +10,7 @@ import { ClassLike } from '../types/ClassTypes';
  * @param value
  * @constructor
  */
-export default function JSONSchema<T extends ClassLike>(
+export function JSONSchema<T extends ClassLike>(
   value: Optional<JSONEntityObject | JSONRoot> = {}
 ) {
   return (target: T) => {

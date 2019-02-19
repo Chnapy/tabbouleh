@@ -2,7 +2,7 @@ import 'reflect-metadata';
 import { JSONEntity, JSONEntityObject } from '../types/JSONTypes';
 import AnnotationEngine from './AnnotationEngine';
 import { ClassLike, ListClassEntity, ListJSONSchema } from '../types/ClassTypes';
-import NotAJsonSchemaError from '../exception/NotAJsonSchemaError';
+import { NotAJsonSchemaError } from '../exception/NotAJsonSchemaError';
 
 export default class Tabbouleh {
   static generateJSONSchemas<C extends ClassLike, L extends ListClassEntity<C>>(

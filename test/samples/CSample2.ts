@@ -1,6 +1,4 @@
-import JSONSchema from '../../src/annotation/JSONSchema';
-import JSONProperty from '../../src/annotation/JSONProperty';
-import { JSONEntityInteger } from '../../src/types/JSONTypes';
+import { JSONEntityInteger, JSONProperty, JSONSchema } from '../../src/tabbouleh';
 
 @JSONSchema({
   $schema: 'http://json-schema.org/draft-07/schema#',
