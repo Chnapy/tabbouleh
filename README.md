@@ -10,8 +10,6 @@ This project is designed to use Typescript classes for data validation (Java dev
 With tabbouleh you could use your classes for both define the data and validate/constraint them using annotations and Typescript typing. 
 ORM users, you may find it familiar.
 
-![](tabbouleh.png)
-
 ### Installation
 
 ```bash
