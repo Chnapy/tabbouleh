@@ -4,7 +4,7 @@ import Tabbouleh from '../src/tabbouleh';
 import CSample2 from './samples/CSample2';
 import { JSONEntityObject, JSONRoot } from '../src/types/JSONTypes';
 import CSample3 from './samples/CSample3';
-import NotAJsonSchemaError from '../src/exception/NotAJsonSchemaError';
+import { NotAJsonSchemaError } from '../src/exception/NotAJsonSchemaError';
 
 const schemaCSample1: JSONEntityObject<typeof CSample1.prototype> = {
   type: 'object',
