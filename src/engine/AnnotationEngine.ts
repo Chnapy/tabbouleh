@@ -110,4 +110,33 @@ export default class AnnotationEngine {
 
     AnnotationEngine.setReflectProperties(prototype, properties);
   }
+
+  static defineReflectProperty<C extends ClassLike, J extends JSONEntity<any, any>, K extends keyof J>(
+    prototype: C['prototype'],
+    key: keyof C['prototype'] & string,
+    propertyKey: K,
+    propertyValue: J[K]
+  ): void {
+
+    const properties = AnnotationEngine.getReflectProperties(prototype);
+
+    const reflectSchema: Optional<JSONEntityAny> =
+      Reflect.getMetadata(REFLECT_KEY.JSON_SCHEMA, prototype, key) || {};
+
+    const typeSchema: ClassLike = Reflect.getMetadata(REFLECT_KEY.TYPE, prototype, key);
+
+    const fullSchema: JSONEntityAny = AnnotationEngine.getJSONPropertyEntity<JSONEntityAny>(
+      reflectSchema,
+      {
+        [propertyKey]: propertyValue
+      },
+      typeSchema,
+      key
+    );
+
+    delete fullSchema.type;
+
+    AnnotationEngine.setReflectProperties(prototype, properties);
+  }
+
 }
