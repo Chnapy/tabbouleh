@@ -1,6 +1,4 @@
-import { JSONRequired } from '../../src/tabbouleh';
-import { JSONInteger } from '../../src/annotation/JSONInteger';
-import { JSONString } from '../../src/annotation/JSONString';
+import { JSONInteger, JSONRequired, JSONString } from '../../src/tabbouleh';
 
 export default class CSample3 {
 

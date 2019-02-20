@@ -1,5 +1,11 @@
-import { JSONDescription, JSONEntityInteger, JSONEntityString, JSONProperty, JSONSchema } from '../../src/tabbouleh';
-import { JSONTitle } from '../../src/annotation/JSONProperty';
+import {
+  JSONDescription,
+  JSONEntityInteger,
+  JSONEntityString,
+  JSONProperty,
+  JSONSchema,
+  JSONTitle
+} from '../../src/tabbouleh';
 
 @JSONSchema
 export default class CSample1 {

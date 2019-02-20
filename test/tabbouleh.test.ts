@@ -1,10 +1,8 @@
 import 'reflect-metadata';
 import CSample1 from './samples/CSample1';
-import Tabbouleh from '../src/tabbouleh';
+import Tabbouleh, { JSONEntityObject, JSONRoot, NotAJsonSchemaError } from '../src/tabbouleh';
 import CSample2 from './samples/CSample2';
-import { JSONEntityObject, JSONRoot } from '../src/types/JSONTypes';
 import CSample3 from './samples/CSample3';
-import { NotAJsonSchemaError } from '../src/exception/NotAJsonSchemaError';
 import CSample4 from './samples/CSample4';
 
 const schemaCSample1: JSONEntityObject<typeof CSample1.prototype> = {
