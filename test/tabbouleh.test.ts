@@ -72,6 +72,10 @@ const schemaCSample4: JSONEntityObject<typeof CSample4.prototype> = {
     money: {
       type: 'number',
       minimum: 0
+    },
+
+    isAdmin: {
+      type: 'boolean'
     }
   }
 
