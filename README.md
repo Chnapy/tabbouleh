@@ -1,5 +1,6 @@
 # Tabbouleh
 
+[![NPM version](http://img.shields.io/npm/v/tabbouleh.svg?style=flat)](https://www.npmjs.org/package/tabbouleh)
 [![styled with prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 [![Greenkeeper badge](https://badges.greenkeeper.io/Chnapy/tabbouleh.svg)](https://greenkeeper.io/)
 [![Travis](https://img.shields.io/travis/Chnapy/tabbouleh.svg)](https://travis-ci.org/Chnapy/tabbouleh)
@@ -11,10 +12,10 @@ With tabbouleh you could use your classes for both define the data and validate/
 ORM users, you may find it familiar.
 
 Some uses cases:
-- [validate some JSON data](https://github.com/epoberezkin/ajv)
+- [validate some JSON data](#usage-with-ajv)
   - send by the front
   - loaded from JSON file
-- [building HTML forms from JSON Schemas](https://github.com/mozilla-services/react-jsonschema-form)
+- [building HTML forms from JSON Schemas](#usage-with-react-jsonschema-form)
 
 ### Installation
 
@@ -37,27 +38,30 @@ Your `tsconfig.json` needs the following flags:
 ## Schema definition
 
 ```Typescript
-import { JSONSchema, JSONProperty, JSONEntityInteger, JSONEntityString } from 'tabbouleh';
+import { JSONSchema, JSONInteger, JSONRequired } from 'tabbouleh';
 
-@JSONSchema()
+@JSONSchema
 class User {
   
-  @JSONProperty<JSONEntityInteger>({
-    type: 'integer',
+  @JSONInteger({
     minimum: 0
   })
   size: number;
 
-  @JSONProperty<JSONEntityString>({
-    minLength: 6
-  })
+  @JSONRequired
   email: string;
   
 }
 ```
 
-The class has to be annotated with the `@JSONSchema()` decorator. All the properties who have to be in the JSON Schema need to be annotated with the `@JSONProperty()` decorator.
-
+The class has to be annotated with the `@JSONSchema` decorator. 
+All the properties who have to be in the JSON Schema need to be annotated with one of these decorators:
+ - `JSONString`
+ - `JSONNumber`
+ - `JSONInteger`
+ - `JSONBoolean`
+ - `JSONProperty`
+ 
 ### `@JSONSchema`
 
 TODO
@@ -71,19 +75,16 @@ TODO
 ```Typescript
 import { Tabbouleh } from 'tabbouleh';
 
-// we use the example upper
-const classes = {
+// we use the example upper: User
+
+const userSchema = Tabbouleh.generateJSONSchema(
   User
-};
+);
 
-const schemas = Tabbouleh.generateJSONSchemas(classes);
-
-schemas.User  // we have now the User schema !
+// we now have the User schema !
 ```
 
-The keys of the object `schemas` returned are exactly the same as the keys of the object `classes` given.
-
-In this example, given the class `User` we saw upper, the value of `schemas.User` is the one below:
+In this example, given the class `User` we saw upper, the value of `userSchema` is the one below:
 
 ```JSON
 {
@@ -95,7 +96,7 @@ In this example, given the class `User` we saw upper, the value of `schemas.User
     },
     "email": {
       "type": "string",
-      "minLength": 6
+      "required": true
     }
   }
 }
@@ -108,6 +109,10 @@ TODO
 ### Usage with [react-jsonschema-form](https://github.com/mozilla-services/react-jsonschema-form)
 
 TODO
+
+### Why tabbouleh ?
+
+[Hummus](https://www.npmjs.com/package/hummus) was already taken.
 
 ### Credits
 

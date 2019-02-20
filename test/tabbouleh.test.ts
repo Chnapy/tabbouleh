@@ -5,6 +5,7 @@ import CSample2 from './samples/CSample2';
 import { JSONEntityObject, JSONRoot } from '../src/types/JSONTypes';
 import CSample3 from './samples/CSample3';
 import { NotAJsonSchemaError } from '../src/exception/NotAJsonSchemaError';
+import CSample4 from './samples/CSample4';
 
 const schemaCSample1: JSONEntityObject<typeof CSample1.prototype> = {
   type: 'object',
@@ -16,6 +17,8 @@ const schemaCSample1: JSONEntityObject<typeof CSample1.prototype> = {
 
     email: {
       type: 'string',
+      title: 'Email',
+      description: 'It\'s where you put your mail',
       minLength: 6
     }
   }
@@ -42,8 +45,40 @@ const schemaCSample2: JSONRoot<typeof CSample2.prototype> = {
 
     anotherProp: {
       type: 'any'
+    },
+
+    email: {
+      type: 'string',
+      minLength: 6,
+      required: true
     }
   }
+};
+
+const schemaCSample4: JSONEntityObject<typeof CSample4.prototype> = {
+
+  type: 'object',
+
+  properties: {
+    lastname: {
+      type: 'string',
+      required: true
+    },
+
+    height: {
+      type: 'number'
+    },
+
+    money: {
+      type: 'number',
+      minimum: 0
+    },
+
+    isAdmin: {
+      type: 'boolean'
+    }
+  }
+
 };
 
 describe('Compare input <-> output', () => {
@@ -54,20 +89,22 @@ describe('Compare input <-> output', () => {
       toto: CSample2
     };
 
-    expect(Object.keys(Tabbouleh.generateJSONSchemas(target)).sort()).toEqual(Object.keys(target).sort());
+    expect(Object.keys(Tabbouleh.generateMultipleJSONSchemas(target)).sort()).toEqual(Object.keys(target).sort());
   });
 
   it('class samples give the good schema', () => {
     const target = {
       CSample1,
-      CSample2
+      CSample2,
+      CSample4
     };
 
-    const listJSONEntities = Tabbouleh.generateJSONSchemas(target);
+    const listJSONEntities = Tabbouleh.generateMultipleJSONSchemas(target);
 
     expect(listJSONEntities).toEqual({
       CSample1: schemaCSample1,
-      CSample2: schemaCSample2
+      CSample2: schemaCSample2,
+      CSample4: schemaCSample4
     });
   });
 
@@ -76,10 +113,10 @@ describe('Compare input <-> output', () => {
       CSample3
     };
 
-    expect(() => Tabbouleh.generateJSONSchemas(target)).toThrow(NotAJsonSchemaError);
+    expect(() => Tabbouleh.generateMultipleJSONSchemas(target)).toThrow(NotAJsonSchemaError);
     expect((() => {
       try {
-        Tabbouleh.generateJSONSchemas(target);
+        Tabbouleh.generateMultipleJSONSchemas(target);
       } catch (e) {
         return e.message.includes(target.CSample3.name);
       }
