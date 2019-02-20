@@ -29,8 +29,7 @@ export default class AnnotationEngine {
   private static getJSONPropertyEntity<J extends JSONEntity<any, any>>(
     reflectEntity: Optional<J>,
     paramEntity: Optional<J>,
-    typeTS: ClassLike,
-    name: string
+    typeTS: ClassLike
   ): J {
 
     const typeEntity = AnnotationEngine.getJSONType(typeTS) as J;
@@ -50,8 +49,7 @@ export default class AnnotationEngine {
     return AnnotationEngine.getJSONPropertyEntity<JSONEntityObject>(
       reflectEntity,
       paramEntity,
-      Object,
-      name
+      Object
     );
   }
 
@@ -99,8 +97,7 @@ export default class AnnotationEngine {
     const fullSchema: JSONEntityAny = AnnotationEngine.getJSONPropertyEntity<JSONEntityAny>(
       reflectSchema,
       value,
-      typeSchema,
-      key
+      typeSchema
     );
 
     properties[key] = {
@@ -130,11 +127,15 @@ export default class AnnotationEngine {
       {
         [propertyKey]: propertyValue
       },
-      typeSchema,
-      key
+      typeSchema
     );
 
     delete fullSchema.type;
+
+    properties[key] = {
+      ...(properties[key] || {}),
+      ...fullSchema
+    };
 
     AnnotationEngine.setReflectProperties(prototype, properties);
   }

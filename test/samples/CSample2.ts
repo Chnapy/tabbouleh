@@ -1,4 +1,6 @@
-import { JSONEntityInteger, JSONProperty, JSONSchema } from '../../src/tabbouleh';
+import { JSONProperty, JSONRequired, JSONSchema } from '../../src/tabbouleh';
+import { JSONInteger } from '../../src/annotation/JSONInteger';
+import { JSONString } from '../../src/annotation/JSONString';
 
 @JSONSchema({
   $schema: 'http://json-schema.org/draft-07/schema#',
@@ -7,18 +9,23 @@ import { JSONEntityInteger, JSONProperty, JSONSchema } from '../../src/tabbouleh
 })
 export default class CSample2 {
 
-  @JSONProperty()
+  @JSONProperty
   name: string;
 
-  @JSONProperty<JSONEntityInteger>({
-    type: 'integer',
+  @JSONInteger({
     minimum: 10,
     maximum: 10,
     required: true
   })
   phone: number;
 
-  @JSONProperty()
+  @JSONString({
+    minLength: 6
+  })
+  @JSONRequired(true)
+  email: string;
+
+  @JSONProperty
   anotherProp: UnknownClass;
 
 }

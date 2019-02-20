@@ -1,8 +1,8 @@
-import {JSONEntity} from "../types/JSONTypes";
-import {ClassLike} from "../types/ClassTypes";
-import AnnotationEngine from "../engine/AnnotationEngine";
+import { JSONEntity } from '../types/JSONTypes';
+import { ClassLike } from '../types/ClassTypes';
+import AnnotationEngine from '../engine/AnnotationEngine';
 
-export default function FunctionAnnotation<J extends JSONEntity<any, any>, K extends keyof J>(args: any[], propertyKey: K, defaultValue: J[K]): Function | void {
+export default function AnnotateOneProperty<J extends JSONEntity<any, any>, K extends keyof J>(args: any[], propertyKey: K, defaultValue: J[K]): Function | void {
 
   const compute = (value: J[K]) => {
 
