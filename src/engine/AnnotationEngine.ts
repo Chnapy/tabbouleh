@@ -1,6 +1,10 @@
 import 'reflect-metadata';
-import { JSONEntity, JSONEntityAny, JSONEntityObject, JSONEntityObjectProperties } from '../types/JSONTypes';
-import { Optional } from '../types/UtilTypes';
+import {
+  JSONEntity,
+  JSONEntityAny,
+  JSONEntityObject,
+  JSONEntityObjectProperties
+} from '../types/JSONTypes';
 import { REFLECT_KEY } from '../annotation/ReflectKeys';
 import { ClassLike } from '../types/ClassTypes';
 
@@ -27,11 +31,10 @@ export default class AnnotationEngine {
   }
 
   private static getJSONPropertyEntity<J extends JSONEntity<any, any>>(
-    reflectEntity: Optional<J>,
-    paramEntity: Optional<J>,
+    reflectEntity: Partial<J>,
+    paramEntity: Partial<J>,
     typeTS: ClassLike
   ): J {
-
     const typeEntity = AnnotationEngine.getJSONType(typeTS) as J;
 
     return {
@@ -42,8 +45,8 @@ export default class AnnotationEngine {
   }
 
   private static getJSONSchemaEntity(
-    reflectEntity: Optional<JSONEntityObject>,
-    paramEntity: Optional<JSONEntityObject>,
+    reflectEntity: Partial<JSONEntityObject>,
+    paramEntity: Partial<JSONEntityObject>,
     name: string
   ): JSONEntityObject {
     return AnnotationEngine.getJSONPropertyEntity<JSONEntityObject>(
@@ -72,7 +75,7 @@ export default class AnnotationEngine {
     Reflect.defineMetadata(REFLECT_KEY.JSON_PROPERTY, properties, prototype);
   }
 
-  static defineReflectSchema(target: ClassLike, value: Optional<JSONEntityObject>): void {
+  static defineReflectSchema(target: ClassLike, value: Partial<JSONEntityObject>): void {
     const classSchema: JSONEntityObject =
       AnnotationEngine.getReflectSchema(target) ||
       AnnotationEngine.getJSONSchemaEntity({}, {}, target.name);
@@ -85,11 +88,11 @@ export default class AnnotationEngine {
   static defineReflectProperties<C extends ClassLike>(
     prototype: C['prototype'],
     key: keyof C['prototype'] & string,
-    value: Optional<JSONEntityAny>
+    value: Partial<JSONEntityAny>
   ): void {
     const properties = AnnotationEngine.getReflectProperties(prototype);
 
-    const reflectSchema: Optional<JSONEntityAny> =
+    const reflectSchema: Partial<JSONEntityAny> =
       Reflect.getMetadata(REFLECT_KEY.JSON_SCHEMA, prototype, key) || {};
 
     const typeSchema: ClassLike = Reflect.getMetadata(REFLECT_KEY.TYPE, prototype, key);
@@ -108,16 +111,19 @@ export default class AnnotationEngine {
     AnnotationEngine.setReflectProperties(prototype, properties);
   }
 
-  static defineReflectProperty<C extends ClassLike, J extends JSONEntity<any, any>, K extends keyof J>(
+  static defineReflectProperty<
+    C extends ClassLike,
+    J extends JSONEntity<any, any>,
+    K extends keyof J
+  >(
     prototype: C['prototype'],
     key: keyof C['prototype'] & string,
     propertyKey: K,
     propertyValue: J[K]
   ): void {
-
     const properties = AnnotationEngine.getReflectProperties(prototype);
 
-    const reflectSchema: Optional<JSONEntityAny> =
+    const reflectSchema: Partial<JSONEntityAny> =
       Reflect.getMetadata(REFLECT_KEY.JSON_SCHEMA, prototype, key) || {};
 
     const typeSchema: ClassLike = Reflect.getMetadata(REFLECT_KEY.TYPE, prototype, key);
@@ -139,5 +145,4 @@ export default class AnnotationEngine {
 
     AnnotationEngine.setReflectProperties(prototype, properties);
   }
-
 }

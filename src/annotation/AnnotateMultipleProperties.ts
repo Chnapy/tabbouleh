@@ -1,12 +1,12 @@
 import { JSONEntity } from '../types/JSONTypes';
-import { Optional } from '../types/UtilTypes';
 import { ClassLike } from '../types/ClassTypes';
 import AnnotationEngine from '../engine/AnnotationEngine';
 
-export function AnnotateMultipleProperties<J extends JSONEntity<any, any>, O extends object>(args: any[], defaultValues: Optional<J>): Function | void {
-
-  const compute = (value: Optional<J> = {}) => {
-
+export function AnnotateMultipleProperties<J extends JSONEntity<any, any>, O extends object>(
+  args: any[],
+  defaultValues: Partial<J>
+): Function | void {
+  const compute = (value: Partial<J> = {}) => {
     value = {
       ...defaultValues,
       ...value
@@ -21,13 +21,11 @@ export function AnnotateMultipleProperties<J extends JSONEntity<any, any>, O ext
     };
   };
 
-  if(args.length === 1) {
-
+  if (args.length === 1) {
     const value = args[0];
 
     return compute(value);
   } else {
-
     const prototype = args[0];
     const key = args[1];
 

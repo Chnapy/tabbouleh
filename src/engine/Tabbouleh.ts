@@ -5,9 +5,7 @@ import { ClassLike, ListClassEntity, ListJSONSchema } from '../types/ClassTypes'
 import { NotAJsonSchemaError } from '../exception/NotAJsonSchemaError';
 
 export default class Tabbouleh {
-
   static generateJSONSchema<C extends ClassLike = ClassLike>(target: C): JSONEntityObject {
-
     const schema = Tabbouleh.getReflectSchema(target);
 
     if (!schema) {
@@ -36,7 +34,6 @@ export default class Tabbouleh {
   }
 
   private static computeJSONClass(target: ClassLike, schema: JSONEntityObject): JSONEntityObject {
-
     schema.properties = AnnotationEngine.getReflectProperties(target.prototype);
 
     return schema;
