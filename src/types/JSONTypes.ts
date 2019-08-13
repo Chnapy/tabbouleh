@@ -1,52 +1,75 @@
 import { Omit } from 'lodash';
+import { JSONSchema7, JSONSchema7TypeName } from 'json-schema';
 
-export type JSONType =
-  | 'string'
-  | 'number'
-  | 'integer'
-  | 'boolean'
-  | 'object'
-  | 'array'
-  | 'null'
-  | 'any';
+/**
+ * JSON Schema 7
+ * Draft 07
+ * @see https://tools.ietf.org/html/draft-handrews-json-schema-validation-01
+ */
 
-export type JSONEntity<T extends JSONType | JSONType[], D> = {
+/**
+ * Primitive type
+ * @see https://tools.ietf.org/html/draft-handrews-json-schema-validation-01#section-6.1.1
+ */
+export type JSONTypeName = JSONSchema7TypeName | 'any';
+
+export type JSONEntityDefinition<
+  T extends JSONTypeName | JSONTypeName[] = JSONTypeName | JSONTypeName[],
+  D = any
+> = JSONEntity<T, D> | boolean;
+
+/**
+ * Generic entity
+ */
+export type JSONEntity<T extends JSONTypeName | JSONTypeName[], D> = Pick<
+  JSONSchema7,
+  | '$id' // TODO find programmatic solution
+  | '$ref' // TODO find programmatic solution
+  | '$schema'
+  | '$comment'
+  | 'title'
+  | 'description'
+  | 'readOnly'
+  | 'writeOnly'
+> & {
+  /**
+   * @see https://tools.ietf.org/html/draft-handrews-json-schema-validation-01#section-6.1
+   */
   type: T;
-
-  title?: string;
-  description?: string;
-
-  disallow?: JSONType | JSONType[];
-
-  required?: boolean;
-
-  default?: D;
-
   enum?: D[];
-
   const?: D;
 
+  /**
+   * @see https://tools.ietf.org/html/draft-handrews-json-schema-validation-01#section-6.6
+   */
+  if?: D | boolean;
+  then?: D;
+  else?: D;
+
+  /**
+   * @see https://tools.ietf.org/html/draft-handrews-json-schema-validation-01#section-6.7
+   */
   allOf?: Omit<JSONEntity<T, D>, 'type'>[];
-
   oneOf?: Omit<JSONEntity<T, D>, 'type'>[];
-
   anyOf?: Omit<JSONEntity<T, D>, 'type'>[];
-
   not?: JSONEntity<T, D>;
+
+  // TODO find programmatic solution
+  // definitions
 
   // TODO find programmatic solution
   // extends
 
-  // TODO find programmatic solution
-  // id
-
-  // TODO find programmatic solution
-  // $ref
-
-  // TODO
-  // dependencies
+  /**
+   * @see https://tools.ietf.org/html/draft-handrews-json-schema-validation-01#section-10
+   */
+  default?: D;
+  examples?: D;
 };
 
+/**
+ * @see https://tools.ietf.org/html/draft-handrews-json-schema-validation-01#section-7
+ */
 type JSONPrimitive = {
   format?:
     | 'date-time'
@@ -64,57 +87,73 @@ type JSONPrimitive = {
     | 'host-name';
 };
 
+/**
+ * Entity for boolean value
+ */
 export type JSONEntityBoolean = JSONEntity<'boolean', boolean>;
 
+/**
+ * Entity for null value
+ */
 export type JSONEntityNull = JSONEntity<'null', null>;
 
+/**
+ * Entity for number, which can be integer or not
+ *
+ * @see https://tools.ietf.org/html/draft-handrews-json-schema-validation-01#section-6.2
+ */
 export type JSONEntityNumber<T extends 'number' | 'integer' = 'number'> = JSONEntity<T, number> &
-  JSONPrimitive & {
-    minimum?: number;
-    maximum?: number;
-    exclusiveMinimum?: number | boolean;
-    exclusiveMaximum?: number | boolean;
-    multipleOf?: number;
-    divisibleBy?: number;
-  };
+  JSONPrimitive &
+  Pick<JSONSchema7, 'minimum' | 'maximum' | 'exclusiveMinimum' | 'exclusiveMaximum' | 'multipleOf'>;
 
+/**
+ * Entity for integer
+ */
 export type JSONEntityInteger = JSONEntityNumber<'integer'>;
 
+/**
+ * Entity for string
+ *
+ * @see https://tools.ietf.org/html/draft-handrews-json-schema-validation-01#section-6.3
+ * @see https://tools.ietf.org/html/draft-handrews-json-schema-validation-01#section-8
+ */
 export type JSONEntityString = JSONEntity<'string', string> &
-  JSONPrimitive & {
-    pattern?: string;
-    minLength?: number;
-    maxLength?: number;
-  };
+  JSONPrimitive &
+  Pick<JSONSchema7, 'maxLength' | 'minLength' | 'pattern' | 'contentEncoding' | 'contentMediaType'>;
 
 export type JSONEntityObjectProperties<K extends object = any> = { [k in keyof K]: JSONEntityAny };
 
-export type JSONEntityObject<K extends object = any> = JSONEntity<'object', object> & {
-  minProperties?: number;
-  maxProperties?: number;
+/**
+ * Entity for object
+ *
+ * @see https://tools.ietf.org/html/draft-handrews-json-schema-validation-01#section-6.5
+ */
+export type JSONEntityObject<K extends object = any> = JSONEntity<'object', object> &
+  Pick<JSONSchema7, 'minProperties' | 'maxProperties'> & {
+    required?: (keyof K)[];
 
-  properties?: JSONEntityObjectProperties<K>;
+    properties?: JSONEntityObjectProperties<K>;
 
-  patternProperties?: {
-    [k: string]: JSONEntity<any, any>;
+    patternProperties?: {
+      [k: string]: JSONEntity<any, any>;
+    };
+
+    additionalProperties?: JSONEntityDefinition<any, any>;
+
+    // TODO
+    // dependencies
+
+    propertyNames?: JSONEntityString;
   };
-
-  additionalProperties?: boolean | JSONEntity<any, any>;
-
-  required?: boolean | (keyof K)[];
-};
 
 export type JSONEntityArray<
   T extends JSONEntity<any, any> | JSONEntity<any, any>[] = any
-> = JSONEntity<'array', T> & {
-  minItems: number;
-  maxItems: number;
-  uniqueItems: boolean;
-
-  items: T;
-
-  additionalItems: boolean | JSONEntity<any, any>;
-};
+> = JSONEntity<'array', T> &
+  Pick<JSONSchema7, 'minItems' | 'maxItems' | 'uniqueItems'> & {
+    items?: T;
+    additionalItems?: JSONEntityDefinition<any, any>;
+    contains?: JSONEntity<any, any>;
+  };
 
 export type JSONEntityAny =
   | JSONEntityBoolean
@@ -123,10 +162,6 @@ export type JSONEntityAny =
   | JSONEntityInteger
   | JSONEntityArray
   | JSONEntityObject
-  | JSONEntityNull
-  | JSONEntity<'any', any>;
+  | JSONEntityNull;
 
-export interface JSONRoot<K extends object = any> extends JSONEntityObject<K> {
-  $schema: string;
-  $id: string;
-}
+export type JSONRoot<K extends object = any> = JSONEntityObject<K>;

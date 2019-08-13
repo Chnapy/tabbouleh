@@ -25,7 +25,7 @@ export default class AnnotationEngine {
         };
       default:
         return {
-          type: 'any'
+          type: 'null'
         };
     }
   }

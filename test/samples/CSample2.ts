@@ -1,33 +1,28 @@
-import { JSONInteger, JSONProperty, JSONRequired, JSONSchema, JSONString } from '../../src/tabbouleh';
+import { JSONInteger, JSONProperty, JSONSchema, JSONString } from '../../src/tabbouleh';
 
-@JSONSchema({
+@JSONSchema<CSample2>({
   $schema: 'http://json-schema.org/draft-07/schema#',
   $id: 'http://json-schema.org/draft-07/schema#',
-  title: 'Toto Africa'
+  title: 'Toto Africa',
+  required: ['phone', 'email']
 })
 export default class CSample2 {
-
   @JSONProperty
   name: string;
 
   @JSONInteger({
     minimum: 10,
-    maximum: 10,
-    required: true
+    maximum: 10
   })
   phone: number;
 
   @JSONString({
     minLength: 6
   })
-  @JSONRequired(true)
   email: string;
 
   @JSONProperty
   anotherProp: UnknownClass;
-
 }
 
-class UnknownClass {
-
-}
+class UnknownClass {}

@@ -20,8 +20,9 @@ export function JSONDescription(value: string) {
   ) as Function;
 }
 
-export function JSONRequired(prototype: any, key: string, descriptor?: PropertyDescriptor): void;
-export function JSONRequired(value: boolean): Function;
-export function JSONRequired(...args: any[]): Function | void {
-  return AnnotateOneProperty<JSONEntity<any, any>, 'required'>(args, 'required', true);
-}
+// TODO JSONRequired disabled, where required props should be defined ?
+// export function JSONRequired(prototype: any, key: string, descriptor?: PropertyDescriptor): void;
+// export function JSONRequired(value: boolean): Function;
+// export function JSONRequired(...args: any[]): Function | void {
+//   return AnnotateOneProperty<JSONEntity<any, any>, 'required'>(args, 'required', true);
+// }

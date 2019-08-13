@@ -1,10 +1,10 @@
-import { JSONBoolean, JSONNumber, JSONRequired, JSONSchema, JSONString } from '../../src/tabbouleh';
+import { JSONBoolean, JSONNumber, JSONSchema, JSONString } from '../../src/tabbouleh';
 
-@JSONSchema
+@JSONSchema<CSample4>({
+  required: ['lastname']
+})
 export default class CSample4 {
-
   @JSONString({})
-  @JSONRequired
   lastname: string;
 
   @JSONNumber
@@ -17,5 +17,4 @@ export default class CSample4 {
 
   @JSONBoolean
   isAdmin: boolean;
-
 }
