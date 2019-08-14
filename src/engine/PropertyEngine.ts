@@ -1,10 +1,5 @@
 import 'reflect-metadata';
-import {
-  JSONEntity,
-  JSONEntityAny,
-  JSONEntityObject,
-  JSONEntityObjectProperties
-} from '../types/JSONTypes';
+import { JSONEntity, JSONEntityAny } from '../types/JSONTypes';
 import { REFLECT_KEY } from '../annotation/ReflectKeys';
 import { ClassLike } from '../types/ClassTypes';
 import { JSONSchema7 } from 'json-schema';
@@ -75,41 +70,6 @@ export default class PropertyEngine {
       value,
       typeSchema
     );
-
-    properties[key] = {
-      ...(properties[key] || {}),
-      ...fullSchema
-    };
-
-    PropertyEngine.setReflectProperties(prototype, properties);
-  }
-
-  static defineReflectProperty<
-    C extends ClassLike,
-    J extends JSONEntity<any, any>,
-    K extends keyof J
-  >(
-    prototype: C['prototype'],
-    key: keyof C['prototype'] & string,
-    propertyKey: K,
-    propertyValue: J[K]
-  ): void {
-    const properties = PropertyEngine.getReflectProperties(prototype);
-
-    const reflectSchema: JSONSchema7 =
-      Reflect.getMetadata(REFLECT_KEY.JSON_SCHEMA, prototype, key) || {};
-
-    const typeSchema: ClassLike = Reflect.getMetadata(REFLECT_KEY.TYPE, prototype, key);
-
-    const fullSchema: JSONSchema7 = PropertyEngine.getJSONPropertyEntity<JSONEntityAny>(
-      reflectSchema,
-      {
-        [propertyKey]: propertyValue
-      },
-      typeSchema
-    );
-
-    delete fullSchema.type;
 
     properties[key] = {
       ...(properties[key] || {}),
