@@ -18,12 +18,12 @@ const compute = <T extends object>(value: JSONSchemaValue<T> = {}) => {
 export function JSONSchema<T extends object>(target: T): void;
 export function JSONSchema<T extends object>(value: JSONSchemaValue<T>): Function;
 export function JSONSchema<T extends object>(arg: T | JSONSchemaValue<T>): Function | void {
-  // target
-  if (typeof arg === 'function') {
-    compute()(arg);
-
-    // value
-  } else {
+  // value
+  if (typeof (arg as any) === 'object') {
     return compute(arg);
+
+    // target
+  } else {
+    compute()(arg);
   }
 }
