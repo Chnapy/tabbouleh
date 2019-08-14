@@ -1,10 +1,16 @@
 import { JSONEntityString } from '../types/JSONTypes';
 import { AnnotateMultipleProperties } from './AnnotateMultipleProperties';
 import { Omit } from 'lodash';
+import { AnnotationClassProps } from '../types/ClassTypes';
 
-export function JSONString(prototype: any, key: string, descriptor?: PropertyDescriptor): void;
-export function JSONString(value: Omit<Partial<JSONEntityString>, 'type'>): Function;
-export function JSONString(...args: any[]): Function | void {
+type JSONStringValue = Omit<Partial<JSONEntityString>, 'type'>;
+
+/**
+ * Annotation for JSON string attribute.
+ */
+export function JSONString(...args: AnnotationClassProps): void;
+export function JSONString(value: JSONStringValue): Function;
+export function JSONString(...args: [JSONStringValue] | AnnotationClassProps): Function | void {
   return AnnotateMultipleProperties(args, {
     type: 'string'
   });
