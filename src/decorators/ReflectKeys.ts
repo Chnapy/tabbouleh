@@ -3,6 +3,7 @@
  */
 export enum REFLECT_KEY {
   TYPE = 'design:type',
-  JSON_SCHEMA = 'json:schema',
-  JSON_PROPERTY = 'json:property'
+  JSON_SCHEMA = 'tabbouleh:schema',
+  JSON_PROPERTY = 'tabbouleh:property',
+  JSON_ASSOCIATIONS = 'tabbouleh:associations'
 }

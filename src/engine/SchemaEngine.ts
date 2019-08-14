@@ -13,7 +13,7 @@ import { JSONSchema7 } from 'json-schema';
 export default class SchemaEngine {
   private static getJSONSchemaEntity(
     reflectEntity: JSONSchema7,
-    paramEntity: Partial<JSONEntityObject>,
+    paramEntity: JSONSchema7,
     name: string
   ): JSONSchema7 {
     return PropertyEngine.getJSONPropertyEntity<JSONEntityObject>(

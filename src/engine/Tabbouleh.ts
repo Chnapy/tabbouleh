@@ -4,6 +4,7 @@ import { ClassLike, ListClassEntity, ListJSONSchema } from '../types/ClassTypes'
 import { NotAJsonSchemaError } from '../exception/NotAJsonSchemaError';
 import { JSONSchema7 } from 'json-schema';
 import SchemaEngine from './SchemaEngine';
+import AssociationEngine from './AssociationEngine';
 
 /**
  * Tabbouleh simply give a valid JSON Schema (draft 7) from a model class
@@ -15,6 +16,8 @@ export default class Tabbouleh {
    * The class MUST be a valid JSONSchema entity, decorated.
    */
   static generateJSONSchema<C extends ClassLike = ClassLike>(target: C): JSONSchema7 {
+    AssociationEngine.computeJSONAssociations(target);
+
     const schema = Tabbouleh.getReflectSchema(target);
 
     if (!schema) {

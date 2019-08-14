@@ -28,7 +28,7 @@ export default class PropertyEngine {
 
   static getJSONPropertyEntity<J extends JSONEntity<any, any>>(
     reflectEntity: JSONSchema7,
-    paramEntity: Partial<J>,
+    paramEntity: JSONSchema7,
     typeTS: ClassLike
   ): JSONSchema7 {
     const typeEntity = PropertyEngine.getJSONType(typeTS) as J;
@@ -56,7 +56,7 @@ export default class PropertyEngine {
   static defineReflectProperties<C extends ClassLike>(
     prototype: C['prototype'],
     key: keyof C['prototype'] & string,
-    value: Partial<JSONEntityAny>
+    value: JSONSchema7
   ): void {
     const properties = PropertyEngine.getReflectProperties(prototype);
 
