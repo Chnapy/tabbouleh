@@ -1,6 +1,6 @@
 import { JSONEntity } from '../types/JSONTypes';
 import { AnnotationClassProps, ClassLike } from '../types/ClassTypes';
-import AnnotationEngine from '../engine/AnnotationEngine';
+import PropertyEngine from '../engine/PropertyEngine';
 
 function compute<J extends JSONEntity<any, any>, K extends keyof J>(
   defaultValues: Partial<J>,
@@ -16,7 +16,7 @@ function compute<J extends JSONEntity<any, any>, K extends keyof J>(
     key: keyof C['prototype'] & string,
     descriptor?: PropertyDescriptor
   ): void => {
-    AnnotationEngine.defineReflectProperties(prototype, key, value);
+    PropertyEngine.defineReflectProperties(prototype, key, value);
   };
 }
 

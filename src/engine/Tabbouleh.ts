@@ -1,9 +1,10 @@
 import 'reflect-metadata';
 import { JSONEntityObject } from '../types/JSONTypes';
-import AnnotationEngine from './AnnotationEngine';
+import PropertyEngine from './PropertyEngine';
 import { ClassLike, ListClassEntity, ListJSONSchema } from '../types/ClassTypes';
 import { NotAJsonSchemaError } from '../exception/NotAJsonSchemaError';
 import { JSONSchema7 } from 'json-schema';
+import SchemaEngine from './SchemaEngine';
 
 /**
  * Tabbouleh simply give a valid JSON Schema (draft 7) from a model class
@@ -43,12 +44,12 @@ export default class Tabbouleh {
     return obj;
   }
 
-  private static getReflectSchema(target: ClassLike): JSONEntityObject | undefined {
-    return AnnotationEngine.getReflectSchema(target);
+  private static getReflectSchema(target: ClassLike): JSONSchema7 | undefined {
+    return SchemaEngine.getReflectSchema(target);
   }
 
-  private static computeJSONClass(target: ClassLike, schema: JSONEntityObject): JSONSchema7 {
-    schema.properties = AnnotationEngine.getReflectProperties(target.prototype);
+  private static computeJSONClass(target: ClassLike, schema: JSONSchema7): JSONSchema7 {
+    schema.properties = PropertyEngine.getReflectProperties(target.prototype);
 
     return schema;
   }

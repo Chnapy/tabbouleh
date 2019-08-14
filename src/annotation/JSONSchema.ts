@@ -1,13 +1,13 @@
 import 'reflect-metadata';
 import { JSONEntityObject, JSONRoot } from '../types/JSONTypes';
-import AnnotationEngine from '../engine/AnnotationEngine';
 import { ClassLike } from '../types/ClassTypes';
+import SchemaEngine from '../engine/SchemaEngine';
 
 type JSONSchemaValue<T extends object> = Partial<JSONEntityObject<T> | JSONRoot<T>>;
 
 const compute = <T extends object>(value: JSONSchemaValue<T> = {}) => {
   return (target: T): void => {
-    AnnotationEngine.defineReflectSchema(target as ClassLike, value);
+    SchemaEngine.defineReflectSchema(target as ClassLike, value);
   };
 };
 
