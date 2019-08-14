@@ -12,7 +12,7 @@ const compute = <T extends object>(value: JSONSchemaValue<T> = {}) => {
 };
 
 /**
- * Annotation for JSON entities.
+ * Decorator for JSON entities.
  * Use it on class.
  */
 export function JSONSchema<T extends object>(target: T): void;

@@ -7,12 +7,12 @@ import SchemaEngine from './SchemaEngine';
 
 /**
  * Tabbouleh simply give a valid JSON Schema (draft 7) from a model class
- * which has been annotate with properties.
+ * which has been decorated with properties.
  */
 export default class Tabbouleh {
   /**
    * From a class, give a JSON Schema (draft 7).
-   * The class MUST be a valid JSONSchema entity, annotated.
+   * The class MUST be a valid JSONSchema entity, decorated.
    */
   static generateJSONSchema<C extends ClassLike = ClassLike>(target: C): JSONSchema7 {
     const schema = Tabbouleh.getReflectSchema(target);
@@ -26,7 +26,7 @@ export default class Tabbouleh {
 
   /**
    * From an object of classes, give an object of JSON Schema (draft 7).
-   * The classes MUST be valid JSONSchema entities, annotated.
+   * The classes MUST be valid JSONSchema entities, decorated.
    * The object returned follow the same mapping as the one given.
    */
   static generateMultipleJSONSchemas<C extends ClassLike, L extends ListClassEntity<C>>(

@@ -108,7 +108,7 @@ describe('Compare input <-> output', () => {
     });
   });
 
-  it('class no annotate with JSONSchema throws a NotAJsonClassError', () => {
+  it('class not decorated with JSONSchema throws a NotAJsonClassError', () => {
     const target = {
       CSample3
     };

@@ -5,7 +5,7 @@ import {
   JSONEntityObject,
   JSONEntityObjectProperties
 } from '../types/JSONTypes';
-import { REFLECT_KEY } from '../annotation/ReflectKeys';
+import { REFLECT_KEY } from '../decorators/ReflectKeys';
 import { ClassLike } from '../types/ClassTypes';
 import PropertyEngine from './PropertyEngine';
 import { JSONSchema7 } from 'json-schema';

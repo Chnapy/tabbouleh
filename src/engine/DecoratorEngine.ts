@@ -1,10 +1,10 @@
 import { JSONEntity } from '../types/JSONTypes';
-import { AnnotationClassProps, ClassLike } from '../types/ClassTypes';
+import { DecoratorClassProps, ClassLike } from '../types/ClassTypes';
 import PropertyEngine from './PropertyEngine';
 
 export class DecoratorEngine {
   static defineProperties<J extends JSONEntity<any, any>>(
-    args: [Partial<J>] | AnnotationClassProps,
+    args: [Partial<J>] | DecoratorClassProps,
     defaultValues: Partial<J>
   ): ReturnType<typeof DecoratorEngine['compute']> | void {
     if (args.length === 1) {

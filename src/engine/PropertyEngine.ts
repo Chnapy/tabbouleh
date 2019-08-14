@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 import { JSONEntity, JSONEntityAny } from '../types/JSONTypes';
-import { REFLECT_KEY } from '../annotation/ReflectKeys';
+import { REFLECT_KEY } from '../decorators/ReflectKeys';
 import { ClassLike } from '../types/ClassTypes';
 import { JSONSchema7 } from 'json-schema';
 
