@@ -1,13 +1,16 @@
-import { Optional } from '../types/UtilTypes';
 import { JSONEntityInteger } from '../types/JSONTypes';
 import { AnnotateMultipleProperties } from './AnnotateMultipleProperties';
 import { Omit } from 'lodash';
+import { AnnotationClassProps } from '../types/ClassTypes';
 
+type JSONIntegerValue = Omit<Partial<JSONEntityInteger>, 'type'>;
 
-export function JSONInteger(prototype: any, key: string, descriptor?: PropertyDescriptor): void;
-export function JSONInteger(value: Omit<Optional<JSONEntityInteger>, 'type'>): Function;
-export function JSONInteger(...args: any[]): Function | void {
-
+/**
+ * Annotation for JSON integer attribute.
+ */
+export function JSONInteger(...args: AnnotationClassProps): void;
+export function JSONInteger(value: JSONIntegerValue): Function;
+export function JSONInteger(...args: [JSONIntegerValue] | AnnotationClassProps): Function | void {
   return AnnotateMultipleProperties(args, {
     type: 'integer'
   });

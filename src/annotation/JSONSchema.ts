@@ -1,26 +1,29 @@
 import 'reflect-metadata';
-import { Optional } from '../types/UtilTypes';
 import { JSONEntityObject, JSONRoot } from '../types/JSONTypes';
 import AnnotationEngine from '../engine/AnnotationEngine';
 import { ClassLike } from '../types/ClassTypes';
 
+type JSONSchemaValue<T extends object> = Partial<JSONEntityObject<T> | JSONRoot<T>>;
 
-export function JSONSchema<T extends ClassLike>(target: T): void;
-export function JSONSchema<T extends ClassLike>(value: Optional<JSONEntityObject | JSONRoot>): Function;
-export function JSONSchema<T extends ClassLike>(arg: any): Function | void {
-
-  const compute = (value: Optional<JSONEntityObject | JSONRoot> = {}) => {
-    return (target: T) => {
-      AnnotationEngine.defineReflectSchema(target, value);
-    };
+const compute = <T extends object>(value: JSONSchemaValue<T> = {}) => {
+  return (target: T): void => {
+    AnnotationEngine.defineReflectSchema(target as ClassLike, value);
   };
+};
 
-  if (typeof arg === 'object') {
-
+/**
+ * Annotation for JSON entities.
+ * Use it on class.
+ */
+export function JSONSchema<T extends object>(target: T): void;
+export function JSONSchema<T extends object>(value: JSONSchemaValue<T>): Function;
+export function JSONSchema<T extends object>(arg: T | JSONSchemaValue<T>): Function | void {
+  // value
+  if (typeof (arg as any) === 'object') {
     return compute(arg);
-  } else {
 
+    // target
+  } else {
     compute()(arg);
   }
-
 }

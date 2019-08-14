@@ -1,6 +1,7 @@
 import { ClassLike } from '../types/ClassTypes';
 
-const msg = (name: string) => `Class called by Tabbouleh but not annotate with @JSONSchema: ${name}`;
+const msg = (name: string) =>
+  `Class called by Tabbouleh but not annotate with @JSONSchema: ${name}`;
 
 export class NotAJsonSchemaError extends Error {
   constructor(target: ClassLike) {

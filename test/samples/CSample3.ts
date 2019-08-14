@@ -1,7 +1,6 @@
-import { JSONInteger, JSONRequired, JSONString } from '../../src/tabbouleh';
+import { JSONInteger, JSONString } from '../../src/tabbouleh';
 
 export default class CSample3 {
-
   @JSONInteger({
     minimum: 0
   })
@@ -10,7 +9,5 @@ export default class CSample3 {
   @JSONString({
     minLength: 6
   })
-  @JSONRequired(true)
   email: string;
-
 }

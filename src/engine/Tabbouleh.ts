@@ -3,11 +3,18 @@ import { JSONEntityObject } from '../types/JSONTypes';
 import AnnotationEngine from './AnnotationEngine';
 import { ClassLike, ListClassEntity, ListJSONSchema } from '../types/ClassTypes';
 import { NotAJsonSchemaError } from '../exception/NotAJsonSchemaError';
+import { JSONSchema7 } from 'json-schema';
 
+/**
+ * Tabbouleh simply give a valid JSON Schema (draft 7) from a model class
+ * which has been annotate with properties.
+ */
 export default class Tabbouleh {
-
-  static generateJSONSchema<C extends ClassLike = ClassLike>(target: C): JSONEntityObject {
-
+  /**
+   * From a class, give a JSON Schema (draft 7).
+   * The class MUST be a valid JSONSchema entity, annotated.
+   */
+  static generateJSONSchema<C extends ClassLike = ClassLike>(target: C): JSONSchema7 {
     const schema = Tabbouleh.getReflectSchema(target);
 
     if (!schema) {
@@ -17,6 +24,11 @@ export default class Tabbouleh {
     return Tabbouleh.computeJSONClass(target, schema);
   }
 
+  /**
+   * From an object of classes, give an object of JSON Schema (draft 7).
+   * The classes MUST be valid JSONSchema entities, annotated.
+   * The object returned follow the same mapping as the one given.
+   */
   static generateMultipleJSONSchemas<C extends ClassLike, L extends ListClassEntity<C>>(
     target: L
   ): ListJSONSchema<L> {
@@ -35,8 +47,7 @@ export default class Tabbouleh {
     return AnnotationEngine.getReflectSchema(target);
   }
 
-  private static computeJSONClass(target: ClassLike, schema: JSONEntityObject): JSONEntityObject {
-
+  private static computeJSONClass(target: ClassLike, schema: JSONEntityObject): JSONSchema7 {
     schema.properties = AnnotationEngine.getReflectProperties(target.prototype);
 
     return schema;
