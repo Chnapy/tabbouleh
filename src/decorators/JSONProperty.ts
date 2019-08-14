@@ -1,35 +1,44 @@
 import { JSONEntity } from '../types/JSONTypes';
-import AnnotateOneProperty from './AnnotateOneProperty';
-import { AnnotateMultipleProperties } from './AnnotateMultipleProperties';
-import { AnnotationClassProps } from '../types/ClassTypes';
+import { DecoratorClassProps } from '../types/ClassTypes';
+import { DecoratorEngine } from '../engine/DecoratorEngine';
 
 /**
- * Annotation for JSON attribute properties.
+ * Decorator for JSON attribute properties.
  * Not type oriented.
  */
-export function JSONProperty(...args: AnnotationClassProps): void;
+export function JSONProperty(...args: DecoratorClassProps): void;
 export function JSONProperty<J extends JSONEntity<any, any>>(value: Partial<J>): Function;
 export function JSONProperty<J extends JSONEntity<any, any>>(
-  ...args: [Partial<J>] | AnnotationClassProps
+  ...args: [Partial<J>] | DecoratorClassProps
 ): Function | void {
-  return AnnotateMultipleProperties(args, {});
+  return DecoratorEngine.defineProperties(args, {});
 }
 
 /**
- * Annotation for JSON attribute **title** property.
+ * Decorator for JSON attribute **title** property.
  */
 export function JSONTitle(value: JSONEntity<any, any>['title']): Function {
-  return AnnotateOneProperty<JSONEntity<any, any>, 'title'>([value], 'title', value) as Function;
+  return DecoratorEngine.defineProperties(
+    [
+      {
+        title: value
+      }
+    ],
+    {}
+  ) as Function;
 }
 
 /**
- * Annotation for JSON attribute **description** property.
+ * Decorator for JSON attribute **description** property.
  */
 export function JSONDescription(value: JSONEntity<any, any>['description']): Function {
-  return AnnotateOneProperty<JSONEntity<any, any>, 'description'>(
-    [value],
-    'description',
-    value
+  return DecoratorEngine.defineProperties(
+    [
+      {
+        description: value
+      }
+    ],
+    {}
   ) as Function;
 }
 

@@ -8,7 +8,7 @@
 [![Dev Dependencies](https://david-dm.org/Chnapy/tabbouleh/dev-status.svg)](https://david-dm.org/Chnapy/tabbouleh?type=dev)
 
 This project is designed to use Typescript classes for data validation (Java developers may say "Bean Validation") generating JSON Schema from them. 
-With tabbouleh you could use your classes for both define the data and validate/constraint them using annotations and Typescript typing. 
+With tabbouleh you could use your classes for both define the data and validate/constraint them using decorators and Typescript typing. 
 ORM users, you may find it familiar.
 
 Some uses cases:
@@ -23,7 +23,7 @@ Some uses cases:
 npm install tabbouleh --save
 ```
 
-tabbouleh requires [reflect-metadata](https://www.npmjs.com/package/reflect-metadata) (for annotations)
+tabbouleh requires [reflect-metadata](https://www.npmjs.com/package/reflect-metadata) (for decorators)
 
 ```bash
 npm install reflect-metadata --save-dev
@@ -54,8 +54,8 @@ class User {
 }
 ```
 
-The class has to be annotated with the `@JSONSchema` decorator. 
-All the properties who have to be in the JSON Schema need to be annotated with one of these decorators:
+The class has to be decorated with the `@JSONSchema` decorator. 
+All the properties who have to be in the JSON Schema need to be decorated with one of these decorators:
  - `JSONString`
  - `JSONNumber`
  - `JSONInteger`

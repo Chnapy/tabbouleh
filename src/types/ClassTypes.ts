@@ -14,10 +14,10 @@ export type ListClassEntity<C extends ClassLike> = { [k: string]: C };
 export type ListJSONSchema<L> = { [k in keyof L]: JSONSchema7 };
 
 /**
- * Args passed to annotations function when using them as expression.
+ * Args passed to decorators function when using them as expression.
  * For class attributes.
  */
-export type AnnotationClassProps<C extends ClassLike = ClassLike> = [
+export type DecoratorClassProps<C extends ClassLike = ClassLike> = [
   C['prototype'],
   keyof C['prototype'] & string,
   PropertyDescriptor?

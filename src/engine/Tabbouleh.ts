@@ -1,18 +1,18 @@
 import 'reflect-metadata';
-import { JSONEntityObject } from '../types/JSONTypes';
-import AnnotationEngine from './AnnotationEngine';
+import PropertyEngine from './PropertyEngine';
 import { ClassLike, ListClassEntity, ListJSONSchema } from '../types/ClassTypes';
 import { NotAJsonSchemaError } from '../exception/NotAJsonSchemaError';
 import { JSONSchema7 } from 'json-schema';
+import SchemaEngine from './SchemaEngine';
 
 /**
  * Tabbouleh simply give a valid JSON Schema (draft 7) from a model class
- * which has been annotate with properties.
+ * which has been decorated with properties.
  */
 export default class Tabbouleh {
   /**
    * From a class, give a JSON Schema (draft 7).
-   * The class MUST be a valid JSONSchema entity, annotated.
+   * The class MUST be a valid JSONSchema entity, decorated.
    */
   static generateJSONSchema<C extends ClassLike = ClassLike>(target: C): JSONSchema7 {
     const schema = Tabbouleh.getReflectSchema(target);
@@ -26,7 +26,7 @@ export default class Tabbouleh {
 
   /**
    * From an object of classes, give an object of JSON Schema (draft 7).
-   * The classes MUST be valid JSONSchema entities, annotated.
+   * The classes MUST be valid JSONSchema entities, decorated.
    * The object returned follow the same mapping as the one given.
    */
   static generateMultipleJSONSchemas<C extends ClassLike, L extends ListClassEntity<C>>(
@@ -43,12 +43,12 @@ export default class Tabbouleh {
     return obj;
   }
 
-  private static getReflectSchema(target: ClassLike): JSONEntityObject | undefined {
-    return AnnotationEngine.getReflectSchema(target);
+  private static getReflectSchema(target: ClassLike): JSONSchema7 | undefined {
+    return SchemaEngine.getReflectSchema(target);
   }
 
-  private static computeJSONClass(target: ClassLike, schema: JSONEntityObject): JSONSchema7 {
-    schema.properties = AnnotationEngine.getReflectProperties(target.prototype);
+  private static computeJSONClass(target: ClassLike, schema: JSONSchema7): JSONSchema7 {
+    schema.properties = PropertyEngine.getReflectProperties(target.prototype);
 
     return schema;
   }
