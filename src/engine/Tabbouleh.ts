@@ -1,5 +1,4 @@
 import 'reflect-metadata';
-import { JSONEntityObject } from '../types/JSONTypes';
 import PropertyEngine from './PropertyEngine';
 import { ClassLike, ListClassEntity, ListJSONSchema } from '../types/ClassTypes';
 import { NotAJsonSchemaError } from '../exception/NotAJsonSchemaError';

@@ -1,7 +1,7 @@
 import { JSONEntityString } from '../types/JSONTypes';
-import { AnnotateMultipleProperties } from './AnnotateMultipleProperties';
 import { Omit } from 'lodash';
 import { AnnotationClassProps } from '../types/ClassTypes';
+import { DecoratorEngine } from '../engine/DecoratorEngine';
 
 type JSONStringValue = Omit<Partial<JSONEntityString>, 'type'>;
 
@@ -11,7 +11,7 @@ type JSONStringValue = Omit<Partial<JSONEntityString>, 'type'>;
 export function JSONString(...args: AnnotationClassProps): void;
 export function JSONString(value: JSONStringValue): Function;
 export function JSONString(...args: [JSONStringValue] | AnnotationClassProps): Function | void {
-  return AnnotateMultipleProperties(args, {
+  return DecoratorEngine.defineProperties(args, {
     type: 'string'
   });
 }
