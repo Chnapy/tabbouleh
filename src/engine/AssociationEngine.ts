@@ -8,7 +8,16 @@ import { NotAJsonSchemaError } from '../exception/NotAJsonSchemaError';
 import { CircularDependencyError } from '../exception/CircularDependencyError';
 import { Util } from './Util';
 
+/**
+ * Handle all associations concerns
+ */
 export default class AssociationEngine {
+  /**
+   * Apply all associations with target as source class.
+   *
+   * @param target class source
+   * @param sourceStack tracking, in case of CircularDependencyError
+   */
   static computeJSONAssociations(target: ClassLike, sourceStack: ClassLike[] = []): void {
     if (!Util.isClass(target)) {
       throw new NotAJsonSchemaError(target);
@@ -25,15 +34,7 @@ export default class AssociationEngine {
     assocMapClass.forEach(a => {
       const assocTarget: ClassLike = a.targetFn();
 
-      AssociationEngine.computeJSONAssociations(assocTarget, sourceStack);
-
-      const valueSchema = SchemaEngine.getReflectSchema(assocTarget);
-
-      if (!valueSchema) {
-        throw new NotAJsonSchemaError(assocTarget);
-      }
-
-      valueSchema.properties = PropertyEngine.getReflectProperties(assocTarget.prototype);
+      const valueSchema = SchemaEngine.getComputedJSONSchema(assocTarget, sourceStack);
 
       const value = a.jsonPropertyKey
         ? {
@@ -45,6 +46,15 @@ export default class AssociationEngine {
     });
   }
 
+  /**
+   * Create and add an association to the given C class,
+   * which target the class returned by classTargetFn.
+   *
+   * @param prototypeSource prototype of the C class source
+   * @param propertyKey property concerned of the C class source
+   * @param jsonProperty JSON property key concerned. Or null if concerns all the JSON Schema
+   * @param classTargetFn wrapper of the class targeted
+   */
   static addAssociation<C extends ClassLike>(
     prototypeSource: C['prototype'],
     propertyKey: keyof C['prototype'] & string,

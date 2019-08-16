@@ -6,10 +6,13 @@ export * from './decorators/JSONBoolean';
 export * from './decorators/JSONString';
 export * from './decorators/JSONNumber';
 export * from './decorators/JSONInteger';
+export * from './decorators/JSONObject';
 
 export * from './types/JSONTypes';
 export * from './types/ClassTypes';
+export * from './types/AssociationTypes';
 
 export * from './exception/NotAJsonSchemaError';
+export * from './exception/CircularDependencyError';
 
 export default Tabbouleh;

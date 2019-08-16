@@ -1,5 +1,5 @@
 import { JSONEntity } from '../types/JSONTypes';
-import { DecoratorClassProps, ClassLike } from '../types/ClassTypes';
+import { ClassLike, DecoratorClassProps } from '../types/ClassTypes';
 import PropertyEngine from './PropertyEngine';
 
 export class DecoratorEngine {

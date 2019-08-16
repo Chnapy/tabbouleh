@@ -7,14 +7,17 @@ export type Association<C extends ClassLike = ClassLike> = {
   className: C['name'];
 
   /**
-   * class property key
+   * Property concerned of the C class source
    */
   key: keyof C['prototype'] & string;
 
+  /**
+   * JSON property key concerned. Or null if concerns all the JSON Schema
+   */
   jsonPropertyKey: keyof JSONSchema7 | null;
 
   /**
-   * class targeted
+   * Wrapper of the class targeted
    */
   targetFn: ClassFn;
 };
