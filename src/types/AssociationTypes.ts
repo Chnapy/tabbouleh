@@ -3,6 +3,9 @@ import { JSONSchema7 } from 'json-schema';
 
 export type ClassFn<C extends ClassLike = ClassLike> = () => C;
 
+/**
+ * An association between two class
+ */
 export type Association<C extends ClassLike = ClassLike> = {
   className: C['name'];
 

@@ -8,6 +8,13 @@ import AssociationEngine from './AssociationEngine';
 import { NotAJsonSchemaError } from '../exception/NotAJsonSchemaError';
 
 export default class SchemaEngine {
+  /**
+   * Return a full JSON Schema from a class, with all properties.
+   * Compute all the class associations.
+   *
+   * @param target
+   * @param sourceStack
+   */
   static getComputedJSONSchema(target: ClassLike, sourceStack?: ClassLike[]): JSONSchema7 {
     AssociationEngine.computeJSONAssociations(target, sourceStack);
 
