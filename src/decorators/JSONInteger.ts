@@ -1,5 +1,4 @@
 import { JSONEntityInteger } from '../types/JSONTypes';
-import { Omit } from 'lodash';
 import { DecoratorClassProps } from '../types/ClassTypes';
 import { DecoratorEngine } from '../engine/DecoratorEngine';
 

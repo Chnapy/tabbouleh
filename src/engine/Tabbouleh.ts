@@ -26,7 +26,7 @@ export default class Tabbouleh {
   ): ListJSONSchema<L> {
     const obj = {} as ListJSONSchema<L>;
 
-    for (const k of Object.keys(target)) {
+    for (const k of Object.keys(target) as (keyof L)[]) {
       const c = target[k];
 
       obj[k] = Tabbouleh.generateJSONSchema(c);

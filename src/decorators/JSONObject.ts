@@ -1,5 +1,4 @@
 import { JSONEntityObject } from '../types/JSONTypes';
-import { Omit } from 'lodash';
 import { ClassLike, DecoratorClassProps } from '../types/ClassTypes';
 import { DecoratorEngine } from '../engine/DecoratorEngine';
 import AssociationEngine from '../engine/AssociationEngine';

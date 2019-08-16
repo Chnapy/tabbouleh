@@ -42,7 +42,7 @@ export default class PropertyEngine {
 
   static getReflectProperties(
     prototype: ClassLike['prototype']
-  ): Exclude<JSONSchema7['properties'], undefined> {
+  ): object & Exclude<JSONSchema7['properties'], undefined> {
     return Reflect.getMetadata(REFLECT_KEY.JSON_PROPERTY, prototype) || {};
   }
 
@@ -71,7 +71,7 @@ export default class PropertyEngine {
       typeSchema
     );
 
-    properties[key] = {
+    properties[key as string] = {
       ...(properties[key] || {}),
       ...fullSchema
     };
