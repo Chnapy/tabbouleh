@@ -1,4 +1,3 @@
-import { Omit } from 'lodash';
 import { JSONSchema7, JSONSchema7TypeName } from 'json-schema';
 
 /**
