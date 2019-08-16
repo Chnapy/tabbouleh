@@ -1,23 +1,39 @@
 import { ClassLike } from '../types/ClassTypes';
 import { JSONSchema7 } from 'json-schema';
 import { REFLECT_KEY } from '../decorators/ReflectKeys';
-import { Association, AssociationMap } from '../types/AssociationTypes';
+import { Association, AssociationMap, ClassFn } from '../types/AssociationTypes';
 import PropertyEngine from './PropertyEngine';
 import SchemaEngine from './SchemaEngine';
 import { NotAJsonSchemaError } from '../exception/NotAJsonSchemaError';
+import { CircularDependencyError } from '../exception/CircularDependencyError';
+import { Util } from './Util';
 
 export default class AssociationEngine {
-  static computeJSONAssociations(target: ClassLike): void {
+  static computeJSONAssociations(target: ClassLike, sourceStack: ClassLike[] = []): void {
+    if (!Util.isClass(target)) {
+      throw new NotAJsonSchemaError(target);
+    }
+
+    if (sourceStack.some(s => s.name === target.name)) {
+      throw new CircularDependencyError(...sourceStack, target);
+    }
+
+    sourceStack.push(target);
+
     const assocMapClass = AssociationEngine.getAssociations(target.name, target.prototype);
 
     assocMapClass.forEach(a => {
-      const valueSchema = SchemaEngine.getReflectSchema(a.target);
+      const assocTarget: ClassLike = a.targetFn();
+
+      AssociationEngine.computeJSONAssociations(assocTarget, sourceStack);
+
+      const valueSchema = SchemaEngine.getReflectSchema(assocTarget);
 
       if (!valueSchema) {
-        throw new NotAJsonSchemaError(a.target);
+        throw new NotAJsonSchemaError(assocTarget);
       }
 
-      valueSchema.properties = PropertyEngine.getReflectProperties(a.target.prototype);
+      valueSchema.properties = PropertyEngine.getReflectProperties(assocTarget.prototype);
 
       const value = a.jsonPropertyKey
         ? {
@@ -33,7 +49,7 @@ export default class AssociationEngine {
     prototypeSource: C['prototype'],
     propertyKey: keyof C['prototype'] & string,
     jsonProperty: keyof JSONSchema7 | null,
-    classTarget: ClassLike
+    classTargetFn: ClassFn
   ): void {
     const className = prototypeSource.constructor.name;
 
@@ -41,7 +57,7 @@ export default class AssociationEngine {
       className,
       key: propertyKey,
       jsonPropertyKey: jsonProperty,
-      target: classTarget
+      targetFn: classTargetFn
     };
 
     const associationMap = AssociationEngine.getReflectAssociation(prototypeSource) || {};

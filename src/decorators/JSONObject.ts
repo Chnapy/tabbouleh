@@ -1,13 +1,11 @@
-import { JSONEntityNumber, JSONEntityObject } from '../types/JSONTypes';
+import { JSONEntityObject } from '../types/JSONTypes';
 import { Omit } from 'lodash';
 import { ClassLike, DecoratorClassProps } from '../types/ClassTypes';
 import { DecoratorEngine } from '../engine/DecoratorEngine';
-import PropertyEngine from '../engine/PropertyEngine';
-import SchemaEngine from '../engine/SchemaEngine';
-import { NotAJsonSchemaError } from '../exception/NotAJsonSchemaError';
 import AssociationEngine from '../engine/AssociationEngine';
+import { ClassFn } from '../types/AssociationTypes';
 
-type JSONObjectValue = Omit<Partial<JSONEntityObject>, 'type'> | (() => ClassLike);
+type JSONObjectValue = Omit<Partial<JSONEntityObject>, 'type'> | ClassFn;
 
 /**
  * Decorator for JSON object attribute.
@@ -22,9 +20,9 @@ export function JSONObject(...args: [JSONObjectValue] | DecoratorClassProps): Fu
       key: keyof ClassLike['prototype'] & string,
       descriptor?: PropertyDescriptor
     ): void => {
-      const Class = (args as [Function])[0]();
+      const [classFn] = args as [ClassFn];
 
-      AssociationEngine.addAssociation(prototype, key, null, Class);
+      AssociationEngine.addAssociation(prototype, key, null, classFn);
     };
   }
 
