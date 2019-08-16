@@ -1,34 +1,32 @@
 import 'reflect-metadata';
-import {
-  JSONEntity,
-  JSONEntityAny,
-  JSONEntityObject,
-  JSONEntityObjectProperties
-} from '../types/JSONTypes';
+import { JSONEntityObject } from '../types/JSONTypes';
 import { REFLECT_KEY } from '../decorators/ReflectKeys';
 import { ClassLike } from '../types/ClassTypes';
 import PropertyEngine from './PropertyEngine';
 import { JSONSchema7 } from 'json-schema';
+import AssociationEngine from './AssociationEngine';
+import { NotAJsonSchemaError } from '../exception/NotAJsonSchemaError';
 
 export default class SchemaEngine {
-  private static getJSONSchemaEntity(
-    reflectEntity: JSONSchema7,
-    paramEntity: Partial<JSONEntityObject>,
-    name: string
-  ): JSONSchema7 {
-    return PropertyEngine.getJSONPropertyEntity<JSONEntityObject>(
-      reflectEntity,
-      paramEntity,
-      Object
-    );
-  }
+  /**
+   * Return a full JSON Schema from a class, with all properties.
+   * Compute all the class associations.
+   *
+   * @param target
+   * @param sourceStack
+   */
+  static getComputedJSONSchema(target: ClassLike, sourceStack?: ClassLike[]): JSONSchema7 {
+    AssociationEngine.computeJSONAssociations(target, sourceStack);
 
-  static getReflectSchema(target: ClassLike): JSONSchema7 | undefined {
-    return Reflect.getMetadata(REFLECT_KEY.JSON_SCHEMA, target.prototype);
-  }
+    const schema = SchemaEngine.getReflectSchema(target);
 
-  private static setReflectSchema(target: ClassLike, entity: JSONSchema7): void {
-    Reflect.defineMetadata(REFLECT_KEY.JSON_SCHEMA, entity, target.prototype);
+    if (!schema) {
+      throw new NotAJsonSchemaError(target);
+    }
+
+    schema.properties = PropertyEngine.getReflectProperties(target.prototype);
+
+    return schema;
   }
 
   static defineReflectSchema(target: ClassLike, value: Partial<JSONEntityObject>): void {
@@ -39,5 +37,25 @@ export default class SchemaEngine {
     Object.assign(classSchema, value);
 
     SchemaEngine.setReflectSchema(target, classSchema);
+  }
+
+  static getReflectSchema(target: ClassLike): JSONSchema7 | undefined {
+    return Reflect.getMetadata(REFLECT_KEY.JSON_SCHEMA, target.prototype);
+  }
+
+  private static getJSONSchemaEntity(
+    reflectEntity: JSONSchema7,
+    paramEntity: JSONSchema7,
+    name: string
+  ): JSONSchema7 {
+    return PropertyEngine.getJSONPropertyEntity<JSONEntityObject>(
+      reflectEntity,
+      paramEntity,
+      Object
+    );
+  }
+
+  private static setReflectSchema(target: ClassLike, entity: JSONSchema7): void {
+    Reflect.defineMetadata(REFLECT_KEY.JSON_SCHEMA, entity, target.prototype);
   }
 }

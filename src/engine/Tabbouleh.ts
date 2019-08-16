@@ -1,7 +1,5 @@
 import 'reflect-metadata';
-import PropertyEngine from './PropertyEngine';
 import { ClassLike, ListClassEntity, ListJSONSchema } from '../types/ClassTypes';
-import { NotAJsonSchemaError } from '../exception/NotAJsonSchemaError';
 import { JSONSchema7 } from 'json-schema';
 import SchemaEngine from './SchemaEngine';
 
@@ -15,13 +13,7 @@ export default class Tabbouleh {
    * The class MUST be a valid JSONSchema entity, decorated.
    */
   static generateJSONSchema<C extends ClassLike = ClassLike>(target: C): JSONSchema7 {
-    const schema = Tabbouleh.getReflectSchema(target);
-
-    if (!schema) {
-      throw new NotAJsonSchemaError(target);
-    }
-
-    return Tabbouleh.computeJSONClass(target, schema);
+    return SchemaEngine.getComputedJSONSchema(target);
   }
 
   /**
@@ -41,15 +33,5 @@ export default class Tabbouleh {
     }
 
     return obj;
-  }
-
-  private static getReflectSchema(target: ClassLike): JSONSchema7 | undefined {
-    return SchemaEngine.getReflectSchema(target);
-  }
-
-  private static computeJSONClass(target: ClassLike, schema: JSONSchema7): JSONSchema7 {
-    schema.properties = PropertyEngine.getReflectProperties(target.prototype);
-
-    return schema;
   }
 }

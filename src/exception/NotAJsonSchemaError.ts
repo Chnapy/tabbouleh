@@ -1,11 +1,17 @@
 import { ClassLike } from '../types/ClassTypes';
 
 const msg = (name: string) =>
-  `Class called by Tabbouleh but not decorate with @JSONSchema: ${name}`;
+  `Class called by Tabbouleh but not decorated with @JSONSchema: ${name}`;
 
+/**
+ * To throw when an expected JSON Schema class is not (or undefined).
+ */
 export class NotAJsonSchemaError extends Error {
-  constructor(target: ClassLike) {
-    super(msg(target.name));
+  /**
+   * @param target the failing target
+   */
+  constructor(target: ClassLike | unknown) {
+    super(msg(target && (target as any).name ? (target as any).name : target));
     Error.call(this);
     Error.captureStackTrace(this, this.constructor);
     Object.setPrototypeOf(this, NotAJsonSchemaError.prototype);
