@@ -74,9 +74,9 @@ export default class AssociationEngine {
 
     let assocMapClass = associationMap[className] || [];
 
-    // if an association for this key already isset, remove it
+    // if an association for this key and json key already exist, remove it
     assocMapClass = assocMapClass.filter(
-      a => a.key !== association.key && a.jsonPropertyKey !== association.jsonPropertyKey
+      a => a.key !== association.key || a.jsonPropertyKey !== association.jsonPropertyKey
     );
 
     associationMap[className] = assocMapClass;
