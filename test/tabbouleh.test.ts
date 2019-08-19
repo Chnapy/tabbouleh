@@ -78,9 +78,8 @@ const schemaCSample4: JSONSchema7 = {
   }
 };
 
-// TODO one file test per test
-describe('Compare input <-> output', () => {
-  it('generate an valid object with the good keys', () => {
+describe('check Tabbouleh generations', () => {
+  it('should generate a Tabbouleh object with the good keys', () => {
     const target = {
       CSample1,
       toto: CSample2
@@ -91,7 +90,7 @@ describe('Compare input <-> output', () => {
     );
   });
 
-  it('class samples give the good schema', () => {
+  it('should generate a Tabbouleh object with valid JSON schemas', () => {
     const target = {
       CSample1,
       CSample2,

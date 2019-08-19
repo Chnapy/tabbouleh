@@ -15,15 +15,14 @@ const compute = <T extends object>(value: JSONSchemaValue<T> = {}) => {
  * Decorator for JSON entities.
  * Use it on class.
  */
-export function JSONSchema<T extends object>(target: T): void;
+export function JSONSchema<T extends object>(target: T): any; // Workaround because of 'target' which can not be differentiated from 'value'
 export function JSONSchema<T extends object>(value: JSONSchemaValue<T>): Function;
 export function JSONSchema<T extends object>(arg: T | JSONSchemaValue<T>): Function | void {
   // value
   if (typeof (arg as any) === 'object') {
     return compute(arg);
-
-    // target
-  } else {
-    compute()(arg);
   }
+
+  // target
+  compute()(arg);
 }

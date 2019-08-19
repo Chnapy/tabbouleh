@@ -3,6 +3,7 @@ import { JSONObject1Sample, OBJECT_SAMPLE_1_USER } from './JSONObjectSample/JSON
 import { JSONSchema7 } from 'json-schema';
 import { FOOD_SCHEMA_PROPS } from './genericSample/Food.sample';
 import { JSONObject2Sample } from './JSONObjectSample/JSONObject2.sample';
+import { JSONObject3Sample } from './JSONObjectSample/JSONObject3.sample';
 
 const schemaObjectSample1: JSONSchema7 = {
   type: 'object',
@@ -32,9 +33,22 @@ const schemaObjectSample2: JSONSchema7 = {
   }
 };
 
+const schemaObjectSample3: JSONSchema7 = {
+  type: 'object',
+  properties: {
+    prop: {
+      type: 'object'
+    }
+  }
+};
+
 describe('check JSONObject', () => {
-  it('should handle JSONObject with JSONEntity given', () => {
+  it('should handle object schema', () => {
     expect(Tabbouleh.generateJSONSchema(JSONObject1Sample)).toEqual(schemaObjectSample1);
+  });
+
+  it('should handle infer type', () => {
+    expect(Tabbouleh.generateJSONSchema(JSONObject3Sample)).toEqual(schemaObjectSample3);
   });
 
   it('should handle nested object by association', () => {
