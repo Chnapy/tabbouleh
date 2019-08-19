@@ -6,7 +6,7 @@ import { JSONArray2Sample } from './JSONArraySample/JSONArray2.sample';
 import { JSONArray3Sample } from './JSONArraySample/JSONArray3.sample';
 import { JSONArray4Sample } from './JSONArraySample/JSONArray4.sample';
 
-const jsonArray1SampleSchema: JSONSchema7 = {
+const schemaJsonArray1: JSONSchema7 = {
   type: 'object',
   properties: {
     myArray: {
@@ -19,7 +19,7 @@ const jsonArray1SampleSchema: JSONSchema7 = {
   }
 };
 
-const jsonArray2SampleSchema: JSONSchema7 = {
+const schemaJsonArray2: JSONSchema7 = {
   type: 'object',
   properties: {
     myArray: {
@@ -31,7 +31,7 @@ const jsonArray2SampleSchema: JSONSchema7 = {
   }
 };
 
-const jsonArray3SampleSchema: JSONSchema7 = {
+const schemaJsonArray3: JSONSchema7 = {
   type: 'object',
   properties: {
     myArray: {
@@ -49,7 +49,7 @@ const jsonArray3SampleSchema: JSONSchema7 = {
   }
 };
 
-const jsonArray4SampleSchema: JSONSchema7 = {
+const schemaJsonArray4: JSONSchema7 = {
   type: 'object',
   properties: {
     myArray: {
@@ -71,18 +71,18 @@ const jsonArray4SampleSchema: JSONSchema7 = {
 
 describe('check JSONArray', () => {
   it('should handle array schema', () => {
-    expect(Tabbouleh.generateJSONSchema(JSONArray1Sample)).toEqual(jsonArray1SampleSchema);
+    expect(Tabbouleh.generateJSONSchema(JSONArray1Sample)).toEqual(schemaJsonArray1);
   });
 
   it('should handle given primary type', () => {
-    expect(Tabbouleh.generateJSONSchema(JSONArray2Sample)).toEqual(jsonArray2SampleSchema);
+    expect(Tabbouleh.generateJSONSchema(JSONArray2Sample)).toEqual(schemaJsonArray2);
   });
 
   it('should handle given object type', () => {
-    expect(Tabbouleh.generateJSONSchema(JSONArray3Sample)).toEqual(jsonArray3SampleSchema);
+    expect(Tabbouleh.generateJSONSchema(JSONArray3Sample)).toEqual(schemaJsonArray3);
   });
 
   it('should handle array schema with given object type', () => {
-    expect(Tabbouleh.generateJSONSchema(JSONArray4Sample)).toEqual(jsonArray4SampleSchema);
+    expect(Tabbouleh.generateJSONSchema(JSONArray4Sample)).toEqual(schemaJsonArray4);
   });
 });

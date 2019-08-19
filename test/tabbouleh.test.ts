@@ -1,8 +1,7 @@
 import 'reflect-metadata';
 import CSample1 from './samples/CSample1';
-import Tabbouleh, { NotAJsonSchemaError } from '../src/tabbouleh';
+import Tabbouleh from '../src/tabbouleh';
 import CSample2 from './samples/CSample2';
-import CSample3 from './samples/CSample3';
 import CSample4 from './samples/CSample4';
 import { JSONSchema7 } from 'json-schema';
 
@@ -106,22 +105,5 @@ describe('Compare input <-> output', () => {
       CSample2: schemaCSample2,
       CSample4: schemaCSample4
     });
-  });
-
-  it('class not decorated with JSONSchema throws a NotAJsonClassError', () => {
-    const target = {
-      CSample3
-    };
-
-    expect(() => Tabbouleh.generateMultipleJSONSchemas(target)).toThrow(NotAJsonSchemaError);
-    expect(
-      (() => {
-        try {
-          Tabbouleh.generateMultipleJSONSchemas(target);
-        } catch (e) {
-          return e.message.includes(target.CSample3.name);
-        }
-      })()
-    ).toBe(true);
   });
 });
