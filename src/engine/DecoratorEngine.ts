@@ -1,6 +1,9 @@
 import { JSONEntity } from '../types/JSONTypes';
 import { ClassLike, DecoratorClassProps } from '../types/ClassTypes';
 import PropertyEngine from './PropertyEngine';
+import { JSONSchema7 } from 'json-schema';
+import AssociationEngine from './AssociationEngine';
+import { ClassFn } from '../types/AssociationTypes';
 
 export class DecoratorEngine {
   static defineProperties<J extends JSONEntity<any, any>>(
@@ -33,7 +36,21 @@ export class DecoratorEngine {
       key: keyof C['prototype'] & string,
       descriptor?: PropertyDescriptor
     ): void => {
-      PropertyEngine.defineReflectProperties(prototype, key, value);
+      const valueSchema: JSONSchema7 = {};
+
+      // If we found ClassFn, we create association for each of them
+      Object.keys(value).forEach(_k => {
+        const k: keyof JSONSchema7 = _k as any;
+        const v: ClassFn | any = value[k as keyof J];
+
+        if (typeof v === 'function') {
+          AssociationEngine.addAssociation(prototype, key, k, v);
+        } else {
+          (valueSchema as any)[k] = v;
+        }
+      });
+
+      PropertyEngine.defineReflectProperties(prototype, key, valueSchema);
     };
   }
 }

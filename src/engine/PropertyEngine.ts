@@ -7,9 +7,9 @@ import { JSONSchema7 } from 'json-schema';
 export default class PropertyEngine {
   private static getJSONType(typeTS: ClassLike): JSONSchema7 {
     switch (typeTS) {
-      case Object:
+      case Array:
         return {
-          type: 'object'
+          type: 'array'
         };
       case Number:
         return {
@@ -18,6 +18,10 @@ export default class PropertyEngine {
       case String:
         return {
           type: 'string'
+        };
+      case Object:
+        return {
+          type: 'object'
         };
       default:
         return {
