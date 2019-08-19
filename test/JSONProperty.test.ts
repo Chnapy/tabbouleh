@@ -27,7 +27,7 @@ describe('check JSONProperty', () => {
     expect(Tabbouleh.generateJSONSchema(JSONProperty1Sample)).toEqual(schemaJsonProperty1);
   });
 
-  it('should handle infer type', () => {
+  it('should handle without schema', () => {
     expect(Tabbouleh.generateJSONSchema(JSONProperty2Sample)).toEqual(schemaJsonProperty2);
   });
 });

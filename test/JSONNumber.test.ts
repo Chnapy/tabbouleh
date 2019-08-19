@@ -48,7 +48,7 @@ describe('check JSONNumber', () => {
     expect(Tabbouleh.generateJSONSchema(JSONNumber1Sample)).toEqual(schemaJsonNumber1);
   });
 
-  it('should handle infer type', () => {
+  it('should handle without schema', () => {
     expect(Tabbouleh.generateJSONSchema(JSONNumber2Sample)).toEqual(schemaJsonNumber2);
   });
 });
@@ -58,7 +58,7 @@ describe('check JSONInteger', () => {
     expect(Tabbouleh.generateJSONSchema(JSONInteger1Sample)).toEqual(schemaJsonInteger1);
   });
 
-  it('should handle infer type', () => {
+  it('should handle without schema', () => {
     expect(Tabbouleh.generateJSONSchema(JSONInteger2Sample)).toEqual(schemaJsonInteger2);
   });
 });
