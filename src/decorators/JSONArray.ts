@@ -8,7 +8,7 @@ import { ClassFn } from '../types/AssociationTypes';
 type JSONArrayValue = Omit<Partial<JSONEntityArray>, 'type'> | ClassFn | JSONTypeName;
 
 /**
- * Decorator for JSON object attribute.
+ * Decorator for JSON array attribute.
  */
 export function JSONArray(value: JSONArrayValue): Function {
   // Related class
