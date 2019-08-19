@@ -1,7 +1,7 @@
 import { JSONSchema } from '../../src/decorators/JSONSchema';
 import { JSONObject } from '../../src/decorators/JSONObject';
 
-export const OBJECT_SAMPLE_USER: Parameters<typeof JSONObject>[0] = {
+export const OBJECT_SAMPLE_1_USER: Parameters<typeof JSONObject>[0] = {
   properties: {
     id: {
       type: 'integer'
@@ -13,8 +13,8 @@ export const OBJECT_SAMPLE_USER: Parameters<typeof JSONObject>[0] = {
 };
 
 @JSONSchema
-export class JSONObjectSample {
-  @JSONObject(OBJECT_SAMPLE_USER)
+export class JSONObject1Sample {
+  @JSONObject(OBJECT_SAMPLE_1_USER)
   user: {
     id: number;
     username: string;

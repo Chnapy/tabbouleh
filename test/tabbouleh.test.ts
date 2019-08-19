@@ -1,9 +1,8 @@
 import 'reflect-metadata';
-import CSample1 from './samples/CSample1';
-import Tabbouleh, { NotAJsonSchemaError } from '../src/tabbouleh';
-import CSample2 from './samples/CSample2';
-import CSample3 from './samples/CSample3';
-import CSample4 from './samples/CSample4';
+import TabboulehSample1 from './TabboulehSample/TabboulehSample1';
+import Tabbouleh from '../src/tabbouleh';
+import TabboulehSample2 from './TabboulehSample/TabboulehSample2';
+import TabboulehSample3 from './TabboulehSample/TabboulehSample3';
 import { JSONSchema7 } from 'json-schema';
 
 const schemaCSample1: JSONSchema7 = {
@@ -79,12 +78,11 @@ const schemaCSample4: JSONSchema7 = {
   }
 };
 
-// TODO one file test per test
-describe('Compare input <-> output', () => {
-  it('generate an valid object with the good keys', () => {
+describe('check Tabbouleh generations', () => {
+  it('should generate a Tabbouleh object with the good keys', () => {
     const target = {
-      CSample1,
-      toto: CSample2
+      CSample1: TabboulehSample1,
+      toto: TabboulehSample2
     };
 
     expect(Object.keys(Tabbouleh.generateMultipleJSONSchemas(target)).sort()).toEqual(
@@ -92,11 +90,11 @@ describe('Compare input <-> output', () => {
     );
   });
 
-  it('class samples give the good schema', () => {
+  it('should generate a Tabbouleh object with valid JSON schemas', () => {
     const target = {
-      CSample1,
-      CSample2,
-      CSample4
+      CSample1: TabboulehSample1,
+      CSample2: TabboulehSample2,
+      CSample4: TabboulehSample3
     };
 
     const listJSONEntities = Tabbouleh.generateMultipleJSONSchemas(target);
@@ -106,22 +104,5 @@ describe('Compare input <-> output', () => {
       CSample2: schemaCSample2,
       CSample4: schemaCSample4
     });
-  });
-
-  it('class not decorated with JSONSchema throws a NotAJsonClassError', () => {
-    const target = {
-      CSample3
-    };
-
-    expect(() => Tabbouleh.generateMultipleJSONSchemas(target)).toThrow(NotAJsonSchemaError);
-    expect(
-      (() => {
-        try {
-          Tabbouleh.generateMultipleJSONSchemas(target);
-        } catch (e) {
-          return e.message.includes(target.CSample3.name);
-        }
-      })()
-    ).toBe(true);
   });
 });

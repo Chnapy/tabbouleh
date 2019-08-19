@@ -1,9 +1,9 @@
-import { JSONBoolean, JSONNumber, JSONSchema, JSONString } from '../../src/tabbouleh';
+import {JSONBoolean, JSONNumber, JSONSchema, JSONString} from '../../src/tabbouleh';
 
-@JSONSchema<CSample4>({
+@JSONSchema<TabboulehSample3>({
   required: ['lastname']
 })
-export default class CSample4 {
+export default class TabboulehSample3 {
   @JSONString({})
   lastname: string;
 
