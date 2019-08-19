@@ -8,7 +8,7 @@ import {
 } from '../../src/tabbouleh';
 
 @JSONSchema
-export default class CSample1 {
+export default class TabboulehSample1 {
 
   @JSONProperty<JSONEntityInteger>({
     type: 'integer',

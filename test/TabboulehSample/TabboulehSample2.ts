@@ -1,12 +1,12 @@
-import { JSONInteger, JSONProperty, JSONSchema, JSONString } from '../../src/tabbouleh';
+import {JSONInteger, JSONProperty, JSONSchema, JSONString} from '../../src/tabbouleh';
 
-@JSONSchema<CSample2>({
+@JSONSchema<TabboulehSample2>({
   $schema: 'http://json-schema.org/draft-07/schema#',
   $id: 'http://json-schema.org/draft-07/schema#',
   title: 'Toto Africa',
   required: ['phone', 'email']
 })
-export default class CSample2 {
+export default class TabboulehSample2 {
   @JSONProperty
   name: string;
 
