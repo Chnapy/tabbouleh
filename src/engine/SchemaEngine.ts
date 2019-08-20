@@ -56,7 +56,7 @@ export default class SchemaEngine {
    * @param target JSONSchema class
    */
   static getReflectSchema(target: ClassLike): JSONSchema7 | undefined {
-    return Reflect.getMetadata(REFLECT_KEY.JSON_CLASS, target.prototype);
+    return Reflect.getMetadata(REFLECT_KEY.JSON_SCHEMA, target.prototype);
   }
 
   /**
@@ -66,6 +66,6 @@ export default class SchemaEngine {
    * @param schema JSON schema
    */
   private static setReflectSchema(target: ClassLike, schema: JSONSchema7): void {
-    Reflect.defineMetadata(REFLECT_KEY.JSON_CLASS, schema, target.prototype);
+    Reflect.defineMetadata(REFLECT_KEY.JSON_SCHEMA, schema, target.prototype);
   }
 }

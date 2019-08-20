@@ -8,12 +8,12 @@ export enum REFLECT_KEY {
   TYPE = 'design:type',
 
   /**
-   * Concerns class schema
+   * Concerns json schema
    */
-  JSON_CLASS = 'tabbouleh:class',
+  JSON_SCHEMA = 'tabbouleh:schema',
 
   /**
-   * Concerns property schema
+   * Concerns object properties schema
    */
   JSON_PROPERTY = 'tabbouleh:property',
 
