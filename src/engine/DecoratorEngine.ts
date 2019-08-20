@@ -5,7 +5,17 @@ import { JSONSchema7 } from 'json-schema';
 import AssociationEngine from './AssociationEngine';
 import { ClassFn } from '../types/AssociationTypes';
 
+/**
+ * Handle decorator actions.
+ */
 export class DecoratorEngine {
+  /**
+   * Add to the class/property json schema the given value, or create the schema if necessary.
+   * To use from decorator, which is used as expression or function.
+   *
+   * @param args depending of the decorator state, a single tuple of J, or DecoratorClassProps
+   * @param defaultValues initialValues which may be overridden
+   */
   static defineProperties<J extends JSONEntity<any, any>>(
     args: [Partial<J>] | DecoratorClassProps,
     defaultValues: Partial<J>
@@ -22,6 +32,13 @@ export class DecoratorEngine {
     DecoratorEngine.compute(defaultValues)(prototype, key);
   }
 
+  /**
+   * Return a decorator function
+   * which handle association mapping and define the class/property json schema.
+   *
+   * @param defaultValues
+   * @param value
+   */
   private static compute<J extends JSONEntity<any, any>, K extends keyof J>(
     defaultValues: Partial<J>,
     value: Partial<J> = {}

@@ -7,6 +7,7 @@ export * from './decorators/JSONString';
 export * from './decorators/JSONNumber';
 export * from './decorators/JSONInteger';
 export * from './decorators/JSONObject';
+export * from './decorators/JSONArray';
 
 export * from './types/JSONTypes';
 export * from './types/ClassTypes';

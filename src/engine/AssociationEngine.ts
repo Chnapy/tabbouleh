@@ -16,7 +16,7 @@ export default class AssociationEngine {
    * Apply all associations with target as source class.
    *
    * @param target class source
-   * @param sourceStack tracking, in case of CircularDependencyError
+   * @param sourceStack stack of all class covered, in case of CircularDependencyError
    */
   static computeJSONAssociations(target: ClassLike, sourceStack: ClassLike[] = []): void {
     if (!Util.isClass(target)) {
@@ -86,6 +86,12 @@ export default class AssociationEngine {
     AssociationEngine.setReflectAssociation(prototypeSource, associationMap);
   }
 
+  /**
+   * For the given class return all its associations.
+   *
+   * @param className
+   * @param prototypeSource prototype of the class
+   */
   static getAssociations<C extends ClassLike>(
     className: C['name'],
     prototypeSource: C['prototype']
@@ -95,12 +101,23 @@ export default class AssociationEngine {
     return associationMap[className] || [];
   }
 
+  /**
+   * Return the association map of the given class prototype.
+   *
+   * @param prototypeTarget prototype of the class
+   */
   private static getReflectAssociation(
     prototypeTarget: ClassLike['prototype']
   ): AssociationMap | undefined {
     return Reflect.getMetadata(REFLECT_KEY.JSON_ASSOCIATIONS, prototypeTarget);
   }
 
+  /**
+   * Define the association map of the given class prototype.
+   *
+   * @param prototypeTarget prototype of the class
+   * @param associationMap
+   */
   private static setReflectAssociation(
     prototypeTarget: ClassLike['prototype'],
     associationMap: AssociationMap
