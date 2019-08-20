@@ -4,7 +4,7 @@ import { JSONSchema7 } from 'json-schema';
 import SchemaEngine from './SchemaEngine';
 
 /**
- * Tabbouleh simply give a valid JSON Schema (draft 7) from a model class
+ * Tabbouleh give a valid JSON Schema (draft 7) from a model class
  * which has been decorated with properties.
  */
 export default class Tabbouleh {
