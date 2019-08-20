@@ -48,7 +48,7 @@ export default class SchemaEngine {
     paramEntity: JSONSchema7,
     name: string
   ): JSONSchema7 {
-    return PropertyEngine.getJSONPropertyEntity<JSONEntityObject>(
+    return PropertyEngine.getJSONPropertySchema<JSONEntityObject>(
       reflectEntity,
       paramEntity,
       Object

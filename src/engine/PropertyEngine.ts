@@ -5,7 +5,12 @@ import { ClassLike } from '../types/ClassTypes';
 import { JSONSchema7 } from 'json-schema';
 
 export default class PropertyEngine {
-  private static getJSONType(typeTS: ClassLike): JSONSchema7 {
+  /**
+   * From a class, return a JSONSchema which may contain only the 'type' associated to this class.
+   *
+   * @param typeTS
+   */
+  private static getJSONSchemaType(typeTS: ClassLike): JSONSchema7 {
     switch (typeTS) {
       case Array:
         return {
@@ -30,12 +35,19 @@ export default class PropertyEngine {
     }
   }
 
-  static getJSONPropertyEntity<J extends JSONEntity<any, any>>(
+  /**
+   * Return a JSON Schema for a property.
+   *
+   * @param reflectEntity partial schema get by reflection
+   * @param paramEntity partial schema given in param
+   * @param typeTS reflected type of the property
+   */
+  static getJSONPropertySchema<J extends JSONEntity<any, any>>(
     reflectEntity: JSONSchema7,
     paramEntity: JSONSchema7,
     typeTS: ClassLike
   ): JSONSchema7 {
-    const typeEntity = PropertyEngine.getJSONType(typeTS) as J;
+    const typeEntity = PropertyEngine.getJSONSchemaType(typeTS) as J;
 
     return {
       ...typeEntity,
@@ -44,12 +56,23 @@ export default class PropertyEngine {
     };
   }
 
+  /**
+   * Return by reflection JSON properties (aka JSONSchema.properties) of the JSONSchema.
+   *
+   * @param prototype prototype of the JSONSchema class
+   */
   static getReflectProperties(
     prototype: ClassLike['prototype']
   ): object & Exclude<JSONSchema7['properties'], undefined> {
     return Reflect.getMetadata(REFLECT_KEY.JSON_PROPERTY, prototype) || {};
   }
 
+  /**
+   * Define by reflection JSON properties (aka JSONSchema.properties) of the JSONSchema.
+   *
+   * @param prototype prototype of the JSONSchema class
+   * @param properties JSONSchema.properties of the JSONSchema
+   */
   private static setReflectProperties(
     prototype: ClassLike['prototype'],
     properties: JSONSchema7['properties']
@@ -57,6 +80,13 @@ export default class PropertyEngine {
     Reflect.defineMetadata(REFLECT_KEY.JSON_PROPERTY, properties, prototype);
   }
 
+  /**
+   * Define JSON schema of the given property.
+   *
+   * @param prototype prototype of the JSONSchema class
+   * @param key property key of the JSONSchema class
+   * @param value partial schema given in param
+   */
   static defineReflectProperties<C extends ClassLike>(
     prototype: C['prototype'],
     key: keyof C['prototype'] & string,
@@ -69,7 +99,7 @@ export default class PropertyEngine {
 
     const typeSchema: ClassLike = Reflect.getMetadata(REFLECT_KEY.TYPE, prototype, key);
 
-    const fullSchema: JSONSchema7 = PropertyEngine.getJSONPropertyEntity<JSONEntityAny>(
+    const fullSchema: JSONSchema7 = PropertyEngine.getJSONPropertySchema<JSONEntityAny>(
       reflectSchema,
       value,
       typeSchema
