@@ -16,7 +16,7 @@ export default class AssociationEngine {
    * Apply all associations with target as source class.
    *
    * @param target class source
-   * @param sourceStack tracking, in case of CircularDependencyError
+   * @param sourceStack stack of all class covered, in case of CircularDependencyError
    */
   static computeJSONAssociations(target: ClassLike, sourceStack: ClassLike[] = []): void {
     if (!Util.isClass(target)) {

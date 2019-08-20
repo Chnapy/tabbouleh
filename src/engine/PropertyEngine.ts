@@ -4,6 +4,9 @@ import { REFLECT_KEY } from '../decorators/ReflectKeys';
 import { ClassLike } from '../types/ClassTypes';
 import { JSONSchema7 } from 'json-schema';
 
+/**
+ * Handle all JSONProperty concerns.
+ */
 export default class PropertyEngine {
   /**
    * From a class, return a JSONSchema which may contain only the 'type' associated to this class.
@@ -92,19 +95,24 @@ export default class PropertyEngine {
     key: keyof C['prototype'] & string,
     value: JSONSchema7
   ): void {
+    // get existing properties
     const properties = PropertyEngine.getReflectProperties(prototype);
 
+    // get the json schema of the property
     const reflectSchema: JSONSchema7 =
       Reflect.getMetadata(REFLECT_KEY.JSON_SCHEMA, prototype, key) || {};
 
+    // get the infered type of the property
     const typeSchema: ClassLike = Reflect.getMetadata(REFLECT_KEY.TYPE, prototype, key);
 
+    // construct the final schema
     const fullSchema: JSONSchema7 = PropertyEngine.getJSONPropertySchema<JSONEntityAny>(
       reflectSchema,
       value,
       typeSchema
     );
 
+    // add the schema to existing properties
     properties[key as string] = {
       ...(properties[key] || {}),
       ...fullSchema
