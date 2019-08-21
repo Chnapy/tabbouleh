@@ -1,9 +1,10 @@
 import Tabbouleh from '../src/engine/Tabbouleh';
 import { JSONObject1Sample, OBJECT_SAMPLE_1_USER } from './JSONObjectSample/JSONObject1.sample';
 import { JSONSchema7 } from 'json-schema';
-import { FOOD_SCHEMA_PROPS } from './genericSample/Food.sample';
+import {FOOD_SCHEMA_PROPS, FoodSample} from './genericSample/Food.sample';
 import { JSONObject2Sample } from './JSONObjectSample/JSONObject2.sample';
 import { JSONObject3Sample } from './JSONObjectSample/JSONObject3.sample';
+import AssociationEngine from "../src/engine/AssociationEngine";
 
 const schemaObjectSample1: JSONSchema7 = {
   type: 'object',
@@ -16,10 +17,11 @@ const schemaObjectSample1: JSONSchema7 = {
   }
 };
 
+const foodSampleID = AssociationEngine.generateSchemaID(FoodSample);
 const schemaObjectSample2: JSONSchema7 = {
   type: 'object',
-  properties: {
-    food: {
+  definitions: {
+    [foodSampleID]: {
       type: 'object',
 
       ...FOOD_SCHEMA_PROPS,
@@ -29,6 +31,11 @@ const schemaObjectSample2: JSONSchema7 = {
           type: 'string'
         }
       }
+    }
+  },
+  properties: {
+    food: {
+      $ref: AssociationEngine.generateRef(FoodSample)
     }
   }
 };

@@ -30,6 +30,7 @@ export type JSONEntity<T extends JSONTypeName | JSONTypeName[], D> = Pick<
   | 'description'
   | 'readOnly'
   | 'writeOnly'
+  | 'definitions'
 > & {
   /**
    * @see https://tools.ietf.org/html/draft-handrews-json-schema-validation-01#section-6.1
@@ -52,9 +53,6 @@ export type JSONEntity<T extends JSONTypeName | JSONTypeName[], D> = Pick<
   oneOf?: Omit<JSONEntity<T, D>, 'type'>[];
   anyOf?: Omit<JSONEntity<T, D>, 'type'>[];
   not?: JSONEntity<T, D>;
-
-  // TODO find programmatic solution
-  // definitions
 
   // TODO find programmatic solution
   // extends

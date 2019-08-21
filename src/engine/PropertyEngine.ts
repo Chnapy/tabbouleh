@@ -40,6 +40,7 @@ export default class PropertyEngine {
 
   /**
    * Return a JSON Schema for a property.
+   * Define schema 'type' only if no '$ref' is defined.
    *
    * @param reflectEntity partial schema get by reflection
    * @param paramEntity partial schema given in param
@@ -50,12 +51,21 @@ export default class PropertyEngine {
     paramEntity: JSONSchema7,
     typeTS: ClassLike
   ): JSONSchema7 {
+
+    const partialEntity = {
+      ...reflectEntity,
+      ...paramEntity
+    };
+
+    if(partialEntity.$ref) {
+      return partialEntity;
+    }
+
     const typeEntity = PropertyEngine.getJSONSchemaType(typeTS) as J;
 
     return {
       ...typeEntity,
-      ...reflectEntity,
-      ...paramEntity
+      ...partialEntity
     };
   }
 
