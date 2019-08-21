@@ -15,20 +15,21 @@ export default class AssociationEngine {
    * Apply all associations with target as source class.
    *
    * @param target class source
+   * @param definitions schema definitions of the root schema
    * @param sourceStack stack of all class covered, in case of CircularDependencyError
    */
-  static computeJSONAssociations(target: ClassLike, sourceStack: ClassLike[] = []): void {
-    if (!Util.isClass(target)) {
-      throw new NotAJsonSchemaError(target);
-    }
-
-    const rootTarget = sourceStack[0] || target;
-
-    const rootTargetSchema = SchemaEngine.getReflectSchema(rootTarget) || {};
-
-    const definitions: JSONSchema7['definitions'] = rootTargetSchema.definitions || {};
-
+  static computeJSONAssociations(target: ClassLike, definitions?: JSONSchema7['definitions'], sourceStack: ClassLike[] = []): void {
     sourceStack.push(target);
+
+    const rootTarget = sourceStack[0];
+
+    const isRoot = sourceStack.length === 1;
+
+    if(!definitions) {
+      const rootTargetSchema = SchemaEngine.getReflectSchema(rootTarget) || {};
+
+      definitions = rootTargetSchema.definitions || {};
+    }
 
     const assocMapClass = AssociationEngine.getAssociations(target.name, target.prototype);
 
@@ -42,8 +43,8 @@ export default class AssociationEngine {
       if (assocTarget !== rootTarget) {
         const targetID = AssociationEngine.generateSchemaID(assocTarget);
 
-        if (!definitions[targetID]) {
-          definitions[targetID] = SchemaEngine.getComputedJSONSchema(assocTarget, sourceStack);
+        if (!definitions![targetID]) {
+          definitions![targetID] = SchemaEngine.getComputedJSONSchema(assocTarget, definitions, sourceStack);
         }
       }
 
@@ -60,7 +61,7 @@ export default class AssociationEngine {
       PropertyEngine.defineReflectProperties(target.prototype, a.key, value);
     });
 
-    if (Object.keys(definitions).length) {
+    if (Object.keys(definitions).length && isRoot) {
       SchemaEngine.defineReflectSchema(rootTarget, {
         definitions
       });
