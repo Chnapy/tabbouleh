@@ -1,12 +1,11 @@
-import { ClassLike } from '../types/ClassTypes';
-import { JSONSchema7 } from 'json-schema';
-import { REFLECT_KEY } from '../decorators/ReflectKeys';
-import { Association, AssociationMap, ClassFn } from '../types/AssociationTypes';
+import {ClassLike} from '../types/ClassTypes';
+import {JSONSchema7} from 'json-schema';
+import {REFLECT_KEY} from '../decorators/ReflectKeys';
+import {Association, AssociationMap, ClassFn} from '../types/AssociationTypes';
 import PropertyEngine from './PropertyEngine';
 import SchemaEngine from './SchemaEngine';
-import { NotAJsonSchemaError } from '../exception/NotAJsonSchemaError';
-import { CircularDependencyError } from '../exception/CircularDependencyError';
-import { Util } from './Util';
+import {NotAJsonSchemaError} from '../exception/NotAJsonSchemaError';
+import {Util} from './Util';
 
 /**
  * Handle all associations concerns
@@ -23,9 +22,11 @@ export default class AssociationEngine {
       throw new NotAJsonSchemaError(target);
     }
 
-    if (sourceStack.some(s => s.name === target.name)) {
-      throw new CircularDependencyError(...sourceStack, target);
-    }
+    const rootTarget = sourceStack[0] || target;
+
+    const rootTargetSchema = SchemaEngine.getReflectSchema(rootTarget) || {};
+
+    const definitions: JSONSchema7['definitions'] = rootTargetSchema.definitions || {};
 
     sourceStack.push(target);
 
@@ -34,16 +35,36 @@ export default class AssociationEngine {
     assocMapClass.forEach(a => {
       const assocTarget: ClassLike = a.targetFn();
 
-      const valueSchema = SchemaEngine.getComputedJSONSchema(assocTarget, sourceStack);
+      if (!Util.isClass(assocTarget)) {
+        throw new NotAJsonSchemaError(assocTarget);
+      }
+
+      if (assocTarget !== rootTarget) {
+        const targetID = AssociationEngine.generateSchemaID(assocTarget);
+
+        if (!definitions[targetID]) {
+          definitions[targetID] = SchemaEngine.getComputedJSONSchema(assocTarget, sourceStack);
+        }
+      }
+
+      const refSchema: JSONSchema7 = {
+        $ref: AssociationEngine.generateRef(assocTarget, rootTarget)
+      };
 
       const value = a.jsonPropertyKey
         ? {
-            [a.jsonPropertyKey]: valueSchema
+          [a.jsonPropertyKey]: refSchema
           }
-        : valueSchema;
+        : refSchema;
 
       PropertyEngine.defineReflectProperties(target.prototype, a.key, value);
     });
+
+    if (Object.keys(definitions).length) {
+      SchemaEngine.defineReflectSchema(rootTarget, {
+        definitions
+      });
+    }
   }
 
   /**
@@ -99,6 +120,28 @@ export default class AssociationEngine {
     const associationMap = AssociationEngine.getReflectAssociation(prototypeSource) || {};
 
     return associationMap[className] || [];
+  }
+
+  /**
+   * Generate a '$ref' value for the given target class.
+   *
+   * @param target
+   * @param rootTarget
+   */
+  static generateRef(target: ClassLike, rootTarget?: ClassLike): string {
+    if (target === rootTarget) {
+      return '#';
+    }
+    return `#/definitions/${AssociationEngine.generateSchemaID(target)}`;
+  }
+
+  /**
+   * Generate an ID for the given target class.
+   *
+   * @param target
+   */
+  static generateSchemaID(target: ClassLike): string {
+    return `_${target.name}_`;
   }
 
   /**

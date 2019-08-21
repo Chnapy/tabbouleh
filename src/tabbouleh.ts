@@ -14,6 +14,5 @@ export * from './types/ClassTypes';
 export * from './types/AssociationTypes';
 
 export * from './exception/NotAJsonSchemaError';
-export * from './exception/CircularDependencyError';
 
 export default Tabbouleh;

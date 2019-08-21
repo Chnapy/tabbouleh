@@ -1,10 +1,13 @@
 import { JSONSchema7 } from 'json-schema';
-import { FOOD_SCHEMA_PROPS } from './genericSample/Food.sample';
+import {FOOD_SCHEMA_PROPS, FoodSample} from './genericSample/Food.sample';
 import Tabbouleh from '../src/engine/Tabbouleh';
 import { JSONArray1Sample } from './JSONArraySample/JSONArray1.sample';
 import { JSONArray2Sample } from './JSONArraySample/JSONArray2.sample';
 import { JSONArray3Sample } from './JSONArraySample/JSONArray3.sample';
 import { JSONArray4Sample } from './JSONArraySample/JSONArray4.sample';
+import AssociationEngine from "../src/engine/AssociationEngine";
+
+const foodSampleID = AssociationEngine.generateSchemaID(FoodSample);
 
 const schemaJsonArray1: JSONSchema7 = {
   type: 'object',
@@ -33,17 +36,24 @@ const schemaJsonArray2: JSONSchema7 = {
 
 const schemaJsonArray3: JSONSchema7 = {
   type: 'object',
+  definitions: {
+    [foodSampleID]: {
+      type: 'object',
+
+      ...FOOD_SCHEMA_PROPS,
+
+      properties: {
+        parsley: {
+          type: 'string'
+        }
+      }
+    }
+  },
   properties: {
     myArray: {
       type: 'array',
       items: {
-        ...FOOD_SCHEMA_PROPS,
-        type: 'object',
-        properties: {
-          parsley: {
-            type: 'string'
-          }
-        }
+        $ref: AssociationEngine.generateRef(FoodSample)
       }
     }
   }
@@ -51,17 +61,24 @@ const schemaJsonArray3: JSONSchema7 = {
 
 const schemaJsonArray4: JSONSchema7 = {
   type: 'object',
+  definitions: {
+    [foodSampleID]: {
+      type: 'object',
+
+      ...FOOD_SCHEMA_PROPS,
+
+      properties: {
+        parsley: {
+          type: 'string'
+        }
+      }
+    }
+  },
   properties: {
     myArray: {
       type: 'array',
       items: {
-        ...FOOD_SCHEMA_PROPS,
-        type: 'object',
-        properties: {
-          parsley: {
-            type: 'string'
-          }
-        }
+        $ref: AssociationEngine.generateRef(FoodSample)
       },
       minItems: 1,
       uniqueItems: true
