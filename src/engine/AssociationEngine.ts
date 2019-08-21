@@ -16,14 +16,13 @@ export default class AssociationEngine {
    *
    * @param target class source
    * @param definitions schema definitions of the root schema
-   * @param sourceStack stack of all class covered, in case of CircularDependencyError
+   * @param rootTarget root schema class, if not target
    */
-  static computeJSONAssociations(target: ClassLike, definitions?: JSONSchema7['definitions'], sourceStack: ClassLike[] = []): void {
-    sourceStack.push(target);
+  static computeJSONAssociations(target: ClassLike, definitions?: JSONSchema7['definitions'], rootTarget?: ClassLike): void {
 
-    const rootTarget = sourceStack[0];
+    const isRoot = !rootTarget;
 
-    const isRoot = sourceStack.length === 1;
+    rootTarget = rootTarget || target;
 
     if(!definitions) {
       const rootTargetSchema = SchemaEngine.getReflectSchema(rootTarget) || {};
@@ -44,7 +43,7 @@ export default class AssociationEngine {
         const targetID = AssociationEngine.generateSchemaID(assocTarget);
 
         if (!definitions![targetID]) {
-          definitions![targetID] = SchemaEngine.getComputedJSONSchema(assocTarget, definitions, sourceStack);
+          definitions![targetID] = SchemaEngine.getComputedJSONSchema(assocTarget, definitions, rootTarget);
         }
       }
 

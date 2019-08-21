@@ -17,10 +17,10 @@ export default class SchemaEngine {
    *
    * @param target JSONSchema class
    * @param definitions schema definitions of the root schema
-   * @param sourceStack stack of all class covered in associations
+   * @param rootTarget root schema class, if not target
    */
-  static getComputedJSONSchema(target: ClassLike, definitions?: JSONSchema7['definitions'], sourceStack?: ClassLike[]): JSONSchema7 {
-    AssociationEngine.computeJSONAssociations(target, definitions, sourceStack);
+  static getComputedJSONSchema(target: ClassLike, definitions?: JSONSchema7['definitions'], rootTarget?: ClassLike): JSONSchema7 {
+    AssociationEngine.computeJSONAssociations(target, definitions, rootTarget);
 
     const schema = SchemaEngine.getReflectSchema(target);
 
