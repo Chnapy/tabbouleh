@@ -4,7 +4,7 @@ import { JSONSchema7 } from 'json-schema';
 import {FOOD_SCHEMA_PROPS, FoodSample} from './genericSample/Food.sample';
 import { JSONObject2Sample } from './JSONObjectSample/JSONObject2.sample';
 import { JSONObject3Sample } from './JSONObjectSample/JSONObject3.sample';
-import AssociationEngine from "../src/engine/AssociationEngine";
+import ReferenceEngine from "../src/engine/ReferenceEngine";
 
 const schemaObjectSample1: JSONSchema7 = {
   type: 'object',
@@ -17,7 +17,7 @@ const schemaObjectSample1: JSONSchema7 = {
   }
 };
 
-const foodSampleID = AssociationEngine.generateSchemaID(FoodSample);
+const foodSampleID = ReferenceEngine.generateSchemaID(FoodSample);
 const schemaObjectSample2: JSONSchema7 = {
   type: 'object',
   definitions: {
@@ -35,7 +35,7 @@ const schemaObjectSample2: JSONSchema7 = {
   },
   properties: {
     food: {
-      $ref: AssociationEngine.generateRef(FoodSample)
+      $ref: ReferenceEngine.generateRef(FoodSample)
     }
   }
 };
@@ -58,7 +58,7 @@ describe('check JSONObject', () => {
     expect(Tabbouleh.generateJSONSchema(JSONObject3Sample)).toEqual(schemaObjectSample3);
   });
 
-  it('should handle nested object by association', () => {
+  it('should handle nested object by reference', () => {
     expect(Tabbouleh.generateJSONSchema(JSONObject2Sample)).toEqual(schemaObjectSample2);
   });
 });

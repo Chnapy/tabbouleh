@@ -1,9 +1,9 @@
 import { JSONEntity } from '../types/JSONTypes';
-import { ClassLike, DecoratorClassProps } from '../types/ClassTypes';
+import { Class, DecoratorClassProps } from '../types/ClassTypes';
 import PropertyEngine from './PropertyEngine';
 import { JSONSchema7 } from 'json-schema';
-import AssociationEngine from './AssociationEngine';
-import { ClassFn } from '../types/AssociationTypes';
+import ReferenceEngine from './ReferenceEngine';
+import { ClassResolver } from '../types/ReferenceTypes';
 
 /**
  * Handle decorator actions.
@@ -34,7 +34,7 @@ export class DecoratorEngine {
 
   /**
    * Return a decorator function
-   * which handle association mapping and define the class/property json schema.
+   * which handle reference mapping and define the class/property json schema.
    *
    * @param defaultValues
    * @param value
@@ -48,20 +48,20 @@ export class DecoratorEngine {
       ...value
     };
 
-    return <C extends ClassLike>(
+    return <C extends Class>(
       prototype: C['prototype'],
       key: keyof C['prototype'] & string,
       descriptor?: PropertyDescriptor
     ): void => {
       const valueSchema: JSONSchema7 = {};
 
-      // If we found ClassFn, we create association for each of them
+      // If we found ClassResolver, we create reference for each of them
       Object.keys(value).forEach(_k => {
         const k: keyof JSONSchema7 = _k as any;
-        const v: ClassFn | any = value[k as keyof J];
+        const v: ClassResolver | any = value[k as keyof J];
 
         if (typeof v === 'function') {
-          AssociationEngine.addAssociation(prototype, key, k, v);
+          ReferenceEngine.addReference(prototype, key, k, v);
         } else {
           (valueSchema as any)[k] = v;
         }

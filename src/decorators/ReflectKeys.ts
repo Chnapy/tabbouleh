@@ -18,7 +18,7 @@ export enum REFLECT_KEY {
   JSON_PROPERTY = 'tabbouleh:property',
 
   /**
-   * Concerns associations
+   * Concerns references
    */
-  JSON_ASSOCIATIONS = 'tabbouleh:associations'
+  JSON_REFERENCE = 'tabbouleh:references'
 }

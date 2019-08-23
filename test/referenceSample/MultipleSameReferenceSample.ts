@@ -3,7 +3,7 @@ import { FoodSample } from '../genericSample/Food.sample';
 import { JSONObject } from '../../src/decorators/JSONObject';
 
 @JSONSchema
-export class MultipleSameAssociationSample {
+export class MultipleSameReferenceSample {
   @JSONObject(() => FoodSample)
   @JSONObject(() => FoodSample)
   prop: FoodSample;

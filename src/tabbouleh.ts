@@ -11,7 +11,7 @@ export * from './decorators/JSONArray';
 
 export * from './types/JSONTypes';
 export * from './types/ClassTypes';
-export * from './types/AssociationTypes';
+export * from './types/ReferenceTypes';
 
 export * from './exception/NotAJsonSchemaError';
 

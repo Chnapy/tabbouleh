@@ -1,11 +1,11 @@
 import { JSONEntityArray, JSONTypeName } from '../types/JSONTypes';
-import { ClassLike } from '../types/ClassTypes';
+import { Class } from '../types/ClassTypes';
 import { DecoratorEngine } from '../engine/DecoratorEngine';
-import AssociationEngine from '../engine/AssociationEngine';
-import { ClassFn } from '../types/AssociationTypes';
+import ReferenceEngine from '../engine/ReferenceEngine';
+import { ClassResolver } from '../types/ReferenceTypes';
 
-// array schema props | item class fn | item json type
-type JSONArrayValue = Omit<Partial<JSONEntityArray>, 'type'> | ClassFn | JSONTypeName;
+// array schema props | item class resolver | item json type
+type JSONArrayValue = Omit<Partial<JSONEntityArray>, 'type'> | ClassResolver | JSONTypeName;
 
 /**
  * Decorator for JSON array attribute.
@@ -14,19 +14,19 @@ export function JSONArray(value: JSONArrayValue): Function {
   // Related class
   if (typeof value === 'function') {
     return (
-      prototype: ClassLike['prototype'],
-      key: keyof ClassLike['prototype'] & string,
+      prototype: Class['prototype'],
+      key: keyof Class['prototype'] & string,
       descriptor?: PropertyDescriptor
     ): void => {
-      AssociationEngine.addAssociation(prototype, key, 'items', value);
+      ReferenceEngine.addReference(prototype, key, 'items', value);
     };
   }
 
   // Given type
   if (typeof value === 'string') {
     return (
-      prototype: ClassLike['prototype'],
-      key: keyof ClassLike['prototype'] & string,
+      prototype: Class['prototype'],
+      key: keyof Class['prototype'] & string,
       descriptor?: PropertyDescriptor
     ): void => {
       DecoratorEngine.defineProperties([prototype, key, descriptor], {

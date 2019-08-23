@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import { ClassLike, ListClassEntity, ListJSONSchema } from '../types/ClassTypes';
+import { Class, ListClassEntity, ListJSONSchema } from '../types/ClassTypes';
 import { JSONSchema7 } from 'json-schema';
 import SchemaEngine from './SchemaEngine';
 
@@ -12,7 +12,7 @@ export default class Tabbouleh {
    * From a class, give a JSON Schema (draft 7).
    * The class MUST be a valid JSONSchema entity, decorated.
    */
-  static generateJSONSchema<C extends ClassLike = ClassLike>(target: C): JSONSchema7 {
+  static generateJSONSchema<C extends Class = Class>(target: C): JSONSchema7 {
     return SchemaEngine.getComputedJSONSchema(target);
   }
 
@@ -21,7 +21,7 @@ export default class Tabbouleh {
    * The classes MUST be valid JSONSchema entities, decorated.
    * The object returned follow the same mapping as the one given.
    */
-  static generateMultipleJSONSchemas<C extends ClassLike, L extends ListClassEntity<C>>(
+  static generateMultipleJSONSchemas<C extends Class, L extends ListClassEntity<C>>(
     target: L
   ): ListJSONSchema<L> {
     const obj = {} as ListJSONSchema<L>;
