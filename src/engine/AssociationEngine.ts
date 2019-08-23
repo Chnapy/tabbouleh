@@ -1,7 +1,7 @@
-import {ClassLike} from '../types/ClassTypes';
+import {Class} from '../types/ClassTypes';
 import {JSONSchema7} from 'json-schema';
 import {REFLECT_KEY} from '../decorators/ReflectKeys';
-import {Association, AssociationMap, ClassFn} from '../types/AssociationTypes';
+import {Association, AssociationMap, ClassResolver} from '../types/AssociationTypes';
 import PropertyEngine from './PropertyEngine';
 import SchemaEngine from './SchemaEngine';
 import {NotAJsonSchemaError} from '../exception/NotAJsonSchemaError';
@@ -18,7 +18,7 @@ export default class AssociationEngine {
    * @param definitions schema definitions of the root schema
    * @param rootTarget root schema class, if not target
    */
-  static computeJSONAssociations(target: ClassLike, definitions?: JSONSchema7['definitions'], rootTarget?: ClassLike): void {
+  static computeJSONAssociations(target: Class, definitions?: JSONSchema7['definitions'], rootTarget?: Class): void {
 
     const isRoot = !rootTarget;
 
@@ -33,7 +33,7 @@ export default class AssociationEngine {
     const assocMapClass = AssociationEngine.getAssociations(target.name, target.prototype);
 
     assocMapClass.forEach(a => {
-      const assocTarget: ClassLike = a.targetFn();
+      const assocTarget: Class = a.targetFn();
 
       if (!Util.isClass(assocTarget)) {
         throw new NotAJsonSchemaError(assocTarget);
@@ -74,13 +74,13 @@ export default class AssociationEngine {
    * @param prototypeSource prototype of the C class source
    * @param propertyKey property concerned of the C class source
    * @param jsonProperty JSON property key concerned. Or null if concerns all the JSON Schema
-   * @param classTargetFn wrapper of the class targeted
+   * @param classTargetFn resolver of the class targeted
    */
-  static addAssociation<C extends ClassLike>(
+  static addAssociation<C extends Class>(
     prototypeSource: C['prototype'],
     propertyKey: keyof C['prototype'] & string,
     jsonProperty: keyof JSONSchema7 | null,
-    classTargetFn: ClassFn
+    classTargetFn: ClassResolver
   ): void {
     const className = prototypeSource.constructor.name;
 
@@ -113,7 +113,7 @@ export default class AssociationEngine {
    * @param className
    * @param prototypeSource prototype of the class
    */
-  static getAssociations<C extends ClassLike>(
+  static getAssociations<C extends Class>(
     className: C['name'],
     prototypeSource: C['prototype']
   ): Association[] {
@@ -128,7 +128,7 @@ export default class AssociationEngine {
    * @param target
    * @param rootTarget
    */
-  static generateRef(target: ClassLike, rootTarget?: ClassLike): string {
+  static generateRef(target: Class, rootTarget?: Class): string {
     if (target === rootTarget) {
       return '#';
     }
@@ -140,7 +140,7 @@ export default class AssociationEngine {
    *
    * @param target
    */
-  static generateSchemaID(target: ClassLike): string {
+  static generateSchemaID(target: Class): string {
     return `_${target.name}_`;
   }
 
@@ -150,7 +150,7 @@ export default class AssociationEngine {
    * @param prototypeTarget prototype of the class
    */
   private static getReflectAssociation(
-    prototypeTarget: ClassLike['prototype']
+    prototypeTarget: Class['prototype']
   ): AssociationMap | undefined {
     return Reflect.getMetadata(REFLECT_KEY.JSON_ASSOCIATIONS, prototypeTarget);
   }
@@ -162,7 +162,7 @@ export default class AssociationEngine {
    * @param associationMap
    */
   private static setReflectAssociation(
-    prototypeTarget: ClassLike['prototype'],
+    prototypeTarget: Class['prototype'],
     associationMap: AssociationMap
   ): void {
     Reflect.defineMetadata(REFLECT_KEY.JSON_ASSOCIATIONS, associationMap, prototypeTarget);

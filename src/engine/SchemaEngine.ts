@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import { JSONEntityObject } from '../types/JSONTypes';
 import { REFLECT_KEY } from '../decorators/ReflectKeys';
-import { ClassLike } from '../types/ClassTypes';
+import { Class } from '../types/ClassTypes';
 import PropertyEngine from './PropertyEngine';
 import { JSONSchema7 } from 'json-schema';
 import AssociationEngine from './AssociationEngine';
@@ -19,7 +19,7 @@ export default class SchemaEngine {
    * @param definitions schema definitions of the root schema
    * @param rootTarget root schema class, if not target
    */
-  static getComputedJSONSchema(target: ClassLike, definitions?: JSONSchema7['definitions'], rootTarget?: ClassLike): JSONSchema7 {
+  static getComputedJSONSchema(target: Class, definitions?: JSONSchema7['definitions'], rootTarget?: Class): JSONSchema7 {
     AssociationEngine.computeJSONAssociations(target, definitions, rootTarget);
 
     const schema = SchemaEngine.getReflectSchema(target);
@@ -39,7 +39,7 @@ export default class SchemaEngine {
    * @param target JSONSchema class
    * @param value partial schema given in param
    */
-  static defineReflectSchema(target: ClassLike, value: Partial<JSONEntityObject>): void {
+  static defineReflectSchema(target: Class, value: Partial<JSONEntityObject>): void {
     const classSchema: JSONSchema7 =
       // we get the existing schema of the class
       SchemaEngine.getReflectSchema(target) ||
@@ -56,7 +56,7 @@ export default class SchemaEngine {
    *
    * @param target JSONSchema class
    */
-  static getReflectSchema(target: ClassLike): JSONSchema7 | undefined {
+  static getReflectSchema(target: Class): JSONSchema7 | undefined {
     return Reflect.getMetadata(REFLECT_KEY.JSON_SCHEMA, target.prototype);
   }
 
@@ -66,7 +66,7 @@ export default class SchemaEngine {
    * @param target JSONSchema class
    * @param schema JSON schema
    */
-  private static setReflectSchema(target: ClassLike, schema: JSONSchema7): void {
+  private static setReflectSchema(target: Class, schema: JSONSchema7): void {
     Reflect.defineMetadata(REFLECT_KEY.JSON_SCHEMA, schema, target.prototype);
   }
 }

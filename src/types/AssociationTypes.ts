@@ -1,12 +1,12 @@
-import { ClassLike } from './ClassTypes';
+import { Class } from './ClassTypes';
 import { JSONSchema7 } from 'json-schema';
 
-export type ClassFn<C extends ClassLike = ClassLike> = () => C;
+export type ClassResolver<C extends Class = Class> = () => C;
 
 /**
  * An association between two class
  */
-export type Association<C extends ClassLike = ClassLike> = {
+export type Association<C extends Class = Class> = {
   className: C['name'];
 
   /**
@@ -20,9 +20,9 @@ export type Association<C extends ClassLike = ClassLike> = {
   jsonPropertyKey: keyof JSONSchema7 | null;
 
   /**
-   * Wrapper of the class targeted
+   * Resolver of the class targeted
    */
-  targetFn: ClassFn;
+  targetFn: ClassResolver;
 };
 
 export type AssociationMap = {

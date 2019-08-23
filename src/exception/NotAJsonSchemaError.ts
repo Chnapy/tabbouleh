@@ -1,4 +1,4 @@
-import { ClassLike } from '../types/ClassTypes';
+import { Class } from '../types/ClassTypes';
 
 const msg = (name: string) =>
   `Class called by Tabbouleh but not decorated with @JSONSchema: ${name}`;
@@ -10,7 +10,7 @@ export class NotAJsonSchemaError extends Error {
   /**
    * @param target the failing target
    */
-  constructor(target: ClassLike | unknown) {
+  constructor(target: Class | unknown) {
     super(msg(target && (target as any).name ? (target as any).name : target));
     Error.call(this);
     Error.captureStackTrace(this, this.constructor);
