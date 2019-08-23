@@ -4,7 +4,7 @@ import { REFLECT_KEY } from '../decorators/ReflectKeys';
 import { Class } from '../types/ClassTypes';
 import PropertyEngine from './PropertyEngine';
 import { JSONSchema7 } from 'json-schema';
-import AssociationEngine from './AssociationEngine';
+import ReferenceEngine from './ReferenceEngine';
 import { NotAJsonSchemaError } from '../exception/NotAJsonSchemaError';
 
 /**
@@ -13,14 +13,14 @@ import { NotAJsonSchemaError } from '../exception/NotAJsonSchemaError';
 export default class SchemaEngine {
   /**
    * Return a full JSON Schema from a class, with all properties.
-   * Compute all the class associations.
+   * Compute all the class references.
    *
    * @param target JSONSchema class
    * @param definitions schema definitions of the root schema
    * @param rootTarget root schema class, if not target
    */
   static getComputedJSONSchema(target: Class, definitions?: JSONSchema7['definitions'], rootTarget?: Class): JSONSchema7 {
-    AssociationEngine.computeJSONAssociations(target, definitions, rootTarget);
+    ReferenceEngine.computeJSONReferences(target, definitions, rootTarget);
 
     const schema = SchemaEngine.getReflectSchema(target);
 

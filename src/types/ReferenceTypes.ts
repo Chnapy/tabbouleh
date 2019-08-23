@@ -4,9 +4,9 @@ import { JSONSchema7 } from 'json-schema';
 export type ClassResolver<C extends Class = Class> = () => C;
 
 /**
- * An association between two class
+ * A reference between two class
  */
-export type Association<C extends Class = Class> = {
+export type Reference<C extends Class = Class> = {
   className: C['name'];
 
   /**
@@ -25,9 +25,9 @@ export type Association<C extends Class = Class> = {
   targetFn: ClassResolver;
 };
 
-export type AssociationMap = {
+export type ReferenceMap = {
   /**
-   * [className]: list Association
+   * [className]: list Reference
    */
-  [key: string]: Association[];
+  [key: string]: Reference[];
 };

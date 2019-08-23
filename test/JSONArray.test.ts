@@ -5,9 +5,9 @@ import { JSONArray1Sample } from './JSONArraySample/JSONArray1.sample';
 import { JSONArray2Sample } from './JSONArraySample/JSONArray2.sample';
 import { JSONArray3Sample } from './JSONArraySample/JSONArray3.sample';
 import { JSONArray4Sample } from './JSONArraySample/JSONArray4.sample';
-import AssociationEngine from "../src/engine/AssociationEngine";
+import ReferenceEngine from "../src/engine/ReferenceEngine";
 
-const foodSampleID = AssociationEngine.generateSchemaID(FoodSample);
+const foodSampleID = ReferenceEngine.generateSchemaID(FoodSample);
 
 const schemaJsonArray1: JSONSchema7 = {
   type: 'object',
@@ -53,7 +53,7 @@ const schemaJsonArray3: JSONSchema7 = {
     myArray: {
       type: 'array',
       items: {
-        $ref: AssociationEngine.generateRef(FoodSample)
+        $ref: ReferenceEngine.generateRef(FoodSample)
       }
     }
   }
@@ -78,7 +78,7 @@ const schemaJsonArray4: JSONSchema7 = {
     myArray: {
       type: 'array',
       items: {
-        $ref: AssociationEngine.generateRef(FoodSample)
+        $ref: ReferenceEngine.generateRef(FoodSample)
       },
       minItems: 1,
       uniqueItems: true

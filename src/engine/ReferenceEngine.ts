@@ -1,24 +1,24 @@
 import {Class} from '../types/ClassTypes';
 import {JSONSchema7} from 'json-schema';
 import {REFLECT_KEY} from '../decorators/ReflectKeys';
-import {Association, AssociationMap, ClassResolver} from '../types/AssociationTypes';
+import {Reference, ReferenceMap, ClassResolver} from '../types/ReferenceTypes';
 import PropertyEngine from './PropertyEngine';
 import SchemaEngine from './SchemaEngine';
 import {NotAJsonSchemaError} from '../exception/NotAJsonSchemaError';
 import {Util} from './Util';
 
 /**
- * Handle all associations concerns
+ * Handle all references concerns
  */
-export default class AssociationEngine {
+export default class ReferenceEngine {
   /**
-   * Apply all associations with target as source class.
+   * Apply all references with target as source class.
    *
    * @param target class source
    * @param definitions schema definitions of the root schema
    * @param rootTarget root schema class, if not target
    */
-  static computeJSONAssociations(target: Class, definitions?: JSONSchema7['definitions'], rootTarget?: Class): void {
+  static computeJSONReferences(target: Class, definitions?: JSONSchema7['definitions'], rootTarget?: Class): void {
 
     const isRoot = !rootTarget;
 
@@ -30,25 +30,25 @@ export default class AssociationEngine {
       definitions = rootTargetSchema.definitions || {};
     }
 
-    const assocMapClass = AssociationEngine.getAssociations(target.name, target.prototype);
+    const refMapClass = ReferenceEngine.getReferences(target.name, target.prototype);
 
-    assocMapClass.forEach(a => {
-      const assocTarget: Class = a.targetFn();
+    refMapClass.forEach(a => {
+      const refTarget: Class = a.targetFn();
 
-      if (!Util.isClass(assocTarget)) {
-        throw new NotAJsonSchemaError(assocTarget);
+      if (!Util.isClass(refTarget)) {
+        throw new NotAJsonSchemaError(refTarget);
       }
 
-      if (assocTarget !== rootTarget) {
-        const targetID = AssociationEngine.generateSchemaID(assocTarget);
+      if (refTarget !== rootTarget) {
+        const targetID = ReferenceEngine.generateSchemaID(refTarget);
 
         if (!definitions![targetID]) {
-          definitions![targetID] = SchemaEngine.getComputedJSONSchema(assocTarget, definitions, rootTarget);
+          definitions![targetID] = SchemaEngine.getComputedJSONSchema(refTarget, definitions, rootTarget);
         }
       }
 
       const refSchema: JSONSchema7 = {
-        $ref: AssociationEngine.generateRef(assocTarget, rootTarget)
+        $ref: ReferenceEngine.generateRef(refTarget, rootTarget)
       };
 
       const value = a.jsonPropertyKey
@@ -68,7 +68,7 @@ export default class AssociationEngine {
   }
 
   /**
-   * Create and add an association to the given C class,
+   * Create and add a reference to the given C class,
    * which target the class returned by classTargetFn.
    *
    * @param prototypeSource prototype of the C class source
@@ -76,7 +76,7 @@ export default class AssociationEngine {
    * @param jsonProperty JSON property key concerned. Or null if concerns all the JSON Schema
    * @param classTargetFn resolver of the class targeted
    */
-  static addAssociation<C extends Class>(
+  static addReference<C extends Class>(
     prototypeSource: C['prototype'],
     propertyKey: keyof C['prototype'] & string,
     jsonProperty: keyof JSONSchema7 | null,
@@ -84,42 +84,42 @@ export default class AssociationEngine {
   ): void {
     const className = prototypeSource.constructor.name;
 
-    const association: Association = {
+    const reference: Reference = {
       className,
       key: propertyKey,
       jsonPropertyKey: jsonProperty,
       targetFn: classTargetFn
     };
 
-    const associationMap = AssociationEngine.getReflectAssociation(prototypeSource) || {};
+    const referenceMap = ReferenceEngine.getReflectReference(prototypeSource) || {};
 
-    let assocMapClass = associationMap[className] || [];
+    let refMapClass = referenceMap[className] || [];
 
-    // if an association for this key and json key already exist, remove it
-    assocMapClass = assocMapClass.filter(
-      a => a.key !== association.key || a.jsonPropertyKey !== association.jsonPropertyKey
+    // if a reference for this key and json key already exist, remove it
+    refMapClass = refMapClass.filter(
+      a => a.key !== reference.key || a.jsonPropertyKey !== reference.jsonPropertyKey
     );
 
-    associationMap[className] = assocMapClass;
+    referenceMap[className] = refMapClass;
 
-    assocMapClass.push(association);
+    refMapClass.push(reference);
 
-    AssociationEngine.setReflectAssociation(prototypeSource, associationMap);
+    ReferenceEngine.setReflectReference(prototypeSource, referenceMap);
   }
 
   /**
-   * For the given class return all its associations.
+   * For the given class return all its references.
    *
    * @param className
    * @param prototypeSource prototype of the class
    */
-  static getAssociations<C extends Class>(
+  static getReferences<C extends Class>(
     className: C['name'],
     prototypeSource: C['prototype']
-  ): Association[] {
-    const associationMap = AssociationEngine.getReflectAssociation(prototypeSource) || {};
+  ): Reference[] {
+    const referenceMap = ReferenceEngine.getReflectReference(prototypeSource) || {};
 
-    return associationMap[className] || [];
+    return referenceMap[className] || [];
   }
 
   /**
@@ -132,7 +132,7 @@ export default class AssociationEngine {
     if (target === rootTarget) {
       return '#';
     }
-    return `#/definitions/${AssociationEngine.generateSchemaID(target)}`;
+    return `#/definitions/${ReferenceEngine.generateSchemaID(target)}`;
   }
 
   /**
@@ -145,26 +145,26 @@ export default class AssociationEngine {
   }
 
   /**
-   * Return the association map of the given class prototype.
+   * Return the reference map of the given class prototype.
    *
    * @param prototypeTarget prototype of the class
    */
-  private static getReflectAssociation(
+  private static getReflectReference(
     prototypeTarget: Class['prototype']
-  ): AssociationMap | undefined {
-    return Reflect.getMetadata(REFLECT_KEY.JSON_ASSOCIATIONS, prototypeTarget);
+  ): ReferenceMap | undefined {
+    return Reflect.getMetadata(REFLECT_KEY.JSON_REFERENCE, prototypeTarget);
   }
 
   /**
-   * Define the association map of the given class prototype.
+   * Define the reference map of the given class prototype.
    *
    * @param prototypeTarget prototype of the class
-   * @param associationMap
+   * @param referenceMap
    */
-  private static setReflectAssociation(
+  private static setReflectReference(
     prototypeTarget: Class['prototype'],
-    associationMap: AssociationMap
+    referenceMap: ReferenceMap
   ): void {
-    Reflect.defineMetadata(REFLECT_KEY.JSON_ASSOCIATIONS, associationMap, prototypeTarget);
+    Reflect.defineMetadata(REFLECT_KEY.JSON_REFERENCE, referenceMap, prototypeTarget);
   }
 }

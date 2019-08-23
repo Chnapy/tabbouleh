@@ -1,8 +1,8 @@
 import { JSONEntityObject } from '../types/JSONTypes';
 import { Class, DecoratorClassProps } from '../types/ClassTypes';
 import { DecoratorEngine } from '../engine/DecoratorEngine';
-import AssociationEngine from '../engine/AssociationEngine';
-import { ClassResolver } from '../types/AssociationTypes';
+import ReferenceEngine from '../engine/ReferenceEngine';
+import { ClassResolver } from '../types/ReferenceTypes';
 
 type JSONObjectValue = Omit<Partial<JSONEntityObject>, 'type'> | ClassResolver;
 
@@ -21,7 +21,7 @@ export function JSONObject(...args: [JSONObjectValue] | DecoratorClassProps): Fu
     ): void => {
       const [classFn] = args as [ClassResolver];
 
-      AssociationEngine.addAssociation(prototype, key, null, classFn);
+      ReferenceEngine.addReference(prototype, key, null, classFn);
     };
   }
 

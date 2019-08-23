@@ -1,8 +1,8 @@
 import { JSONEntityArray, JSONTypeName } from '../types/JSONTypes';
 import { Class } from '../types/ClassTypes';
 import { DecoratorEngine } from '../engine/DecoratorEngine';
-import AssociationEngine from '../engine/AssociationEngine';
-import { ClassResolver } from '../types/AssociationTypes';
+import ReferenceEngine from '../engine/ReferenceEngine';
+import { ClassResolver } from '../types/ReferenceTypes';
 
 // array schema props | item class resolver | item json type
 type JSONArrayValue = Omit<Partial<JSONEntityArray>, 'type'> | ClassResolver | JSONTypeName;
@@ -18,7 +18,7 @@ export function JSONArray(value: JSONArrayValue): Function {
       key: keyof Class['prototype'] & string,
       descriptor?: PropertyDescriptor
     ): void => {
-      AssociationEngine.addAssociation(prototype, key, 'items', value);
+      ReferenceEngine.addReference(prototype, key, 'items', value);
     };
   }
 

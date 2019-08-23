@@ -2,8 +2,8 @@ import { JSONEntity } from '../types/JSONTypes';
 import { Class, DecoratorClassProps } from '../types/ClassTypes';
 import PropertyEngine from './PropertyEngine';
 import { JSONSchema7 } from 'json-schema';
-import AssociationEngine from './AssociationEngine';
-import { ClassResolver } from '../types/AssociationTypes';
+import ReferenceEngine from './ReferenceEngine';
+import { ClassResolver } from '../types/ReferenceTypes';
 
 /**
  * Handle decorator actions.
@@ -34,7 +34,7 @@ export class DecoratorEngine {
 
   /**
    * Return a decorator function
-   * which handle association mapping and define the class/property json schema.
+   * which handle reference mapping and define the class/property json schema.
    *
    * @param defaultValues
    * @param value
@@ -55,13 +55,13 @@ export class DecoratorEngine {
     ): void => {
       const valueSchema: JSONSchema7 = {};
 
-      // If we found ClassResolver, we create association for each of them
+      // If we found ClassResolver, we create reference for each of them
       Object.keys(value).forEach(_k => {
         const k: keyof JSONSchema7 = _k as any;
         const v: ClassResolver | any = value[k as keyof J];
 
         if (typeof v === 'function') {
-          AssociationEngine.addAssociation(prototype, key, k, v);
+          ReferenceEngine.addReference(prototype, key, k, v);
         } else {
           (valueSchema as any)[k] = v;
         }
