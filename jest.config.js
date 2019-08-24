@@ -1,5 +1,8 @@
 module.exports = {
 
+  modulePathIgnorePatterns: [
+    "node_modules"
+  ],
   transform: {
     ".(ts|tsx)": "ts-jest"
   },
