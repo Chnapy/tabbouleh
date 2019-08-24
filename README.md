@@ -1,15 +1,53 @@
-# Tabbouleh
+# Tabbouleh - ![GitHub](https://img.shields.io/github/license/Chnapy/tabbouleh) [![NPM version](http://img.shields.io/npm/v/tabbouleh.svg?style=flat)](https://www.npmjs.org/package/tabbouleh) ![npm bundle size](https://img.shields.io/bundlephobia/min/tabbouleh) ![contribute](https://img.shields.io/badge/can%20I%20contribute-yes-brightgreen)
 
-[![NPM version](http://img.shields.io/npm/v/tabbouleh.svg?style=flat)](https://www.npmjs.org/package/tabbouleh)
-[![styled with prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
-[![Greenkeeper badge](https://badges.greenkeeper.io/Chnapy/tabbouleh.svg)](https://greenkeeper.io/)
 [![Travis](https://img.shields.io/travis/Chnapy/tabbouleh.svg)](https://travis-ci.org/Chnapy/tabbouleh)
 [![Coverage Status](https://coveralls.io/repos/github/Chnapy/tabbouleh/badge.svg?branch=master)](https://coveralls.io/github/Chnapy/tabbouleh?branch=master)
 [![Dev Dependencies](https://david-dm.org/Chnapy/tabbouleh/dev-status.svg)](https://david-dm.org/Chnapy/tabbouleh?type=dev)
 
-This project is designed to use Typescript classes for data validation (Java developers may say "Bean Validation") generating JSON Schema from them. 
-With tabbouleh you could use your classes for both define the data and validate/constraint them using decorators and Typescript typing. 
-ORM users, you may find it familiar.
+
+Tabbouleh is a TypeScript library which generate JSON Schema (draft 7) from data class definition, in runtime.
+
+  - **Class-based** - Structure your data definitions with classes, in which you put your JSON Schema properties. No need to create other types, classes or variables. 
+
+  - **Decorators** - Define JSON Schema of data fields with decorators, for readability & understandability.
+
+  - **Field type inference** - Type of the field JSON Schema can be inferred from its Typescript type.
+
+## Motivation
+
+To understand why I made Tabbouleh we have to simulate a user data input process.
+Like an **authentication**.
+
+Let list the steps:
+
+  - Define the data structure (like with a type or class). We have an username and a password.
+
+  - [front-side] Generate a form with an input for each of the data fields, which one need to have some rules (required, minLength, ...).
+
+  - [front-side] On form submit, validate the data, check that it follows all the rules.
+  
+  - [front-side] Then send the data to the back-end.
+  
+  - [back-side] On data receipt, validate the data, again (no trust with front).
+
+If you ever developed this kind of process you may know the inconsistency of the binding between the data and each of these steps.
+
+Let take the data validation part. 
+It's made front-side on form generate (input rules), then on form submit (data validate). Depending on your app logic, you may do only one of these step.
+Back-side, data is again validated, because we can't trust the front.
+
+The definition of these rules and there validation may be programmatically do, in each of these steps with lot of redundancy, fat & ugly code, poor maintainability, and too much time.
+
+I wanted a way to define all these rules easily, elegantly, without a ton of code. When I define my data structure, I define its validation rules. It's simple, it's how Tabbouleh works.
+Then I use the generated JSON Schema for generate my form, and validate the data submitted. Easily.
+
+The JSON Schema format is normalized and handled by data validators and form generators.
+
+But careful, Tabbouleh will not validate your data, or generate your form. It'll just do the first step of these: generate the JSON Schema, which be used for these purposes.
+Check the #use cases for more.
+
+---
+
 
 Some uses cases:
 - [validate some JSON data](#usage-with-ajv)
