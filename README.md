@@ -110,7 +110,7 @@ And our schema looks like...
 
 ## Motivation
 
-To understand my motivation behind Tabbouleh we have to simulate a user data input process.
+To understand my motivation behind Tabbouleh we have to simulate an user data input process.
 Like a **login**.
 
 Let's list the steps:
@@ -171,7 +171,7 @@ Schema definitions are made in your data class, with decorators.
 
 ### `@JSONSchema` API
 
-`@JSONSchema` is the only decorator for the class head. It defines the root schema properties.
+The only decorator for the class head. It defines the root schema properties.
 
 More infos on which fields you can use: https://tools.ietf.org/html/draft-handrews-json-schema-validation-01#section-10 [10]
 
@@ -209,7 +209,7 @@ export class LoginData {
 
 ### `@JSONProperty` API
 
-`@JSONProperty` is a field decorator which doesn't define the schema `type`. 
+Field decorator which doesn't define the schema `type`. 
 If not defined it will be inferred from the field type.
 
 Depending on the `type` given, see corresponding decorator API to know which fields are allowed. 
@@ -233,7 +233,7 @@ export class LoginData {
 
 ### `@JSONString` API
 
-`@JSONString` is a field decorator for **string** type.
+Field decorator for **string** type.
 
 More infos on which fields you can use: https://tools.ietf.org/html/draft-handrews-json-schema-validation-01#section-6.3 [6.3]
 
@@ -249,6 +249,41 @@ export class LoginData {
 
   @JSONString
   password: string;
+
+}
+```
+
+### `@JSONNumber` & `@JSONInteger` API
+
+Fields decorator for **number** and **integer** types. They share the same fields.
+
+More infos on which fields you can use: https://tools.ietf.org/html/draft-handrews-json-schema-validation-01#section-6.2 [6.2]
+
+```typescript
+@JSONSchema
+export class UserData {
+
+  @JSONInteger({
+    minimum: 0
+  })
+  age: number;
+
+  @JSONNumber
+  percentCompleted: number;
+
+}
+```
+
+### `@JSONBoolean` API
+
+Field decorator for **boolean**.
+
+```typescript
+@JSONSchema
+export class UserData {
+
+  @JSONBoolean
+  active: boolean;
 
 }
 ```
