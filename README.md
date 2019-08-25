@@ -146,88 +146,112 @@ The JSON Schema format is normalized and handled by many data validators and for
 But careful, Tabbouleh will not validate your data, or generate your form. It'll just do the first step of these: generate the JSON Schema, which be used for these purposes.
 Check the #use cases for more.
 
+## Note on draft used
+
+Tabbouleh actually uses the **draft 7** of JSON Schema specification.
+
+For more:
+
+  - http://json-schema.org/specification.html
+  - https://tools.ietf.org/html/draft-handrews-json-schema-validation-01
+
 ## Use cases
 
 ### Data validation
 
+TODO
+
 ### Form generation
 
-
+TODO
 
 ## Schema definition
 
-```Typescript
-import { JSONSchema, JSONInteger, JSONRequired } from 'tabbouleh';
+Schema definitions are made in your data class, with decorators.
 
-@JSONSchema
-class User {
-  
-  @JSONInteger({
-    minimum: 0
-  })
-  size: number;
+### `@JSONSchema` API
 
-  @JSONRequired
+`@JSONSchema` is the only decorator for the class head. It defines the root schema properties.
+
+More infos on which fields you can use: https://tools.ietf.org/html/draft-handrews-json-schema-validation-01#section-10 [10]
+
+```typescript
+@JSONSchema<LoginData>({
+  $id: "https://example.com/login.json",
+  $schema: "http://json-schema.org/draft-07/schema#",
+  title: "Login data",
+  description: "Data required form user login",
+  required: ['email', 'password']
+})
+export class LoginData {
+
+  @JSONString
   email: string;
-  
+
+  @JSONString
+  password: string;
+
 }
 ```
 
-The class has to be decorated with the `@JSONSchema` decorator. 
-All the properties who have to be in the JSON Schema need to be decorated with one of these decorators:
- - `JSONString`
- - `JSONNumber`
- - `JSONInteger`
- - `JSONBoolean`
- - `JSONProperty`
- 
-### `@JSONSchema`
+```typescript
+@JSONSchema
+export class LoginData {
 
-TODO
+  @JSONString
+  email: string;
 
-### `@JSONProperty`
+  @JSONString
+  password: string;
 
-TODO
-
-## Usage
-
-```Typescript
-import { Tabbouleh } from 'tabbouleh';
-
-// we use the example upper: User
-
-const userSchema = Tabbouleh.generateJSONSchema(
-  User
-);
-
-// we now have the User schema !
-```
-
-In this example, given the class `User` we saw upper, the value of `userSchema` is the one below:
-
-```JSON
-{
-  "type": "object",
-  "properties": {
-    "size": {
-      "type": "integer",
-      "minimum": 0
-    },
-    "email": {
-      "type": "string",
-      "required": true
-    }
-  }
 }
 ```
 
-### Usage with [ajv](https://github.com/epoberezkin/ajv)
+### `@JSONProperty` API
 
-TODO
+`@JSONProperty` is a field decorator which doesn't define the schema `type`. 
+If not defined it will be inferred from the field type.
 
-### Usage with [react-jsonschema-form](https://github.com/mozilla-services/react-jsonschema-form)
+Depending on the `type` given, see corresponding decorator API to know which fields are allowed. 
+Also: https://tools.ietf.org/html/draft-handrews-json-schema-validation-01#section-6.1 [6.1]
 
-TODO
+```typescript
+@JSONSchema
+export class LoginData {
+
+  @JSONProperty
+  email: string;
+
+  @JSONProperty<JSONEntityString>({
+    type: 'string',
+    minLength: 6
+  })
+  password: string;
+
+}
+```
+
+### `@JSONString` API
+
+`@JSONString` is a field decorator for **string** type.
+
+More infos on which fields you can use: https://tools.ietf.org/html/draft-handrews-json-schema-validation-01#section-6.3 [6.3]
+
+```typescript
+@JSONSchema
+export class LoginData {
+
+  @JSONString({
+    format: 'email',
+    maxLength: 64
+  })
+  email: string;
+
+  @JSONString
+  password: string;
+
+}
+```
 
 ### Why tabbouleh ?
 
