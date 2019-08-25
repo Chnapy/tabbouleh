@@ -16,7 +16,18 @@ A TypeScript library which generate JSON Schema (draft 7) from data class defini
 
   - **Non-opinionated** - Tabbouleh is not linked to any other libraries. Choose the validator you want, the form generator you want, they just have to work with JSON Schema format which is quite generic.
 
-[MENU]
+---
+
+- [Install](#install)
+- [Get started](#get-started)
+  - [Define a data structure](#define-a-data-structure)
+  - [Generate its JSON Schema](#generate-its-json-schema)
+- [Motivation](#motivation)
+- [Use cases](#use-cases)
+  - [Data validation](#data-validation)
+  - [Form generation](#form-generation)
+
+---
 
 ## Install
 
@@ -41,7 +52,7 @@ The user will login with:
   - its **email** - It must follow the email format.
   - its **password** - It must have at least 6 chars.
 
-And these fields are required.
+All these fields are required.
 
 ```typescript
 import { JSONSchema, JSONString } from 'tabbouleh';
@@ -99,8 +110,8 @@ And our schema looks like...
 
 ## Motivation
 
-To understand why I made Tabbouleh we have to simulate a user data input process.
-Like an **authentication**.
+To understand my motivation behind Tabbouleh we have to simulate a user data input process.
+Like a **login**.
 
 Let's list the steps:
 
@@ -135,32 +146,13 @@ The JSON Schema format is normalized and handled by many data validators and for
 But careful, Tabbouleh will not validate your data, or generate your form. It'll just do the first step of these: generate the JSON Schema, which be used for these purposes.
 Check the #use cases for more.
 
----
+## Use cases
+
+### Data validation
+
+### Form generation
 
 
-Some uses cases:
-- [validate some JSON data](#usage-with-ajv)
-  - send by the front
-  - loaded from JSON file
-- [building HTML forms from JSON Schemas](#usage-with-react-jsonschema-form)
-
-### Installation
-
-```bash
-npm install tabbouleh --save
-```
-
-tabbouleh requires [reflect-metadata](https://www.npmjs.com/package/reflect-metadata) (for decorators)
-
-```bash
-npm install reflect-metadata --save-dev
-```
-
-Your `tsconfig.json` needs the following flags:
-```json
-"experimentalDecorators": true,
-"emitDecoratorMetadata": true
-```
 
 ## Schema definition
 
