@@ -8,7 +8,7 @@ import { JSONSchema } from '../../src/decorators/JSONSchema';
   description: "Data required form user login",
   required: ['email', 'password']
 })
-export class LoginData {
+class LoginData {
 
   @JSONString
   email: string;

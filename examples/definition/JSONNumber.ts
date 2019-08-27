@@ -3,7 +3,7 @@ import { JSONNumber } from '../../src/decorators/JSONNumber';
 import { JSONInteger } from '../../src/decorators/JSONInteger';
 
 @JSONSchema
-export class UserData {
+class UserData {
 
   @JSONInteger({
     minimum: 0

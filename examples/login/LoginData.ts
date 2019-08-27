@@ -4,7 +4,7 @@ import { JSONString } from '../../src/decorators/JSONString';
 @JSONSchema<LoginData>({
   required: ['email', 'password']
 })
-export class LoginData {
+class LoginData {
 
   @JSONString({
     format: 'email'

@@ -165,11 +165,11 @@ TODO
 
 TODO
 
-## Schema definition
+## API
 
 Schema definitions are made in your data class, with decorators.
 
-### `@JSONSchema` API
+### `@JSONSchema`
 
 The only decorator for the class head. It defines the root schema properties.
 
@@ -207,7 +207,7 @@ export class LoginData {
 }
 ```
 
-### `@JSONProperty` API
+### `@JSONProperty`
 
 Field decorator which doesn't define the schema `type`. 
 If not defined it will be inferred from the field type.
@@ -231,7 +231,7 @@ export class LoginData {
 }
 ```
 
-### `@JSONString` API
+### `@JSONString`
 
 Field decorator for **string** type.
 
@@ -253,9 +253,9 @@ export class LoginData {
 }
 ```
 
-### `@JSONNumber` & `@JSONInteger` API
+### `@JSONNumber` & `@JSONInteger`
 
-Fields decorator for **number** and **integer** types. They share the same fields.
+Field decorators for **number** and **integer** types. They share the same fields.
 
 More infos on which fields you can use: https://tools.ietf.org/html/draft-handrews-json-schema-validation-01#section-6.2 [6.2]
 
@@ -274,9 +274,9 @@ export class UserData {
 }
 ```
 
-### `@JSONBoolean` API
+### `@JSONBoolean`
 
-Field decorator for **boolean**.
+Field decorator for **boolean** type.
 
 ```typescript
 @JSONSchema
@@ -287,6 +287,107 @@ export class UserData {
 
 }
 ```
+
+### `@JSONObject`
+
+Field decorator for **object** type.
+
+```typescript
+@JSONSchema
+export class UserData {
+
+  @JSONObject({
+    properties: {
+      street: {
+        type: 'string'
+      },
+      city: {
+        type: 'string'
+      }
+    }
+  })
+  address: object;
+
+}
+```
+
+#### Class reference
+
+With this decorator you can reference an other schema class.
+
+Note that you have to wrap the target in a function, like `() => MyClass`. It is required because of the case of circular referencing which may cause an `undefined` value.
+
+```typescript
+@JSONSchema
+export class UserData {
+
+  @JSONObject(() => UserAddress)
+  address: UserAddress;
+
+}
+```
+
+```typescript
+@JSONSchema
+class UserAddress {
+
+  @JSONString
+  street: string;
+
+  @JSONString
+  city: string;
+
+}
+```
+
+### `@JSONArray`
+
+Field decorator for **array** type.
+
+```typescript
+@JSONSchema
+class UserData {
+
+  @JSONArray({
+    items: {
+      type: 'integer'
+    }
+  })
+  childrenAges: number[];
+
+}
+```
+
+#### Class reference
+
+As with `@JSONObject` you can reference an other schema class.
+
+```typescript
+@JSONSchema
+class UserData {
+
+  @JSONArray(() => UserData)
+  children: UserData[];
+
+}
+```
+
+You may want to add some properties in addition of the reference, for that put the reference in the `items` property.
+
+```typescript
+@JSONSchema
+class UserData {
+
+  @JSONArray({
+    items: () => UserData,
+    maxItems: 4,
+    minItems: 0
+  })
+  children: UserData[];
+
+}
+```
+
 
 ### Why tabbouleh ?
 

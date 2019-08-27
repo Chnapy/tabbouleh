@@ -2,7 +2,7 @@ import { JSONSchema } from '../../src/decorators/JSONSchema';
 import { JSONString } from '../../src/decorators/JSONString';
 
 @JSONSchema
-export class LoginData {
+class LoginData {
 
   @JSONString({
     format: 'email',

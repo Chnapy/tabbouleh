@@ -3,7 +3,7 @@ import { JSONProperty } from '../../src/decorators/JSONProperty';
 import { JSONEntityString } from '../../src/types/JSONTypes';
 
 @JSONSchema
-export class LoginData {
+class LoginData {
 
   @JSONProperty
   email: string;
