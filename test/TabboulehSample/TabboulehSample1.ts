@@ -1,11 +1,4 @@
-import {
-  JSONDescription,
-  JSONEntityInteger,
-  JSONEntityString,
-  JSONProperty,
-  JSONSchema,
-  JSONTitle
-} from '../../src/tabbouleh';
+import { JSONEntityInteger, JSONEntityString, JSONProperty, JSONSchema } from '../../src/tabbouleh';
 
 @JSONSchema
 export default class TabboulehSample1 {
@@ -17,10 +10,10 @@ export default class TabboulehSample1 {
   size: number;
 
   @JSONProperty<JSONEntityString>({
+    title: 'Email',
+    description: 'It\'s where you put your mail',
     minLength: 6
   })
-  @JSONTitle('Email')
-  @JSONDescription('It\'s where you put your mail')
   email: string;
 
 }
