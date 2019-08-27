@@ -13,31 +13,3 @@ export function JSONProperty<J extends JSONEntity<any, any>>(
 ): Function | void {
   return DecoratorEngine.defineProperties(args, {});
 }
-
-/**
- * Decorator for JSON attribute **title** property.
- */
-export function JSONTitle(value: JSONEntity<any, any>['title']): Function {
-  return DecoratorEngine.defineProperties(
-    [
-      {
-        title: value
-      }
-    ],
-    {}
-  ) as Function;
-}
-
-/**
- * Decorator for JSON attribute **description** property.
- */
-export function JSONDescription(value: JSONEntity<any, any>['description']): Function {
-  return DecoratorEngine.defineProperties(
-    [
-      {
-        description: value
-      }
-    ],
-    {}
-  ) as Function;
-}
