@@ -12,7 +12,7 @@ A TypeScript library which generate JSON Schema (draft 7) from data class defini
 
   - **Decorators** - Define JSON Schema of data fields with decorators, for readability & understandability.
 
-  - **Field type inference** - Type of the field JSON Schema can be inferred from its Typescript type.
+  - **Field type inference** - Type of the field JSON Schema can be inferred from its TypeScript type.
 
   - **Non-opinionated** - Tabbouleh is not linked to any other libraries. Choose the validator you want, the form generator you want, they just have to work with JSON Schema format which is quite generic.
 
@@ -23,9 +23,21 @@ A TypeScript library which generate JSON Schema (draft 7) from data class defini
   - [Define a data structure](#define-a-data-structure)
   - [Generate its JSON Schema](#generate-its-json-schema)
 - [Motivation](#motivation)
+- [Note on draft used](#note-on-draft-used)
 - [Use cases](#use-cases)
   - [Data validation](#data-validation)
   - [Form generation](#form-generation)
+- [API](#api)
+  - [`@JSONSchema`](#jsonschema)
+  - [`@JSONProperty`](#jsonproperty)
+  - [`@JSONString`](#jsonstring)
+  - [`@JSONNumber` & `@JSONInteger`](#jsonnumber--jsoninteger)
+  - [`@JSONBoolean`](#jsonboolean)
+  - [`@JSONObject`](#jsonobject)
+  - [`@JSONArray`](#jsonarray)
+- [How referencing works](#how-referencing-works)
+  - [Wrap the class !](#wrap-the-class-)
+- [Credits](#credits)
 
 ---
 
@@ -35,7 +47,7 @@ A TypeScript library which generate JSON Schema (draft 7) from data class defini
 npm install tabbouleh --save
 ```
 
-For enable Typescript decorators, your `tsconfig.json` needs the following flags:
+For enable TypeScript decorators, your `tsconfig.json` needs the following flags:
 ```json
 "experimentalDecorators": true,
 "emitDecoratorMetadata": true
@@ -173,7 +185,7 @@ Schema definitions are made in your data class, with decorators.
 
 The only decorator for the class head. It defines the root schema properties.
 
-More infos on which fields you can use: https://tools.ietf.org/html/draft-handrews-json-schema-validation-01#section-10 [10]
+[More infos on which fields you can use.](https://tools.ietf.org/html/draft-handrews-json-schema-validation-01#section-10) [10]
 
 ```typescript
 @JSONSchema<LoginData>({
@@ -212,8 +224,8 @@ export class LoginData {
 Field decorator which doesn't define the schema `type`. 
 If not defined it will be inferred from the field type.
 
-Depending on the `type` given, see corresponding decorator API to know which fields are allowed. 
-Also: https://tools.ietf.org/html/draft-handrews-json-schema-validation-01#section-6.1 [6.1]
+Depending on the `type` given, see the corresponding decorator to know which fields are allowed. 
+Also, [more infos on which fields you can use.](https://tools.ietf.org/html/draft-handrews-json-schema-validation-01#section-6.1) [6.1]
 
 ```typescript
 @JSONSchema
@@ -235,7 +247,7 @@ export class LoginData {
 
 Field decorator for **string** type.
 
-More infos on which fields you can use: https://tools.ietf.org/html/draft-handrews-json-schema-validation-01#section-6.3 [6.3]
+[More infos on which fields you can use.](https://tools.ietf.org/html/draft-handrews-json-schema-validation-01#section-6.3) [6.3]
 
 ```typescript
 @JSONSchema
@@ -257,7 +269,7 @@ export class LoginData {
 
 Field decorators for **number** and **integer** types. They share the same fields.
 
-More infos on which fields you can use: https://tools.ietf.org/html/draft-handrews-json-schema-validation-01#section-6.2 [6.2]
+[More infos on which fields you can use.](https://tools.ietf.org/html/draft-handrews-json-schema-validation-01#section-6.2) [6.2]
 
 ```typescript
 @JSONSchema
@@ -292,6 +304,8 @@ export class UserData {
 
 Field decorator for **object** type.
 
+[More infos on which fields you can use.](https://tools.ietf.org/html/draft-handrews-json-schema-validation-01#section-6.5) [6.5]
+
 ```typescript
 @JSONSchema
 export class UserData {
@@ -315,7 +329,7 @@ export class UserData {
 
 With this decorator you can reference an other schema class.
 
-Note that you have to wrap the target in a function, like `() => MyClass`. It is required because of the case of circular referencing which may cause an `undefined` value.
+[Wrap your class !](#wrap-the-class-)
 
 ```typescript
 @JSONSchema
@@ -343,6 +357,8 @@ class UserAddress {
 ### `@JSONArray`
 
 Field decorator for **array** type.
+
+[More infos on which fields you can use.](https://tools.ietf.org/html/draft-handrews-json-schema-validation-01#section-6.4) [6.4]
 
 ```typescript
 @JSONSchema
@@ -388,12 +404,80 @@ class UserData {
 }
 ```
 
+## How referencing works
 
-### Why tabbouleh ?
+Let's take one of the previous example.
 
-[Hummus](https://www.npmjs.com/package/hummus) was already taken.
+```typescript
+@JSONSchema
+export class UserData {
 
-### Credits
+  @JSONObject(() => UserAddress)
+  address: UserAddress;
+
+}
+```
+
+```typescript
+@JSONSchema
+class UserAddress {
+
+  @JSONString
+  street: string;
+
+  @JSONString
+  city: string;
+
+}
+```
+
+The JSON result will be:
+
+```JSON
+{
+  "type": "object",
+  
+  "definitions": {
+    "_UserAddress_": {
+      "type": "object",
+      "properties": {
+        "street": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  
+  "properties": {
+    
+    "address": {
+      "$ref": "#/definitions/_UserAddress_"
+    }
+    
+  }
+}
+```
+
+You can see that:
+  - `UserAdress` schema was put in the `definitions` of the root schema,
+  - `address` field is now referencing `UserAddress` by using the `$ref` field.
+  
+A class reference is **always** translated as a schema reference with the use of the `$ref`. 
+Because of multiple same references optimization, and because of circular reference handling.
+
+
+
+### Wrap the class !
+
+You have to wrap the target in a function, like `() => MyClass`. 
+
+It is required because of the case of circular referencing which may cause an `undefined` value instead of the referenced class.
+
+
+## Credits
 
 This library was created with [typescript-library-starter](https://github.com/alexjoverm/typescript-library-starter).
 
@@ -406,3 +490,7 @@ This library was created with [typescript-library-starter](https://github.com/al
 <!--<!-- ALL-CONTRIBUTORS-LIST:END -->
 
 <!--This project follows the [all-contributors](https://github.com/kentcdodds/all-contributors) specification. Contributions of any kind are welcome!-->
+
+### So, why tabbouleh ?
+
+[Hummus](https://www.npmjs.com/package/hummus) was already taken :shipit:
