@@ -39,6 +39,7 @@ A TypeScript library which generate JSON Schema (draft 7) from data class defini
   - [`@JSONArray`](#jsonarray)
 - [How referencing works](#how-referencing-works)
   - [Wrap the class !](#wrap-the-class-)
+- [Examples](#examples)
 - [Credits](#credits)
 
 ---
