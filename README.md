@@ -6,7 +6,8 @@ A TypeScript library which generate JSON Schema (draft 7) from data class defini
 [![Travis](https://img.shields.io/travis/Chnapy/tabbouleh.svg)](https://travis-ci.org/Chnapy/tabbouleh)
 [![Coverage Status](https://coveralls.io/repos/github/Chnapy/tabbouleh/badge.svg?branch=master)](https://coveralls.io/github/Chnapy/tabbouleh?branch=master)
 [![Dev Dependencies](https://david-dm.org/Chnapy/tabbouleh/dev-status.svg)](https://david-dm.org/Chnapy/tabbouleh?type=dev)
-
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=Chnapy_tabbouleh&metric=alert_status)](https://sonarcloud.io/dashboard?id=Chnapy_tabbouleh)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=Chnapy_tabbouleh&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=Chnapy_tabbouleh)
 
   - **Class-based** - Structure your data definitions with classes, in which you put your JSON Schema properties. No need to create other types, classes or variables. 
 
