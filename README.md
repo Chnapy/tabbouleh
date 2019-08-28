@@ -15,8 +15,9 @@ A TypeScript library which generate JSON Schema (draft 7) from data class defini
 
   - **Field type inference** - Type of the field JSON Schema can be inferred from its TypeScript type.
 
-  - **Non-opinionated** - Tabbouleh is not linked to any other libraries. Choose the validator you want, the form generator you want, they just have to work with JSON Schema format which is quite generic.
+  - **Non-opinionated** - No link to any other libraries. Choose the validator you want, the form generator you want, they just have to work with JSON Schema format which is quite generic.
 
+  - **Back & Front** - Tabbouleh works in the same way with Node or in a Browser environment, it doesn't matter !
 ---
 
 - [Install](#install)
