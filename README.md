@@ -184,7 +184,7 @@ For more:
 
 ### Data validation
 
-TODO
+You can see the use of Tabbouleh with [AJV](https://github.com/epoberezkin/ajv) in this dedicated repo: [tabbouleh-sample-ajv](https://github.com/Chnapy/tabbouleh-sample-ajv).
 
 ### Form generation
 
