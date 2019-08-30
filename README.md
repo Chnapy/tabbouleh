@@ -189,7 +189,9 @@ You can see the use of Tabbouleh with [AJV](https://github.com/epoberezkin/ajv) 
 
 ### Form generation
 
-TODO
+You can see the use of Tabbouleh with [react-jsonschema-form](https://github.com/mozilla-services/react-jsonschema-form) in this dedicated repo: [tabbouleh-sample-rjsf](https://github.com/Chnapy/tabbouleh-sample-rjsf).
+
+An alternative of react-jsonschema-form: [uniforms](https://github.com/vazco/uniforms).
 
 ## API
 
