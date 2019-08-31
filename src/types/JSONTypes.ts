@@ -22,8 +22,8 @@ export type JSONEntityDefinition<
  */
 export type JSONEntity<T extends JSONTypeName | JSONTypeName[], D> = Pick<
   JSONSchema7,
-  | '$id' // TODO find programmatic solution
-  | '$ref' // TODO find programmatic solution
+  | '$id'
+  | '$ref'
   | '$schema'
   | '$comment'
   | 'title'
@@ -54,7 +54,6 @@ export type JSONEntity<T extends JSONTypeName | JSONTypeName[], D> = Pick<
   anyOf?: Omit<JSONEntity<T, D>, 'type'>[];
   not?: JSONEntity<T, D>;
 
-  // TODO find programmatic solution
   // extends
 
   /**
@@ -137,7 +136,6 @@ export type JSONEntityObject<K extends object = any> = JSONEntity<'object', obje
 
     additionalProperties?: JSONEntityDefinition<any, any>;
 
-    // TODO
     // dependencies
 
     propertyNames?: JSONEntityString;
