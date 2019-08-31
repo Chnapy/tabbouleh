@@ -1,6 +1,6 @@
 {
   "name": "tabbouleh",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "JSON Schema generator from TypeScript classes, in runtime",
   "keywords": [
     "typescript",
