@@ -1,6 +1,6 @@
 {
   "name": "tabbouleh",
-  "version": "0.0.3-development",
+  "version": "1.0.0",
   "description": "JSON Schema generator from TypeScript classes, in runtime",
   "keywords": [
     "typescript",
@@ -8,7 +8,7 @@
     "jsonschema",
     "json-schema",
     "schema",
-    "validation"
+    "decorators"
   ],
   "main": "dist/tabbouleh.umd.js",
   "module": "dist/tabbouleh.es5.js",
