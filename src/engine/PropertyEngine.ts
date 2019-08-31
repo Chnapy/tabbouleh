@@ -112,7 +112,7 @@ export default class PropertyEngine {
     const reflectSchema: JSONSchema7 =
       Reflect.getMetadata(REFLECT_KEY.JSON_SCHEMA, prototype, key) || {};
 
-    // get the infered type of the property
+    // get the inferred type of the property
     const typeSchema: Class = Reflect.getMetadata(REFLECT_KEY.TYPE, prototype, key);
 
     // construct the final schema
