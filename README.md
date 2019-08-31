@@ -1,120 +1,502 @@
-# Tabbouleh
+# Tabbouleh - ![License](https://img.shields.io/github/license/Chnapy/tabbouleh) [![NPM version](http://img.shields.io/npm/v/tabbouleh.svg?style=flat)](https://www.npmjs.org/package/tabbouleh) ![npm bundle size](https://img.shields.io/bundlephobia/min/tabbouleh) ![contribute](https://img.shields.io/badge/can%20I%20contribute-yes-brightgreen)
 
-[![NPM version](http://img.shields.io/npm/v/tabbouleh.svg?style=flat)](https://www.npmjs.org/package/tabbouleh)
-[![styled with prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
-[![Greenkeeper badge](https://badges.greenkeeper.io/Chnapy/tabbouleh.svg)](https://greenkeeper.io/)
+
+A TypeScript library which generate JSON Schema (draft 7) from data class definition, in runtime.
+
 [![Travis](https://img.shields.io/travis/Chnapy/tabbouleh.svg)](https://travis-ci.org/Chnapy/tabbouleh)
 [![Coverage Status](https://coveralls.io/repos/github/Chnapy/tabbouleh/badge.svg?branch=master)](https://coveralls.io/github/Chnapy/tabbouleh?branch=master)
 [![Dev Dependencies](https://david-dm.org/Chnapy/tabbouleh/dev-status.svg)](https://david-dm.org/Chnapy/tabbouleh?type=dev)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=Chnapy_tabbouleh&metric=alert_status)](https://sonarcloud.io/dashboard?id=Chnapy_tabbouleh)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=Chnapy_tabbouleh&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=Chnapy_tabbouleh)
 
-This project is designed to use Typescript classes for data validation (Java developers may say "Bean Validation") generating JSON Schema from them. 
-With tabbouleh you could use your classes for both define the data and validate/constraint them using decorators and Typescript typing. 
-ORM users, you may find it familiar.
+  - **Class-based** - Structure your data definitions with classes, in which you put your JSON Schema properties. No need to create other types, classes or variables. 
 
-Some uses cases:
-- [validate some JSON data](#usage-with-ajv)
-  - send by the front
-  - loaded from JSON file
-- [building HTML forms from JSON Schemas](#usage-with-react-jsonschema-form)
+  - **Decorators** - Define JSON Schema of data fields with decorators, for readability & understandability.
 
-### Installation
+  - **Field type inference** - Type of the field JSON Schema can be inferred from its TypeScript type.
+
+  - **Non-opinionated** - No link to any other libraries. Choose the validator you want, the form generator you want, they just have to work with JSON Schema format which is quite generic.
+
+  - **Back & Front** - Tabbouleh works in the same way with Node or in a Browser environment, it doesn't matter !
+---
+
+- [Install](#install)
+- [Get started](#get-started)
+  - [Define a data structure](#define-a-data-structure)
+  - [Generate its JSON Schema](#generate-its-json-schema)
+- [Dependencies](#dependencies)
+- [Motivation](#motivation)
+- [Note on draft used](#note-on-draft-used)
+- [Use cases](#use-cases)
+  - [Data validation](#data-validation)
+  - [Form generation](#form-generation)
+- [API](#api)
+  - [`@JSONSchema`](#jsonschema)
+  - [`@JSONProperty`](#jsonproperty)
+  - [`@JSONString`](#jsonstring)
+  - [`@JSONNumber` & `@JSONInteger`](#jsonnumber--jsoninteger)
+  - [`@JSONBoolean`](#jsonboolean)
+  - [`@JSONObject`](#jsonobject)
+  - [`@JSONArray`](#jsonarray)
+- [How referencing works](#how-referencing-works)
+  - [Wrap the class !](#wrap-the-class-)
+- [Examples](#examples)
+- [Credits](#credits)
+
+---
+
+## Install
 
 ```bash
 npm install tabbouleh --save
 ```
 
-tabbouleh requires [reflect-metadata](https://www.npmjs.com/package/reflect-metadata) (for decorators)
-
-```bash
-npm install reflect-metadata --save-dev
-```
-
-Your `tsconfig.json` needs the following flags:
+For enable TypeScript decorators, your `tsconfig.json` needs the following flags:
 ```json
 "experimentalDecorators": true,
 "emitDecoratorMetadata": true
 ```
 
-## Schema definition
+## Get started
 
-```Typescript
-import { JSONSchema, JSONInteger, JSONRequired } from 'tabbouleh';
+Let's imagine a login case.
 
-@JSONSchema
-class User {
-  
-  @JSONInteger({
-    minimum: 0
+### Define a data structure
+
+The user will login with:
+
+  - its **email** - It must follow the email format.
+  - its **password** - It must have at least 6 chars.
+
+All these fields are required.
+
+```typescript
+import { JSONSchema, JSONString } from 'tabbouleh';
+
+@JSONSchema<LoginData>({
+  required: ['email', 'password']
+})
+export class LoginData {
+
+  @JSONString({
+    format: 'email'
   })
-  size: number;
-
-  @JSONRequired
   email: string;
-  
+
+  @JSONString({
+    minLength: 6
+  })
+  password: string;
+
 }
 ```
 
-The class has to be decorated with the `@JSONSchema` decorator. 
-All the properties who have to be in the JSON Schema need to be decorated with one of these decorators:
- - `JSONString`
- - `JSONNumber`
- - `JSONInteger`
- - `JSONBoolean`
- - `JSONProperty`
- 
-### `@JSONSchema`
+### Generate its JSON Schema
 
-TODO
+From our data structure, we generate its JSON Schema.
 
-### `@JSONProperty`
+```typescript
+import Tabbouleh from 'tabbouleh';
+import { JSONSchema7 } from 'json-schema';
 
-TODO
-
-## Usage
-
-```Typescript
-import { Tabbouleh } from 'tabbouleh';
-
-// we use the example upper: User
-
-const userSchema = Tabbouleh.generateJSONSchema(
-  User
-);
-
-// we now have the User schema !
+const schema: JSONSchema7 = Tabbouleh.generateJSONSchema(LoginData);
 ```
 
-In this example, given the class `User` we saw upper, the value of `userSchema` is the one below:
+And our schema looks like...
 
 ```JSON
 {
   "type": "object",
+  "required": [
+    "email",
+    "password"
+  ],
   "properties": {
-    "size": {
-      "type": "integer",
-      "minimum": 0
-    },
     "email": {
       "type": "string",
-      "required": true
+      "format": "email"
+    },
+    "password": {
+      "type": "string",
+      "minLength": 6
     }
   }
 }
 ```
 
-### Usage with [ajv](https://github.com/epoberezkin/ajv)
+## Dependencies
 
-TODO
+Tabbouleh has 2 dependencies:
+- `reflect-metadata`, for decorators.
+- `json-schema`, for schema types. Essentially `JSONSchema7` which is the type of schemas generated by Tabbouleh.
 
-### Usage with [react-jsonschema-form](https://github.com/mozilla-services/react-jsonschema-form)
+## Motivation
 
-TODO
+To understand my motivation behind Tabbouleh we have to simulate an user data input process.
+Like a **login**.
 
-### Why tabbouleh ?
+Let's list the steps:
 
-[Hummus](https://www.npmjs.com/package/hummus) was already taken.
+  - Define the data structure (like with a type or class). We have an username and a password.
 
-### Credits
+  - [front-end] Generate a form with an input for each of the data fields, which one need to have some rules (required, minLength, ...).
+
+  - [front-end] On form submit, validate the data, check that it follows all the rules.
+  
+  - [front-end] Then send the data to the back-end.
+  
+  - [back-end] On data receipt, validate the data, again (no trust with front).
+
+### The problem
+
+If you ever developed this kind of process you may know the inconsistency of the binding between the data and each of these steps.
+
+When we create the form, there is no concrete link between inputs and the data structure. 
+We have to create an input for each data field, give it its rules in a HTML way.
+
+Then on form submit, the data must be generated from inputs values (from FormData object), and validated with the data rules, for each field.
+
+Again, when the back-end has the data, it validates it with the same rules.
+
+The definition of these rules and there validation may be programmatically done, in each of these steps with lot of redundancy, fat & ugly code, poor maintainability, and too much time.
+
+### My solution
+
+I wanted a way to define all these rules easily, elegantly, without a ton of code. When I define my data structure, I define its validation rules in the same place. And from my data structure, I get my related JSON Schema.
+It's simple, it's how Tabbouleh works.
+
+Then I use the generated JSON Schema for generate my form, and validate the data submitted. Easily.
+
+The JSON Schema format is normalized and handled by many data validators and form generators.
+
+But careful, **Tabbouleh will not validate your data, or generate your form.** It'll just do the first step of these: generate the JSON Schema, which can be used for these purposes.
+Check the [use cases](#use-cases) for more.
+
+## Note on draft used
+
+Tabbouleh actually uses the **draft 7** of JSON Schema specification.
+
+For more:
+
+  - http://json-schema.org/specification.html
+  - https://tools.ietf.org/html/draft-handrews-json-schema-validation-01
+
+## Use cases
+
+### Data validation
+
+You can see the use of Tabbouleh with [AJV](https://github.com/epoberezkin/ajv) in this dedicated repo: [tabbouleh-sample-ajv](https://github.com/Chnapy/tabbouleh-sample-ajv).
+
+### Form generation
+
+You can see the use of Tabbouleh with [react-jsonschema-form](https://github.com/mozilla-services/react-jsonschema-form) in this dedicated repo: [tabbouleh-sample-rjsf](https://github.com/Chnapy/tabbouleh-sample-rjsf).
+
+An alternative of react-jsonschema-form: [uniforms](https://github.com/vazco/uniforms).
+
+## API
+
+Schema definitions are made in your data class, with decorators.
+
+### `@JSONSchema`
+
+The only decorator for the class head. It defines the root schema properties.
+
+[More infos on which fields you can use.](https://tools.ietf.org/html/draft-handrews-json-schema-validation-01#section-10) [10]
+
+```typescript
+@JSONSchema<LoginData>({
+  $id: "https://example.com/login.json",
+  $schema: "http://json-schema.org/draft-07/schema#",
+  title: "Login data",
+  description: "Data required form user login",
+  required: ['email', 'password']
+})
+export class LoginData {
+
+  @JSONString
+  email: string;
+
+  @JSONString
+  password: string;
+
+}
+```
+
+```typescript
+@JSONSchema
+export class LoginData {
+
+  @JSONString
+  email: string;
+
+  @JSONString
+  password: string;
+
+}
+```
+
+### `@JSONProperty`
+
+Field decorator which doesn't define the schema `type`. 
+If not defined it will be inferred from the field type.
+
+Depending on the `type` given, see the corresponding decorator to know which fields are allowed. 
+Also, [more infos on which fields you can use.](https://tools.ietf.org/html/draft-handrews-json-schema-validation-01#section-6.1) [6.1]
+
+```typescript
+@JSONSchema
+export class LoginData {
+
+  @JSONProperty
+  email: string;
+
+  @JSONProperty<JSONEntityString>({
+    type: 'string',
+    minLength: 6
+  })
+  password: string;
+
+}
+```
+
+### `@JSONString`
+
+Field decorator for **string** type.
+
+[More infos on which fields you can use.](https://tools.ietf.org/html/draft-handrews-json-schema-validation-01#section-6.3) [6.3]
+
+```typescript
+@JSONSchema
+export class LoginData {
+
+  @JSONString({
+    format: 'email',
+    maxLength: 64
+  })
+  email: string;
+
+  @JSONString
+  password: string;
+
+}
+```
+
+### `@JSONNumber` & `@JSONInteger`
+
+Field decorators for **number** and **integer** types. They share the same fields.
+
+[More infos on which fields you can use.](https://tools.ietf.org/html/draft-handrews-json-schema-validation-01#section-6.2) [6.2]
+
+```typescript
+@JSONSchema
+export class UserData {
+
+  @JSONInteger({
+    minimum: 0
+  })
+  age: number;
+
+  @JSONNumber
+  percentCompleted: number;
+
+}
+```
+
+### `@JSONBoolean`
+
+Field decorator for **boolean** type.
+
+```typescript
+@JSONSchema
+export class UserData {
+
+  @JSONBoolean
+  active: boolean;
+
+}
+```
+
+### `@JSONObject`
+
+Field decorator for **object** type.
+
+[More infos on which fields you can use.](https://tools.ietf.org/html/draft-handrews-json-schema-validation-01#section-6.5) [6.5]
+
+```typescript
+@JSONSchema
+export class UserData {
+
+  @JSONObject({
+    properties: {
+      street: {
+        type: 'string'
+      },
+      city: {
+        type: 'string'
+      }
+    }
+  })
+  address: object;
+
+}
+```
+
+#### Class reference
+
+With this decorator you can reference an other schema class.
+
+[Wrap your class !](#wrap-the-class-)
+
+```typescript
+@JSONSchema
+export class UserData {
+
+  @JSONObject(() => UserAddress)
+  address: UserAddress;
+
+}
+```
+
+```typescript
+@JSONSchema
+class UserAddress {
+
+  @JSONString
+  street: string;
+
+  @JSONString
+  city: string;
+
+}
+```
+
+### `@JSONArray`
+
+Field decorator for **array** type.
+
+[More infos on which fields you can use.](https://tools.ietf.org/html/draft-handrews-json-schema-validation-01#section-6.4) [6.4]
+
+```typescript
+@JSONSchema
+class UserData {
+
+  @JSONArray({
+    items: {
+      type: 'integer'
+    }
+  })
+  childrenAges: number[];
+
+}
+```
+
+#### Class reference
+
+As with `@JSONObject` you can reference an other schema class.
+
+```typescript
+@JSONSchema
+class UserData {
+
+  @JSONArray(() => UserData)
+  children: UserData[];
+
+}
+```
+
+You may want to add some properties in addition of the reference, for that put the reference in the `items` property.
+
+```typescript
+@JSONSchema
+class UserData {
+
+  @JSONArray({
+    items: () => UserData,
+    maxItems: 4,
+    minItems: 0
+  })
+  children: UserData[];
+
+}
+```
+
+## How referencing works
+
+Let's take one of the previous example.
+
+```typescript
+@JSONSchema
+export class UserData {
+
+  @JSONObject(() => UserAddress)
+  address: UserAddress;
+
+}
+```
+
+```typescript
+@JSONSchema
+class UserAddress {
+
+  @JSONString
+  street: string;
+
+  @JSONString
+  city: string;
+
+}
+```
+
+The JSON result will be:
+
+```JSON
+{
+  "type": "object",
+  
+  "definitions": {
+    "_UserAddress_": {
+      "type": "object",
+      "properties": {
+        "street": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  
+  "properties": {
+    
+    "address": {
+      "$ref": "#/definitions/_UserAddress_"
+    }
+    
+  }
+}
+```
+
+You can see that:
+  - `UserAdress` schema was put in the `definitions` of the root schema,
+  - `address` field is now referencing `UserAddress` by using the `$ref` field.
+  
+A class reference is **always** translated as a schema reference with the use of the `$ref`. 
+Because of multiple same references optimization, and because of circular reference handling.
+
+
+
+### Wrap the class !
+
+You have to wrap the target in a function, like `() => MyClass`. 
+
+It is required because of the case of circular referencing which may cause an `undefined` value instead of the referenced class.
+
+## Examples
+
+You can find all examples used in [/examples](examples).
+
+## Credits
 
 This library was created with [typescript-library-starter](https://github.com/alexjoverm/typescript-library-starter).
 
@@ -127,3 +509,7 @@ This library was created with [typescript-library-starter](https://github.com/al
 <!--<!-- ALL-CONTRIBUTORS-LIST:END -->
 
 <!--This project follows the [all-contributors](https://github.com/kentcdodds/all-contributors) specification. Contributions of any kind are welcome!-->
+
+### So, why tabbouleh ?
+
+[Hummus](https://www.npmjs.com/package/hummus) was already taken :shipit:

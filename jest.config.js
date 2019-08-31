@@ -18,7 +18,8 @@ module.exports = {
     "/test/",
     "/.git/",
     "/dist/",
-    "/coverage/"
+    "/coverage/",
+    "/examples"
   ],
   coverageThreshold: {
     global: {
