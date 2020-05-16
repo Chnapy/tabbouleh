@@ -1,6 +1,6 @@
 import { JSONSchema } from '../../src/decorators/JSONSchema';
 
 @JSONSchema({
-  $comment: 'comment'
+  $comment: 'comment',
 })
 export class JSONSchema2Sample {}

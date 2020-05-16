@@ -8,18 +8,18 @@ const schemaJsonBoolean1: JSONSchema7 = {
   properties: {
     prop: {
       type: 'boolean',
-      default: false
-    }
-  }
+      default: false,
+    },
+  },
 };
 
 const schemaJsonBoolean2: JSONSchema7 = {
   type: 'object',
   properties: {
     prop: {
-      type: 'boolean'
-    }
-  }
+      type: 'boolean',
+    },
+  },
 };
 
 describe('check JSONBoolean', () => {

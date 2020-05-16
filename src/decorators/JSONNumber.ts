@@ -11,6 +11,6 @@ export function JSONNumber(...args: DecoratorClassProps): void;
 export function JSONNumber(value: JSONNumberValue): Function;
 export function JSONNumber(...args: [JSONNumberValue] | DecoratorClassProps): Function | void {
   return DecoratorEngine.defineProperties(args, {
-    type: 'number'
+    type: 'number',
   });
 }

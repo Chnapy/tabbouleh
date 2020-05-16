@@ -4,7 +4,7 @@ import { JSONString } from '../../src/decorators/JSONString';
 @JSONSchema
 export class JSONString1Sample {
   @JSONString({
-    minLength: 1
+    minLength: 1,
   })
   prop: string;
 }

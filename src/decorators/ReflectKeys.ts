@@ -20,5 +20,5 @@ export enum REFLECT_KEY {
   /**
    * Concerns references
    */
-  JSON_REFERENCE = 'tabbouleh:references'
+  JSON_REFERENCE = 'tabbouleh:references',
 }

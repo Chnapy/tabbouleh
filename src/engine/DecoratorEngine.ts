@@ -45,7 +45,7 @@ export class DecoratorEngine {
   ) {
     value = {
       ...defaultValues,
-      ...value
+      ...value,
     };
 
     return <C extends Class>(
@@ -56,7 +56,7 @@ export class DecoratorEngine {
       const valueSchema: JSONSchema7 = {};
 
       // If we found ClassResolver, we create reference for each of them
-      Object.keys(value).forEach(_k => {
+      Object.keys(value).forEach((_k) => {
         const k: keyof JSONSchema7 = _k as any;
         const v: ClassResolver | any = value[k as keyof J];
 

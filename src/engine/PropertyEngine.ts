@@ -17,23 +17,23 @@ export default class PropertyEngine {
     switch (typeTS) {
       case Array:
         return {
-          type: 'array'
+          type: 'array',
         };
       case Number:
         return {
-          type: 'number'
+          type: 'number',
         };
       case String:
         return {
-          type: 'string'
+          type: 'string',
         };
       case Object:
         return {
-          type: 'object'
+          type: 'object',
         };
       default:
         return {
-          type: 'null'
+          type: 'null',
         };
     }
   }
@@ -51,13 +51,12 @@ export default class PropertyEngine {
     paramEntity: JSONSchema7,
     typeTS: Class
   ): JSONSchema7 {
-
     const partialEntity = {
       ...reflectEntity,
-      ...paramEntity
+      ...paramEntity,
     };
 
-    if(partialEntity.$ref) {
+    if (partialEntity.$ref) {
       return partialEntity;
     }
 
@@ -65,7 +64,7 @@ export default class PropertyEngine {
 
     return {
       ...typeEntity,
-      ...partialEntity
+      ...partialEntity,
     };
   }
 
@@ -125,7 +124,7 @@ export default class PropertyEngine {
     // add the schema to existing properties
     properties[key as string] = {
       ...(properties[key] || {}),
-      ...fullSchema
+      ...fullSchema,
     };
 
     PropertyEngine.setReflectProperties(prototype, properties);

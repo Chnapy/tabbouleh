@@ -7,7 +7,7 @@ export class JSONArray4Sample {
   @JSONArray({
     items: () => FoodSample,
     minItems: 1,
-    uniqueItems: true
+    uniqueItems: true,
   })
   myArray: FoodSample[];
 }

@@ -4,7 +4,7 @@ import { JSONBoolean } from '../../src/decorators/JSONBoolean';
 @JSONSchema
 export class JSONBoolean1Sample {
   @JSONBoolean({
-    default: false
+    default: false,
   })
   prop: boolean;
 }

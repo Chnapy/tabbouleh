@@ -1,11 +1,11 @@
-import {Class} from '../types/ClassTypes';
-import {JSONSchema7} from 'json-schema';
-import {REFLECT_KEY} from '../decorators/ReflectKeys';
-import {Reference, ReferenceMap, ClassResolver} from '../types/ReferenceTypes';
+import { Class } from '../types/ClassTypes';
+import { JSONSchema7 } from 'json-schema';
+import { REFLECT_KEY } from '../decorators/ReflectKeys';
+import { Reference, ReferenceMap, ClassResolver } from '../types/ReferenceTypes';
 import PropertyEngine from './PropertyEngine';
 import SchemaEngine from './SchemaEngine';
-import {NotAJsonSchemaError} from '../exception/NotAJsonSchemaError';
-import {Util} from './Util';
+import { NotAJsonSchemaError } from '../exception/NotAJsonSchemaError';
+import { Util } from './Util';
 
 /**
  * Handle all references concerns
@@ -18,13 +18,16 @@ export default class ReferenceEngine {
    * @param definitions schema definitions of the root schema
    * @param rootTarget root schema class, if not target
    */
-  static computeJSONReferences(target: Class, definitions?: JSONSchema7['definitions'], rootTarget?: Class): void {
-
+  static computeJSONReferences(
+    target: Class,
+    definitions?: JSONSchema7['definitions'],
+    rootTarget?: Class
+  ): void {
     const isRoot = !rootTarget;
 
     rootTarget = rootTarget || target;
 
-    if(!definitions) {
+    if (!definitions) {
       const rootTargetSchema = SchemaEngine.getReflectSchema(rootTarget) || {};
 
       definitions = rootTargetSchema.definitions || {};
@@ -32,7 +35,7 @@ export default class ReferenceEngine {
 
     const refMapClass = ReferenceEngine.getReferences(target.name, target.prototype);
 
-    refMapClass.forEach(a => {
+    refMapClass.forEach((a) => {
       const refTarget: Class = a.targetFn();
 
       if (!Util.isClass(refTarget)) {
@@ -43,17 +46,21 @@ export default class ReferenceEngine {
         const targetID = ReferenceEngine.generateSchemaID(refTarget);
 
         if (!definitions![targetID]) {
-          definitions![targetID] = SchemaEngine.getComputedJSONSchema(refTarget, definitions, rootTarget);
+          definitions![targetID] = SchemaEngine.getComputedJSONSchema(
+            refTarget,
+            definitions,
+            rootTarget
+          );
         }
       }
 
       const refSchema: JSONSchema7 = {
-        $ref: ReferenceEngine.generateRef(refTarget, rootTarget)
+        $ref: ReferenceEngine.generateRef(refTarget, rootTarget),
       };
 
       const value = a.jsonPropertyKey
         ? {
-          [a.jsonPropertyKey]: refSchema
+            [a.jsonPropertyKey]: refSchema,
           }
         : refSchema;
 
@@ -62,7 +69,7 @@ export default class ReferenceEngine {
 
     if (Object.keys(definitions).length && isRoot) {
       SchemaEngine.defineReflectSchema(rootTarget, {
-        definitions
+        definitions,
       });
     }
   }
@@ -88,7 +95,7 @@ export default class ReferenceEngine {
       className,
       key: propertyKey,
       jsonPropertyKey: jsonProperty,
-      targetFn: classTargetFn
+      targetFn: classTargetFn,
     };
 
     const referenceMap = ReferenceEngine.getReflectReference(prototypeSource) || {};
@@ -97,7 +104,7 @@ export default class ReferenceEngine {
 
     // if a reference for this key and json key already exist, remove it
     refMapClass = refMapClass.filter(
-      a => a.key !== reference.key || a.jsonPropertyKey !== reference.jsonPropertyKey
+      (a) => a.key !== reference.key || a.jsonPropertyKey !== reference.jsonPropertyKey
     );
 
     referenceMap[className] = refMapClass;

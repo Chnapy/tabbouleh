@@ -8,18 +8,18 @@ const schemaJsonString1: JSONSchema7 = {
   properties: {
     prop: {
       type: 'string',
-      minLength: 1
-    }
-  }
+      minLength: 1,
+    },
+  },
 };
 
 const schemaJsonString2: JSONSchema7 = {
   type: 'object',
   properties: {
     prop: {
-      type: 'string'
-    }
-  }
+      type: 'string',
+    },
+  },
 };
 
 describe('check JSONString', () => {

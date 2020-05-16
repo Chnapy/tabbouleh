@@ -4,13 +4,11 @@ import { JSONInteger } from '../../src/decorators/JSONInteger';
 
 @JSONSchema
 class UserData {
-
   @JSONInteger({
-    minimum: 0
+    minimum: 0,
   })
   age: number;
 
   @JSONNumber
   percentCompleted: number;
-
 }

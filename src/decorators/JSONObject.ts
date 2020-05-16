@@ -26,6 +26,6 @@ export function JSONObject(...args: [JSONObjectValue] | DecoratorClassProps): Fu
   }
 
   return DecoratorEngine.defineProperties(args as any, {
-    type: 'object'
+    type: 'object',
   });
 }

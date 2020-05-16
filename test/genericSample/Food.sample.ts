@@ -2,7 +2,7 @@ import { JSONSchema } from '../../src/decorators/JSONSchema';
 import { JSONString } from '../../src/decorators/JSONString';
 
 export const FOOD_SCHEMA_PROPS = {
-  title: 'Tabbouleh'
+  title: 'Tabbouleh',
 };
 
 @JSONSchema<FoodSample>(FOOD_SCHEMA_PROPS)

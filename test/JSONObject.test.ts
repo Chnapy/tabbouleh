@@ -1,10 +1,10 @@
 import Tabbouleh from '../src/engine/Tabbouleh';
 import { JSONObject1Sample, OBJECT_SAMPLE_1_USER } from './JSONObjectSample/JSONObject1.sample';
 import { JSONSchema7 } from 'json-schema';
-import {FOOD_SCHEMA_PROPS, FoodSample} from './genericSample/Food.sample';
+import { FOOD_SCHEMA_PROPS, FoodSample } from './genericSample/Food.sample';
 import { JSONObject2Sample } from './JSONObjectSample/JSONObject2.sample';
 import { JSONObject3Sample } from './JSONObjectSample/JSONObject3.sample';
-import ReferenceEngine from "../src/engine/ReferenceEngine";
+import ReferenceEngine from '../src/engine/ReferenceEngine';
 
 const schemaObjectSample1: JSONSchema7 = {
   type: 'object',
@@ -12,9 +12,9 @@ const schemaObjectSample1: JSONSchema7 = {
   properties: {
     user: {
       type: 'object',
-      ...(OBJECT_SAMPLE_1_USER as any)
-    }
-  }
+      ...(OBJECT_SAMPLE_1_USER as any),
+    },
+  },
 };
 
 const foodSampleID = ReferenceEngine.generateSchemaID(FoodSample);
@@ -28,25 +28,25 @@ const schemaObjectSample2: JSONSchema7 = {
 
       properties: {
         parsley: {
-          type: 'string'
-        }
-      }
-    }
+          type: 'string',
+        },
+      },
+    },
   },
   properties: {
     food: {
-      $ref: ReferenceEngine.generateRef(FoodSample)
-    }
-  }
+      $ref: ReferenceEngine.generateRef(FoodSample),
+    },
+  },
 };
 
 const schemaObjectSample3: JSONSchema7 = {
   type: 'object',
   properties: {
     prop: {
-      type: 'object'
-    }
-  }
+      type: 'object',
+    },
+  },
 };
 
 describe('check JSONObject', () => {
