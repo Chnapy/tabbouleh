@@ -4,14 +4,12 @@ import { JSONEntityString } from '../../src/types/JSONTypes';
 
 @JSONSchema
 class LoginData {
-
   @JSONProperty
   email: string;
 
   @JSONProperty<JSONEntityString>({
     type: 'string',
-    minLength: 6
+    minLength: 6,
   })
   password: string;
-
 }

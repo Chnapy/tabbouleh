@@ -6,8 +6,8 @@ export class JSONArray1Sample {
   @JSONArray({
     items: {
       type: 'string',
-      minLength: 3
-    }
+      minLength: 3,
+    },
   })
   myArray: string[];
 }

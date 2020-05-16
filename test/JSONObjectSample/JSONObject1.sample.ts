@@ -4,12 +4,12 @@ import { JSONObject } from '../../src/decorators/JSONObject';
 export const OBJECT_SAMPLE_1_USER: Parameters<typeof JSONObject>[0] = {
   properties: {
     id: {
-      type: 'integer'
+      type: 'integer',
     },
     username: {
-      type: 'string'
-    }
-  }
+      type: 'string',
+    },
+  },
 };
 
 @JSONSchema

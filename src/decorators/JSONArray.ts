@@ -32,13 +32,13 @@ export function JSONArray(value: JSONArrayValue): Function {
       DecoratorEngine.defineProperties([prototype, key, descriptor], {
         type: 'array',
         items: {
-          type: value
-        }
+          type: value,
+        },
       });
     };
   }
 
   return DecoratorEngine.defineProperties<JSONEntityArray>([value], {
-    type: 'array'
+    type: 'array',
   }) as Function;
 }

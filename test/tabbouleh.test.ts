@@ -10,16 +10,16 @@ const schemaCSample1: JSONSchema7 = {
   properties: {
     size: {
       type: 'integer',
-      minimum: 0
+      minimum: 0,
     },
 
     email: {
       type: 'string',
       title: 'Email',
       description: "It's where you put your mail",
-      minLength: 6
-    }
-  }
+      minLength: 6,
+    },
+  },
 };
 
 const schemaCSample2: JSONSchema7 = {
@@ -33,24 +33,24 @@ const schemaCSample2: JSONSchema7 = {
 
   properties: {
     name: {
-      type: 'string'
+      type: 'string',
     },
 
     phone: {
       type: 'integer',
       minimum: 10,
-      maximum: 10
+      maximum: 10,
     },
 
     anotherProp: {
-      type: 'null'
+      type: 'null',
     },
 
     email: {
       type: 'string',
-      minLength: 6
-    }
-  }
+      minLength: 6,
+    },
+  },
 };
 
 const schemaCSample4: JSONSchema7 = {
@@ -60,29 +60,29 @@ const schemaCSample4: JSONSchema7 = {
 
   properties: {
     lastname: {
-      type: 'string'
+      type: 'string',
     },
 
     height: {
-      type: 'number'
+      type: 'number',
     },
 
     money: {
       type: 'number',
-      minimum: 0
+      minimum: 0,
     },
 
     isAdmin: {
-      type: 'boolean'
-    }
-  }
+      type: 'boolean',
+    },
+  },
 };
 
 describe('check Tabbouleh generations', () => {
   it('should generate a Tabbouleh object with the good keys', () => {
     const target = {
       CSample1: TabboulehSample1,
-      toto: TabboulehSample2
+      toto: TabboulehSample2,
     };
 
     expect(Object.keys(Tabbouleh.generateMultipleJSONSchemas(target)).sort()).toEqual(
@@ -94,7 +94,7 @@ describe('check Tabbouleh generations', () => {
     const target = {
       CSample1: TabboulehSample1,
       CSample2: TabboulehSample2,
-      CSample4: TabboulehSample3
+      CSample4: TabboulehSample3,
     };
 
     const listJSONEntities = Tabbouleh.generateMultipleJSONSchemas(target);
@@ -102,7 +102,7 @@ describe('check Tabbouleh generations', () => {
     expect(listJSONEntities).toEqual({
       CSample1: schemaCSample1,
       CSample2: schemaCSample2,
-      CSample4: schemaCSample4
+      CSample4: schemaCSample4,
     });
   });
 });

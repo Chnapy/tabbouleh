@@ -6,13 +6,13 @@ import { JSONSchema2Sample } from './JSONSchemaSample/JSONSchema2.sample';
 
 const schemaJSONSchema1: JSONSchema7 = {
   type: 'object',
-  properties: {}
+  properties: {},
 };
 
 const schemaJSONSchema2: JSONSchema7 = {
   type: 'object',
   $comment: 'comment',
-  properties: {}
+  properties: {},
 };
 
 describe('check JSONSchema', () => {

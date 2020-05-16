@@ -10,18 +10,18 @@ const schemaJsonNumber1: JSONSchema7 = {
   properties: {
     prop: {
       type: 'number',
-      minimum: 1
-    }
-  }
+      minimum: 1,
+    },
+  },
 };
 
 const schemaJsonNumber2: JSONSchema7 = {
   type: 'object',
   properties: {
     prop: {
-      type: 'number'
-    }
-  }
+      type: 'number',
+    },
+  },
 };
 
 const schemaJsonInteger1: JSONSchema7 = {
@@ -29,18 +29,18 @@ const schemaJsonInteger1: JSONSchema7 = {
   properties: {
     prop: {
       type: 'integer',
-      minimum: 1
-    }
-  }
+      minimum: 1,
+    },
+  },
 };
 
 const schemaJsonInteger2: JSONSchema7 = {
   type: 'object',
   properties: {
     prop: {
-      type: 'integer'
-    }
-  }
+      type: 'integer',
+    },
+  },
 };
 
 describe('check JSONNumber', () => {

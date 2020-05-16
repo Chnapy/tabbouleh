@@ -11,6 +11,6 @@ export function JSONBoolean(...args: DecoratorClassProps): void;
 export function JSONBoolean(value: JSONBooleanValue): Function;
 export function JSONBoolean(...args: [JSONBooleanValue] | DecoratorClassProps): Function | void {
   return DecoratorEngine.defineProperties(args, {
-    type: 'boolean'
+    type: 'boolean',
   });
 }

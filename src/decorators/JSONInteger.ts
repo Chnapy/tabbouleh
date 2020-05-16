@@ -11,6 +11,6 @@ export function JSONInteger(...args: DecoratorClassProps): void;
 export function JSONInteger(value: JSONIntegerValue): Function;
 export function JSONInteger(...args: [JSONIntegerValue] | DecoratorClassProps): Function | void {
   return DecoratorEngine.defineProperties(args, {
-    type: 'integer'
+    type: 'integer',
   });
 }

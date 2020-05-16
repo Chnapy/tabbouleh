@@ -1,11 +1,11 @@
 import { JSONSchema7 } from 'json-schema';
-import {FOOD_SCHEMA_PROPS, FoodSample} from './genericSample/Food.sample';
+import { FOOD_SCHEMA_PROPS, FoodSample } from './genericSample/Food.sample';
 import Tabbouleh from '../src/engine/Tabbouleh';
 import { JSONArray1Sample } from './JSONArraySample/JSONArray1.sample';
 import { JSONArray2Sample } from './JSONArraySample/JSONArray2.sample';
 import { JSONArray3Sample } from './JSONArraySample/JSONArray3.sample';
 import { JSONArray4Sample } from './JSONArraySample/JSONArray4.sample';
-import ReferenceEngine from "../src/engine/ReferenceEngine";
+import ReferenceEngine from '../src/engine/ReferenceEngine';
 
 const foodSampleID = ReferenceEngine.generateSchemaID(FoodSample);
 
@@ -16,10 +16,10 @@ const schemaJsonArray1: JSONSchema7 = {
       type: 'array',
       items: {
         type: 'string',
-        minLength: 3
-      }
-    }
-  }
+        minLength: 3,
+      },
+    },
+  },
 };
 
 const schemaJsonArray2: JSONSchema7 = {
@@ -28,10 +28,10 @@ const schemaJsonArray2: JSONSchema7 = {
     myArray: {
       type: 'array',
       items: {
-        type: 'string'
-      }
-    }
-  }
+        type: 'string',
+      },
+    },
+  },
 };
 
 const schemaJsonArray3: JSONSchema7 = {
@@ -44,19 +44,19 @@ const schemaJsonArray3: JSONSchema7 = {
 
       properties: {
         parsley: {
-          type: 'string'
-        }
-      }
-    }
+          type: 'string',
+        },
+      },
+    },
   },
   properties: {
     myArray: {
       type: 'array',
       items: {
-        $ref: ReferenceEngine.generateRef(FoodSample)
-      }
-    }
-  }
+        $ref: ReferenceEngine.generateRef(FoodSample),
+      },
+    },
+  },
 };
 
 const schemaJsonArray4: JSONSchema7 = {
@@ -69,21 +69,21 @@ const schemaJsonArray4: JSONSchema7 = {
 
       properties: {
         parsley: {
-          type: 'string'
-        }
-      }
-    }
+          type: 'string',
+        },
+      },
+    },
   },
   properties: {
     myArray: {
       type: 'array',
       items: {
-        $ref: ReferenceEngine.generateRef(FoodSample)
+        $ref: ReferenceEngine.generateRef(FoodSample),
       },
       minItems: 1,
-      uniqueItems: true
-    }
-  }
+      uniqueItems: true,
+    },
+  },
 };
 
 describe('check JSONArray', () => {

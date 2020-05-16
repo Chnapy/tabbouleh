@@ -33,7 +33,7 @@
     "test": "jest --coverage",
     "test:verbose": "jest --coverage --verbose",
     "test:watch": "jest --coverage --watch",
-    "test:prod": "npm run lint && npm run test -- --no-cache",
+    "test:prod": "npm run lint && npm run prettier && npm run test -- --no-cache",
     "check-type": "tsc --noEmit",
     "prettier": "prettier --check \"{src,test,examples}/**/*.ts\""
   },

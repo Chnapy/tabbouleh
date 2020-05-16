@@ -19,7 +19,11 @@ export default class SchemaEngine {
    * @param definitions schema definitions of the root schema
    * @param rootTarget root schema class, if not target
    */
-  static getComputedJSONSchema(target: Class, definitions?: JSONSchema7['definitions'], rootTarget?: Class): JSONSchema7 {
+  static getComputedJSONSchema(
+    target: Class,
+    definitions?: JSONSchema7['definitions'],
+    rootTarget?: Class
+  ): JSONSchema7 {
     ReferenceEngine.computeJSONReferences(target, definitions, rootTarget);
 
     const schema = SchemaEngine.getReflectSchema(target);
